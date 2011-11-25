@@ -1,7 +1,11 @@
 # MKb
 
-MKb is a random collection of code snippets I've accumulated through my work
-on various code projects for school, for work, and for fun.
+MKb is a random collection of code snippets I've accumulated through various
+projects for school, for work, and for fun. Since I found myself using
+and updating these snippets often for various projects, it made sense to
+centralize them in a repo.  With a little luck, others might find them useful
+as well. Snippets range from a C# document interface to a basic TCP and UDP
+wrapper for Winsock in C++.
 
 ## License
 
