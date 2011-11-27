@@ -17,7 +17,7 @@ public:
 	*/
 	Exception(const std::string& exceptionMessage,
 			const std::string& callingFunctionName = nullptr)
-		: message(exceptionMessage), callingFunciton(callingFunctionName)
+		: message(exceptionMessage), callingFunction(callingFunctionName)
 	{ }
 
 	//! A void pointer to hold any extra exception data a user might want
