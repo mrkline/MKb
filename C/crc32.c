@@ -40,7 +40,7 @@ void CRC32Init()
 
 uint32_t CRC32Generate(void* data, size_t dataLength)
 {
-	uint32_t crc = 0xFFFFFFFF;
+	uint32_t crc = ~0;
 
     for (uint8_t* cData = (uint8_t*)data; dataLength; --dataLength, ++cData)
     {
