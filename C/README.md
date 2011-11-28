@@ -1,6 +1,6 @@
 ## Directory Contents
 
-- crc32.h and crc32.c calculate 32-bit Cyclic Redundancy Check (CRC)
+- crc32.h and crc32.c calculates a 32-bit Cyclic Redundancy Check (CRC)
 	checksum for a given buffer of data.
 
 ## Comment Format

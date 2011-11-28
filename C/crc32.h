@@ -11,6 +11,6 @@ void CRC32Init();
 \param data A pointer to the data from which a checksum should be generated
 \param dataLength The length of the data from which a checksum should be
 		generated, in bytes
-\returns The 32-bit CRC checksum of data
+\returns The 32-bit CRC checksum of the given data
 */
 uint32_t CRC32Generate(void* data, size_t dataLength);
