@@ -1,6 +1,6 @@
 #pragma once
 
-#include <stddef.h> // For size_t
+#include <cstddef> // For size_t
 #include <stdint.h> // For uint32_t
 
 class CRC32Generator
