@@ -12,7 +12,7 @@ public:
 	float Y;
 
 	//! Initializes vector to zero
-	Vector2() : X(0.0f), Y(0.0f) {} 
+	Vector2() : X(0.0f), Y(0.0f) {}
 
 	//! Initializes vector to provided x and y values
 	Vector2(float x, float y) : X(x), Y(y) {}
@@ -25,37 +25,37 @@ public:
 
 	//! Initializes vector with the first two values in the provided array
 	explicit Vector2(float* arr) : X(arr[0]), Y(arr[1]) {}
-	
+
 	Vector2 operator-() const { return Vector2(-X, -Y); }
-	
+
 	Vector2& operator=(const Vector2& o)
-		{ X = o.X; Y = o.Y; return *this; }
+	{ X = o.X; Y = o.Y; return *this; }
 
 	Vector2 operator+(const Vector2& o) const
-		{ return Vector2(X + o.X, Y + o.Y); }
+	{ return Vector2(X + o.X, Y + o.Y); }
 	Vector2& operator +=(const Vector2& o)
-		{ X += o.X; Y += o.Y; return *this; }
+	{ X += o.X; Y += o.Y; return *this; }
 	Vector2 operator+(float v) const
-		{ return Vector2(X + v, Y + v); }
+	{ return Vector2(X + v, Y + v); }
 	Vector2& operator+=(float v)
-		{ X += v; Y += v; return *this; }
+	{ X += v; Y += v; return *this; }
 
 	Vector2 operator-(const Vector2& o) const
-		{ return Vector2(X - o.X, Y - o.Y); }
+	{ return Vector2(X - o.X, Y - o.Y); }
 	Vector2& operator -=(const Vector2& o)
-		{ X -= o.X; Y -= o.Y; return *this; }
+	{ X -= o.X; Y -= o.Y; return *this; }
 	Vector2 operator-(float v) const
-		{ return Vector2(X - v, Y - v); }
+	{ return Vector2(X - v, Y - v); }
 	Vector2& operator-=(float v)
-		{ X -= v; Y -= v; return *this; }
+	{ X -= v; Y -= v; return *this; }
 
 	//! Comparison operators can be used to sort vectors with respect to X,
 	//! then Y
 	bool operator<=(const Vector2& o) const
 	{
 		return 	(X < o.X || Math::Equals(X, o.X)) ||
-				(Math::Equals(X, o.X) && (Y < o.Y || Math::Equals(Y, o.Y))) ||
-				(Math::Equals(X, o.X) && Math::Equals(Y, o.Y));
+		        (Math::Equals(X, o.X) && (Y < o.Y || Math::Equals(Y, o.Y))) ||
+		        (Math::Equals(X, o.X) && Math::Equals(Y, o.Y));
 	}
 
 	//! Comparison operators can be used to sort vectors with respect to X,
@@ -63,8 +63,8 @@ public:
 	bool operator>=(const Vector2& o) const
 	{
 		return 	(X > o.X || Math::Equals(X, o.X)) ||
-				(Math::Equals(X, o.X) && (Y > o.Y || Math::Equals(Y, o.Y))) ||
-				(Math::Equals(X, o.X) && Math::Equals(Y, o.Y));
+		        (Math::Equals(X, o.X) && (Y > o.Y || Math::Equals(Y, o.Y))) ||
+		        (Math::Equals(X, o.X) && Math::Equals(Y, o.Y));
 	}
 
 	//! Comparison operators can be used to sort vectors with respect to X,
@@ -72,8 +72,8 @@ public:
 	bool operator<(const Vector2& o) const
 	{
 		return 	(X < o.X && !Math::Equals(X, o.X)) ||
-				(Math::Equals(X, o.X) && Y < o.Y && !Math::Equals(Y, o.Y)) ||
-				(Math::Equals(X, o.X) && Math::Equals(Y, o.Y));
+		        (Math::Equals(X, o.X) && Y < o.Y && !Math::Equals(Y, o.Y)) ||
+		        (Math::Equals(X, o.X) && Math::Equals(Y, o.Y));
 	}
 
 	//! Comparison operators can be used to sort vectors with respect to X,
@@ -81,8 +81,8 @@ public:
 	bool operator>(const Vector2& o) const
 	{
 		return 	(X > o.X && !Math::Equals(X, o.X)) ||
-				(Math::Equals(X, o.X) && Y > o.Y && !Math::Equals(Y, o.Y)) ||
-				(Math::Equals(X, o.X) && Math::Equals(Y, o.Y));
+		        (Math::Equals(X, o.X) && Y > o.Y && !Math::Equals(Y, o.Y)) ||
+		        (Math::Equals(X, o.X) && Math::Equals(Y, o.Y));
 	}
 
 	/*!
@@ -106,10 +106,10 @@ public:
 	\see Math::kFloatRoundError
 	*/
 	bool IsWithinTolerance(const Vector2& o,
-			float tolerance = Math::kFloatRoundError) const
+	                       float tolerance = Math::kFloatRoundError) const
 	{
 		return Math::Equals(X, o.X, tolerance)
-			&& Math::Equals(Y, o.Y, tolerance);
+		       && Math::Equals(Y, o.Y, tolerance);
 	}
 
 	//! Gets the length of this vector
@@ -142,7 +142,7 @@ public:
 
 	//! Returns true if this vector is a unit vector (with a length of 1)
 	bool IsNormalized() const
-		{ return Math::Equals(std::sqrt(X*X + Y*Y), 1.0f); }
+	{ return Math::Equals(std::sqrt(X*X + Y*Y), 1.0f); }
 
 	//! Copies this vector into the first two values of the provided array
 	void GetAsArray(float* arr) const
@@ -157,36 +157,36 @@ public:
 	//! Sets this vector's values from the first two values of the
 	//! provided array
 	void SetFromArray(float* asArray)
-		{ X = asArray[0]; Y = asArray[1]; }
+	{ X = asArray[0]; Y = asArray[1]; }
 
 	//! Set's vector's components to their mulitplicative inverses
 	void SetToInverse() { X = 1.0f / X; Y = 1.0f / Y; }
 
 	//! Gets an array with components (1/x, 1/y, 1/z) of this vector
 	Vector2 GetInverse() const
-		{ Vector2 ret(*this); ret.SetToInverse(); return ret; }
+	{ Vector2 ret(*this); ret.SetToInverse(); return ret; }
 
 	//! Scales this vector by the components of the provided vector
 	void Scale(const Vector2& o)
-		{ X *= o.X; Y *= o.Y; }
+	{ X *= o.X; Y *= o.Y; }
 
 	//! Returns a copy of this vector, scaled by the provided vector
 	Vector2 GetScaledBy(const Vector2& o) const
-		{ Vector2 ret(*this); ret.Scale(o); return ret; }
+	{ Vector2 ret(*this); ret.Scale(o); return ret; }
 
 	//! Scales this vector by a provided scalar
 	void Scale(float v)
-		{ X *= v; Y *= v; }
+	{ X *= v; Y *= v; }
 
 	//! Returns a copy of this vector, scaled by the provided scalar
 	Vector2 GetScaledBy(float v) const
-		{ Vector2 ret(*this); ret.Scale(v); return ret; }
+	{ Vector2 ret(*this); ret.Scale(v); return ret; }
 
 	//! Sets the length of this vector to 1
 	void Normalize()
 	{
 		float len = std::sqrt(X*X + Y*Y);
-		
+
 		// Normalized already if our length is zero.
 		// Also stops NaN errors
 		if (Math::IsZero(len))
@@ -198,7 +198,7 @@ public:
 
 	//! Returns a copy of this vector with a length of 1
 	Vector2 GetNormalized() const
-		{ Vector2 ret(*this); ret.Normalize(); return ret; }
+	{ Vector2 ret(*this); ret.Normalize(); return ret; }
 
 	//! Sets the length of this vector to a provided scalar
 	void SetLength(float len)
@@ -209,7 +209,7 @@ public:
 
 	//! Returns a copy of this vector with a length of the provided scalar
 	Vector2 SetLength(float len) const
-		{ Vector2 ret(*this); ret.SetLength(len); return ret; }
+	{ Vector2 ret(*this); ret.SetLength(len); return ret; }
 
 	/*!
 	\brief Calculates the dot product of two vectors

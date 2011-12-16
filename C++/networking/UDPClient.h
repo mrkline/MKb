@@ -5,7 +5,7 @@
 #include "Exceptions.h"
 
 /*!
-\brief A User Datagram Protocol client for 
+\brief A User Datagram Protocol client for
 		sending and receiving data over a network
 \todo Async?
 \todo Multicast?
@@ -21,8 +21,8 @@ public:
 	{
 	public:
 		InsufficientBufferException(const char* exceptionMessage,
-			const char* callingFunctionName = nullptr)
-			: NetworkException(exceptionMessage, callingFunctionName)
+		                            const char* callingFunctionName = nullptr)
+				: NetworkException(exceptionMessage, callingFunctionName)
 		{ }
 	};
 
@@ -88,7 +88,7 @@ public:
 	\brief Shuts down sending operations on the connection
 	\throws InvalidOperationException if sending has already been shut down
 	\throws NetworkException if Winsock's shutdown fails
-	*/ 
+	*/
 	void ShutDownSending();
 
 	/*!

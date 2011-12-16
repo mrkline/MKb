@@ -39,13 +39,13 @@ public:
 	\see ConstructType
 	*/
 	explicit Transform(ConstructType type = E_MT_IDENTITY);
-	
+
 	/*!
 	\brief Sets a transform the inverse of this one, if possible
 	\param out The transform to set to the inverse
 	\return true on success, false if there is no inverse
 	\throws MathException if no inverse exists
-	
+
 	The inverse is calculated using Cramers rule.
 	*/
 	void GetInverse(Transform& out) const;
@@ -54,7 +54,7 @@ public:
 	\brief Returns a transform  that is the inverse of this one, if possible
 	\return The inverse of this transform
 	\throws MathException if no inverse exists
-	
+
 	The inverse is calculated using Cramers rule.
 	*/
 	Transform GetInverse() const
@@ -67,7 +67,7 @@ public:
 	/*!
 	\brief Sets the transform to its inverse, if possible
 	\throws MathException if no inverse exists
-	
+
 	The inverse is calculated using Cramers rule.
 	*/
 	void SetToInverse()
@@ -122,7 +122,7 @@ public:
 	\see Math::kFloatRoundError
 	*/
 	bool Equals(const Transform& other,
-			float roundingTolerance = Math::kFloatRoundError) const;
+	            float roundingTolerance = Math::kFloatRoundError) const;
 
 	//! Returns true if this transform is an identity matrix
 	bool IsIdentity() const;
@@ -134,7 +134,7 @@ public:
 	\brief Sets a vector to the rotation of this transform in degrees
 	\param vecOut Upon completion, vecOut contains the rotation in degrees
 	*/
-	void GetRotationDegrees(Vector3& vecOut) const; 
+	void GetRotationDegrees(Vector3& vecOut) const;
 
 	/*!
 	\brief Gets the rotation of this transform in degrees
@@ -186,7 +186,7 @@ public:
 		GetScale(ret);
 		return ret;
 	}
-	
+
 	/*!
 	\brief Sets a vector to the translation from this transform
 	\param vecOut Upon completion, vecOut contains the translation of this transform
@@ -203,13 +203,13 @@ public:
 		GetTranslation(ret);
 		return ret;
 	}
-	
+
 	/*!
 	\brief Gets the 16-element (4 x 4) array that makes up this transfor matrix
 	\return A pointer to the array
 	*/
 	float* GetArray() { return matrix; }
-	
+
 	/*!
 	\brief Gets the 16-element (4 x 4) array that makes up this transfor matrix
 	\return A pointer to the array
@@ -283,10 +283,10 @@ public:
 	float operator[](unsigned int index) const { return matrix[index]; }
 	//! Access a transform value by row and column
 	float& operator()(unsigned int row, unsigned int col)
-		{ return matrix[row * 4 + col]; }
+	{ return matrix[row * 4 + col]; }
 	//! Access a transform value by row and column
 	float operator()(unsigned int row, unsigned int col) const
-		{ return matrix[row * 4 + col]; }
+	{ return matrix[row * 4 + col]; }
 
 protected:
 	//! The array of floats for the matrix

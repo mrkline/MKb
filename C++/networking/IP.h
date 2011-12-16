@@ -82,6 +82,6 @@ struct IPEndPoint
 	int Port;
 
 	IPEndPoint(const IP& address, int port)
-		: Address(address), Port(port)
+			: Address(address), Port(port)
 	{ }
 };

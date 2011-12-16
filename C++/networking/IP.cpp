@@ -31,7 +31,7 @@ IP::IP(unsigned int bin)
 
 unsigned char IP::GetOctet( unsigned char octetNum ) const
 {
-	if(octetNum > 3)
+	if (octetNum > 3)
 		throw ArgumentOutOfRangeException("IPs have octets [0,4)", __FUNCTION__);
 
 	return octets[octetNum];
@@ -39,7 +39,7 @@ unsigned char IP::GetOctet( unsigned char octetNum ) const
 
 void IP::SetOctet( unsigned char octetNum, unsigned char val )
 {
-	if(octetNum > 3)
+	if (octetNum > 3)
 		throw ArgumentOutOfRangeException("IPs have octets [0,4)", __FUNCTION__);
 
 	octets[octetNum] = val;
@@ -68,9 +68,9 @@ IP& IP::operator=(unsigned int bin )
 
 bool IP::operator==(const IP& other) const
 {
-	for(int c = 0; c < 4; ++c)
+	for (int c = 0; c < 4; ++c)
 	{
-		if(octets[c] != other.octets[c])
+		if (octets[c] != other.octets[c])
 			return false;
 	}
 	return true;
@@ -83,19 +83,19 @@ void IP::UpdateString()
 	strRep = ss.str();
 }
 
-void IP::OctetsFromString( const string& ipStr ) 
+void IP::OctetsFromString( const string& ipStr )
 {
 	// Split the string using '.' as the delimetor
 	vector<string> octetStrs;
 	stringstream ss(ipStr);
 	string octet;
 
-	while(getline(ss, octet, '.'))
+	while (getline(ss, octet, '.'))
 	{
 		octetStrs.push_back(octet);
 	}
 
-	if(octetStrs.size() != 4)
+	if (octetStrs.size() != 4)
 		throw ArgumentException("An IP address could not be constructed from the given string", __FUNCTION__);
 
 	octets[0] = atoi(octetStrs[0].c_str());

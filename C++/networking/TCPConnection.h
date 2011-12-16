@@ -40,7 +40,7 @@ public:
 	*/
 	void Connect(const IPEndPoint& server);
 
-	/*! 
+	/*!
 	\brief Closes the TCP connection
 	\throws InvalidOperationException if the connection isn't established
 	\throws NetworkException if Winsock's shutdown or closesocket fail
@@ -78,7 +78,7 @@ public:
 	\brief Shuts down sending operations on the connection
 	\throws InvalidOperationException if sending has already been shut down
 	\throws NetworkException if Winsock's shutdown fails
-	*/ 
+	*/
 	void ShutDownSending();
 
 	/*!

@@ -6,13 +6,14 @@
 
 //! Used for very quickly setting the identity matrices
 static const float kIdentityMatrix[16] = { 1, 0, 0, 0,
-										 0, 1, 0, 0,
-										 0, 0, 1, 0,
-										 0, 0, 0, 1 };
+                                           0, 1, 0, 0,
+                                           0, 0, 1, 0,
+                                           0, 0, 0, 1
+                                         };
 
 Transform::Transform(ConstructType type)
 {
-	if(type == E_MT_IDENTITY)
+	if (type == E_MT_IDENTITY)
 		SetToIdentity();
 	else
 		memset(matrix, 0, sizeof(float) * 16);
@@ -33,68 +34,68 @@ void Transform::GetInverse(Transform& out) const
 	const Transform &m = *this;
 
 	float d = (m(0, 0) * m(1, 1) - m(0, 1) * m(1, 0)) * (m(2, 2) * m(3, 3) - m(2, 3) * m(3, 2)) -
-		(m(0, 0) * m(1, 2) - m(0, 2) * m(1, 0)) * (m(2, 1) * m(3, 3) - m(2, 3) * m(3, 1)) +
-		(m(0, 0) * m(1, 3) - m(0, 3) * m(1, 0)) * (m(2, 1) * m(3, 2) - m(2, 2) * m(3, 1)) +
-		(m(0, 1) * m(1, 2) - m(0, 2) * m(1, 1)) * (m(2, 0) * m(3, 3) - m(2, 3) * m(3, 0)) -
-		(m(0, 1) * m(1, 3) - m(0, 3) * m(1, 1)) * (m(2, 0) * m(3, 2) - m(2, 2) * m(3, 0)) +
-		(m(0, 2) * m(1, 3) - m(0, 3) * m(1, 2)) * (m(2, 0) * m(3, 1) - m(2, 1) * m(3, 0));
+	          (m(0, 0) * m(1, 2) - m(0, 2) * m(1, 0)) * (m(2, 1) * m(3, 3) - m(2, 3) * m(3, 1)) +
+	          (m(0, 0) * m(1, 3) - m(0, 3) * m(1, 0)) * (m(2, 1) * m(3, 2) - m(2, 2) * m(3, 1)) +
+	          (m(0, 1) * m(1, 2) - m(0, 2) * m(1, 1)) * (m(2, 0) * m(3, 3) - m(2, 3) * m(3, 0)) -
+	          (m(0, 1) * m(1, 3) - m(0, 3) * m(1, 1)) * (m(2, 0) * m(3, 2) - m(2, 2) * m(3, 0)) +
+	          (m(0, 2) * m(1, 3) - m(0, 3) * m(1, 2)) * (m(2, 0) * m(3, 1) - m(2, 1) * m(3, 0));
 
-	if(Math::IsZero(d))
+	if (Math::IsZero(d))
 	{
 		throw MathException("The provided transform has no inverse.",
-				__FUNCTION__);
+		                    __FUNCTION__);
 	}
 
 	d = 1.0f / d;
 
 	out(0, 0) = d * (m(1, 1) * (m(2, 2) * m(3, 3) - m(2, 3) * m(3, 2)) +
-			m(1, 2) * (m(2, 3) * m(3, 1) - m(2, 1) * m(3, 3)) +
-			m(1, 3) * (m(2, 1) * m(3, 2) - m(2, 2) * m(3, 1)));
+	                 m(1, 2) * (m(2, 3) * m(3, 1) - m(2, 1) * m(3, 3)) +
+	                 m(1, 3) * (m(2, 1) * m(3, 2) - m(2, 2) * m(3, 1)));
 	out(0, 1) = d * (m(2, 1) * (m(0, 2) * m(3, 3) - m(0, 3) * m(3, 2)) +
-			m(2, 2) * (m(0, 3) * m(3, 1) - m(0, 1) * m(3, 3)) +
-			m(2, 3) * (m(0, 1) * m(3, 2) - m(0, 2) * m(3, 1)));
+	                 m(2, 2) * (m(0, 3) * m(3, 1) - m(0, 1) * m(3, 3)) +
+	                 m(2, 3) * (m(0, 1) * m(3, 2) - m(0, 2) * m(3, 1)));
 	out(0, 2) = d * (m(3, 1) * (m(0, 2) * m(1, 3) - m(0, 3) * m(1, 2)) +
-			m(3, 2) * (m(0, 3) * m(1, 1) - m(0, 1) * m(1, 3)) +
-			m(3, 3) * (m(0, 1) * m(1, 2) - m(0, 2) * m(1, 1)));
+	                 m(3, 2) * (m(0, 3) * m(1, 1) - m(0, 1) * m(1, 3)) +
+	                 m(3, 3) * (m(0, 1) * m(1, 2) - m(0, 2) * m(1, 1)));
 	out(0, 3) = d * (m(0, 1) * (m(1, 3) * m(2, 2) - m(1, 2) * m(2, 3)) +
-			m(0, 2) * (m(1, 1) * m(2, 3) - m(1, 3) * m(2, 1)) +
-			m(0, 3) * (m(1, 2) * m(2, 1) - m(1, 1) * m(2, 2)));
+	                 m(0, 2) * (m(1, 1) * m(2, 3) - m(1, 3) * m(2, 1)) +
+	                 m(0, 3) * (m(1, 2) * m(2, 1) - m(1, 1) * m(2, 2)));
 	out(1, 0) = d * (m(1, 2) * (m(2, 0) * m(3, 3) - m(2, 3) * m(3, 0)) +
-			m(1, 3) * (m(2, 2) * m(3, 0) - m(2, 0) * m(3, 2)) +
-			m(1, 0) * (m(2, 3) * m(3, 2) - m(2, 2) * m(3, 3)));
+	                 m(1, 3) * (m(2, 2) * m(3, 0) - m(2, 0) * m(3, 2)) +
+	                 m(1, 0) * (m(2, 3) * m(3, 2) - m(2, 2) * m(3, 3)));
 	out(1, 1) = d * (m(2, 2) * (m(0, 0) * m(3, 3) - m(0, 3) * m(3, 0)) +
-			m(2, 3) * (m(0, 2) * m(3, 0) - m(0, 0) * m(3, 2)) +
-			m(2, 0) * (m(0, 3) * m(3, 2) - m(0, 2) * m(3, 3)));
+	                 m(2, 3) * (m(0, 2) * m(3, 0) - m(0, 0) * m(3, 2)) +
+	                 m(2, 0) * (m(0, 3) * m(3, 2) - m(0, 2) * m(3, 3)));
 	out(1, 2) = d * (m(3, 2) * (m(0, 0) * m(1, 3) - m(0, 3) * m(1, 0)) +
-			m(3, 3) * (m(0, 2) * m(1, 0) - m(0, 0) * m(1, 2)) +
-			m(3, 0) * (m(0, 3) * m(1, 2) - m(0, 2) * m(1, 3)));
+	                 m(3, 3) * (m(0, 2) * m(1, 0) - m(0, 0) * m(1, 2)) +
+	                 m(3, 0) * (m(0, 3) * m(1, 2) - m(0, 2) * m(1, 3)));
 	out(1, 3) = d * (m(0, 2) * (m(1, 3) * m(2, 0) - m(1, 0) * m(2, 3)) +
-			m(0, 3) * (m(1, 0) * m(2, 2) - m(1, 2) * m(2, 0)) +
-			m(0, 0) * (m(1, 2) * m(2, 3) - m(1, 3) * m(2, 2)));
+	                 m(0, 3) * (m(1, 0) * m(2, 2) - m(1, 2) * m(2, 0)) +
+	                 m(0, 0) * (m(1, 2) * m(2, 3) - m(1, 3) * m(2, 2)));
 	out(2, 0) = d * (m(1, 3) * (m(2, 0) * m(3, 1) - m(2, 1) * m(3, 0)) +
-			m(1, 0) * (m(2, 1) * m(3, 3) - m(2, 3) * m(3, 1)) +
-			m(1, 1) * (m(2, 3) * m(3, 0) - m(2, 0) * m(3, 3)));
+	                 m(1, 0) * (m(2, 1) * m(3, 3) - m(2, 3) * m(3, 1)) +
+	                 m(1, 1) * (m(2, 3) * m(3, 0) - m(2, 0) * m(3, 3)));
 	out(2, 1) = d * (m(2, 3) * (m(0, 0) * m(3, 1) - m(0, 1) * m(3, 0)) +
-			m(2, 0) * (m(0, 1) * m(3, 3) - m(0, 3) * m(3, 1)) +
-			m(2, 1) * (m(0, 3) * m(3, 0) - m(0, 0) * m(3, 3)));
+	                 m(2, 0) * (m(0, 1) * m(3, 3) - m(0, 3) * m(3, 1)) +
+	                 m(2, 1) * (m(0, 3) * m(3, 0) - m(0, 0) * m(3, 3)));
 	out(2, 2) = d * (m(3, 3) * (m(0, 0) * m(1, 1) - m(0, 1) * m(1, 0)) +
-			m(3, 0) * (m(0, 1) * m(1, 3) - m(0, 3) * m(1, 1)) +
-			m(3, 1) * (m(0, 3) * m(1, 0) - m(0, 0) * m(1, 3)));
+	                 m(3, 0) * (m(0, 1) * m(1, 3) - m(0, 3) * m(1, 1)) +
+	                 m(3, 1) * (m(0, 3) * m(1, 0) - m(0, 0) * m(1, 3)));
 	out(2, 3) = d * (m(0, 3) * (m(1, 1) * m(2, 0) - m(1, 0) * m(2, 1)) +
-			m(0, 0) * (m(1, 3) * m(2, 1) - m(1, 1) * m(2, 3)) +
-			m(0, 1) * (m(1, 0) * m(2, 3) - m(1, 3) * m(2, 0)));
+	                 m(0, 0) * (m(1, 3) * m(2, 1) - m(1, 1) * m(2, 3)) +
+	                 m(0, 1) * (m(1, 0) * m(2, 3) - m(1, 3) * m(2, 0)));
 	out(3, 0) = d * (m(1, 0) * (m(2, 2) * m(3, 1) - m(2, 1) * m(3, 2)) +
-			m(1, 1) * (m(2, 0) * m(3, 2) - m(2, 2) * m(3, 0)) +
-			m(1, 2) * (m(2, 1) * m(3, 0) - m(2, 0) * m(3, 1)));
+	                 m(1, 1) * (m(2, 0) * m(3, 2) - m(2, 2) * m(3, 0)) +
+	                 m(1, 2) * (m(2, 1) * m(3, 0) - m(2, 0) * m(3, 1)));
 	out(3, 1) = d * (m(2, 0) * (m(0, 2) * m(3, 1) - m(0, 1) * m(3, 2)) +
-			m(2, 1) * (m(0, 0) * m(3, 2) - m(0, 2) * m(3, 0)) +
-			m(2, 2) * (m(0, 1) * m(3, 0) - m(0, 0) * m(3, 1)));
+	                 m(2, 1) * (m(0, 0) * m(3, 2) - m(0, 2) * m(3, 0)) +
+	                 m(2, 2) * (m(0, 1) * m(3, 0) - m(0, 0) * m(3, 1)));
 	out(3, 2) = d * (m(3, 0) * (m(0, 2) * m(1, 1) - m(0, 1) * m(1, 2)) +
-			m(3, 1) * (m(0, 0) * m(1, 2) - m(0, 2) * m(1, 0)) +
-			m(3, 2) * (m(0, 1) * m(1, 0) - m(0, 0) * m(1, 1)));
+	                 m(3, 1) * (m(0, 0) * m(1, 2) - m(0, 2) * m(1, 0)) +
+	                 m(3, 2) * (m(0, 1) * m(1, 0) - m(0, 0) * m(1, 1)));
 	out(3, 3) = d * (m(0, 0) * (m(1, 1) * m(2, 2) - m(1, 2) * m(2, 1)) +
-			m(0, 1) * (m(1, 2) * m(2, 0) - m(1, 0) * m(2, 2)) +
-			m(0, 2) * (m(1, 0) * m(2, 1) - m(1, 1) * m(2, 0)));
+	                 m(0, 1) * (m(1, 2) * m(2, 0) - m(1, 0) * m(2, 2)) +
+	                 m(0, 2) * (m(1, 0) * m(2, 1) - m(1, 1) * m(2, 0)));
 }
 
 void Transform::GetTransposed(Transform& out) const
@@ -122,15 +123,15 @@ void Transform::GetTransposed(Transform& out) const
 
 void Transform::Interpolate(const Transform& other, float t, Transform& out) const
 {
-	for(unsigned int c = 0; c < 16; ++c)
+	for (unsigned int c = 0; c < 16; ++c)
 		out[c] = matrix[c] + (other[c] - matrix[c]) * t;
 }
 
 bool Transform::Equals(const Transform& other, float roundingTolerance) const
 {
-	for(unsigned int c = 0; c < 16; ++c)
+	for (unsigned int c = 0; c < 16; ++c)
 	{
-		if(!Math::Equals(matrix[c], other[c], roundingTolerance))
+		if (!Math::Equals(matrix[c], other[c], roundingTolerance))
 			return false;
 	}
 
@@ -139,9 +140,9 @@ bool Transform::Equals(const Transform& other, float roundingTolerance) const
 
 bool Transform::IsIdentity() const
 {
-	for(unsigned int c = 0; c < 16; ++c)
+	for (unsigned int c = 0; c < 16; ++c)
 	{
-		if(!Math::Equals(matrix[c], kIdentityMatrix[c]))
+		if (!Math::Equals(matrix[c], kIdentityMatrix[c]))
 			return false;
 	}
 	return true;
@@ -150,36 +151,36 @@ bool Transform::IsIdentity() const
 bool Transform::IsOrthogonal() const
 {
 	float dp=matrix[0] * matrix[4] + matrix[1] * matrix[5] + matrix[2]
-		* matrix[6] + matrix[3] * matrix[7];
+	         * matrix[6] + matrix[3] * matrix[7];
 
 
 	if (!Math::IsZero(dp))
 		return false;
 
 	dp = matrix[0] * matrix[8] + matrix[1] * matrix[9] + matrix[2]
-		* matrix[10] + matrix[3] * matrix[11];
+	     * matrix[10] + matrix[3] * matrix[11];
 
 	if (!Math::IsZero(dp))
 		return false;
 
 	dp = matrix[0] * matrix[12] + matrix[1] * matrix[13] + matrix[2]
-		* matrix[14] + matrix[3] * matrix[15];
+	     * matrix[14] + matrix[3] * matrix[15];
 	if (!Math::IsZero(dp))
 		return false;
 	dp = matrix[4] * matrix[8] + matrix[5] * matrix[9] + matrix[6]
-		* matrix[10] + matrix[7] * matrix[11];
+	     * matrix[10] + matrix[7] * matrix[11];
 
 	if (!Math::IsZero(dp))
 		return false;
 
 	dp = matrix[4] * matrix[12] + matrix[5] * matrix[13] + matrix[6]
-		* matrix[14] + matrix[7] * matrix[15];
+	     * matrix[14] + matrix[7] * matrix[15];
 
 	if (!Math::IsZero(dp))
 		return false;
 
 	dp = matrix[8] * matrix[12] + matrix[9] * matrix[13] + matrix[10]
-		* matrix[14] + matrix[11] * matrix[15];
+	     * matrix[14] + matrix[11] * matrix[15];
 
 	return (Math::IsZero(dp));
 }
@@ -220,9 +221,9 @@ void Transform::GetRotationRadians(Vector3& vecOut) const
 	// fix values that get below zero
 	// before it would set (!) values to 360
 	// that were above 360:
-	if(X < 0.0)
+	if (X < 0.0)
 		X += 2 * Math::kPi;
-	if(Y < 0.0)
+	if (Y < 0.0)
 		Y += 2 * Math::kPi;
 	if (Z < 0.0)
 		Z += 2 * Math::kPi;
@@ -240,18 +241,18 @@ void Transform::GetScale(Vector3& vecOut) const
 	// See http://www.robertblum.com/articles/2005/02/14/decomposing-matrices
 
 	// Deal with the 0 rotation case first
-	if(Math::IsZero(matrix[1]) && Math::IsZero(matrix[2]) &&
-		Math::IsZero(matrix[4]) && Math::IsZero(matrix[6]) &&
-		Math::IsZero(matrix[8]) && Math::IsZero(matrix[9]))
+	if (Math::IsZero(matrix[1]) && Math::IsZero(matrix[2]) &&
+	        Math::IsZero(matrix[4]) && Math::IsZero(matrix[6]) &&
+	        Math::IsZero(matrix[8]) && Math::IsZero(matrix[9]))
 	{
 		vecOut.Set(matrix[0], matrix[5], matrix[10]);
 	}
 	else
 	{
-	// We have to do the full calculation.
-	vecOut.Set(sqrtf(matrix[0] * matrix[0] + matrix[1] * matrix[1] + matrix[2] * matrix[2]),
-		sqrtf(matrix[4] * matrix[4] + matrix[5] * matrix[5] + matrix[6] * matrix[6]),
-		sqrtf(matrix[8] * matrix[8] + matrix[9] * matrix[9] + matrix[10] * matrix[10]));
+		// We have to do the full calculation.
+		vecOut.Set(sqrtf(matrix[0] * matrix[0] + matrix[1] * matrix[1] + matrix[2] * matrix[2]),
+		           sqrtf(matrix[4] * matrix[4] + matrix[5] * matrix[5] + matrix[6] * matrix[6]),
+		           sqrtf(matrix[8] * matrix[8] + matrix[9] * matrix[9] + matrix[10] * matrix[10]));
 	}
 }
 
@@ -419,11 +420,11 @@ void Transform::TransformPoint(Vector3& point) const
 	float vector[3];
 
 	vector[0] = point.X * matrix[0] + point.Y * matrix[4]
-		+ point.Z * matrix[8] + matrix[12];
+	            + point.Z * matrix[8] + matrix[12];
 	vector[1] = point.X * matrix[1] + point.Y * matrix[5]
-		+ point.Z * matrix[9] + matrix[13];
+	            + point.Z * matrix[9] + matrix[13];
 	vector[2] = point.X * matrix[2] + point.Y * matrix[6]
-		+ point.Z * matrix[10] + matrix[14];
+	            + point.Z * matrix[10] + matrix[14];
 
 	point.X = vector[0];
 	point.Y = vector[1];
@@ -442,7 +443,7 @@ Transform Transform::operator*(const float scalar) const
 	Transform ret(matrix);
 	float* arr = ret.matrix;
 
-	for(unsigned int c = 0; c < 16; ++c)
+	for (unsigned int c = 0; c < 16; ++c)
 		arr[c] *= scalar;
 
 	return ret;
@@ -457,7 +458,7 @@ Transform& Transform::operator*=(const Transform& other)
 
 Transform& Transform::operator*=(const float scalar)
 {
-	for(unsigned int c = 0; c < 16; ++c)
+	for (unsigned int c = 0; c < 16; ++c)
 		matrix[c] *= scalar;
 
 	return *this;
@@ -469,7 +470,7 @@ Transform Transform::operator+(const Transform& other) const
 
 	Transform ret(matrix);
 
-	for(unsigned int c = 0; c < 16; ++c)
+	for (unsigned int c = 0; c < 16; ++c)
 		ret.matrix[c] += otherMat[c];
 
 	return ret;
@@ -479,7 +480,7 @@ Transform& Transform::operator+=(const Transform& other)
 {
 	const float* otherMat = other.matrix;
 
-	for(unsigned int c = 0; c < 16; ++c)
+	for (unsigned int c = 0; c < 16; ++c)
 		matrix[c] += otherMat[c];
 
 	return *this;
@@ -491,7 +492,7 @@ Transform Transform::operator-(const Transform& other) const
 
 	Transform ret(matrix);
 
-	for(unsigned int c = 0; c < 16; ++c)
+	for (unsigned int c = 0; c < 16; ++c)
 		ret.matrix[c] -= otherMat[c];
 
 	return ret;
@@ -501,7 +502,7 @@ Transform& Transform::operator-=(const Transform& other)
 {
 	const float* otherMat = other.matrix;
 
-	for(unsigned int c = 0; c < 16; ++c)
+	for (unsigned int c = 0; c < 16; ++c)
 		matrix[c] -= otherMat[c];
 
 	return *this;
