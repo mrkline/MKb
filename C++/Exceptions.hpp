@@ -17,19 +17,14 @@ namespace Exceptions
 		\param exceptionMessage The message to contain within the exception.
 		\param callingFunctionName The name of the exception the function comes from.
 		*/
-		Exception(const std::string& exceptionMessage,	const std::string& callingFunctionName = nullptr)
-				: message(exceptionMessage), cf(callingFunctionName)
+		Exception(const std::string& exceptionMessage,
+		          const std::string& callingFunctionName = nullptr)
+				: message(exceptionMessage),
+				callingFunction(callingFunctionName)
 		{ }
 
-		//! Returns the exception message
-		const std::string& GetExceptionMessage() const { return message; }
-
-		//! Returns the name of the calling function, or null if it is not set
-		const std::string& GetCallingFunction() const { return cf;	}
-
-	private:
 		const std::string message; //!< Exception message
-		const std::string cf; //!< Name of calling function
+		const std::string callingFunction; //!< Name of calling function
 	};
 
 	/*!
@@ -41,7 +36,9 @@ namespace Exceptions
 	{
 	public:
 		explicit NotImplementedException(const std::string& callingFunctionName)
-				: Exception("This function or method has not been implemented yet", callingFunctionName)
+				: Exception("This function or method has not been"
+				            " implemented yet",
+				            callingFunctionName)
 		{ }
 
 		NotImplementedException(const std::string& exceptionMessage,
