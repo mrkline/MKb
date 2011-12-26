@@ -1,8 +1,8 @@
 #pragma once
 
-#include "IP.h"
-#include "WinsockRequirement.h"
-#include "Exceptions.h"
+#include "IP.hpp"
+#include "WinsockRequirement.hpp"
+#include "Exceptions.hpp"
 
 /*!
 \brief A User Datagram Protocol client for

@@ -2,7 +2,9 @@
 
 #include <WinSock2.h>
 
-#include "Exceptions.h"
+#include "Exceptions.hpp"
+
+using namespace Exceptions;
 
 /*!
 \brief Wraps the startups and shutdown functions of Winsock.

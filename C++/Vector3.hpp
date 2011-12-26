@@ -2,7 +2,7 @@
 
 #include <string>
 
-#include "MKMath.h"
+#include "MKMath.hpp"
 
 //! A three-dimensional vector using floats for each dimension
 class Vector3

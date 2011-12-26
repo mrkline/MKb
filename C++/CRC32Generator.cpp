@@ -1,4 +1,4 @@
-#include "CRC32Generator.h"
+#include "CRC32Generator.hpp"
 
 uint32_t CRC32Generator::Reflect(uint32_t ref, char ch)
 {

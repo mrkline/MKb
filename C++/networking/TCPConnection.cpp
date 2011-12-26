@@ -1,12 +1,13 @@
-#include "TCPConnection.h"
+#include "TCPConnection.hpp"
 
 #include <sstream>
 #include <winsock2.h>
 #include <ws2tcpip.h>
 
-#include "Exceptions.h"
+#include "Exceptions.hpp"
 
 using namespace std;
+using namespace Exceptions;
 
 TCPConnection::TCPConnection()
 		: sock(INVALID_SOCKET)

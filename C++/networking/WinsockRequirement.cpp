@@ -1,3 +1,3 @@
-#include "WinsockRequirement.h"
+#include "WinsockRequirement.hpp"
 
 WSADATA WinsockRequirement::wsd;

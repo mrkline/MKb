@@ -1,11 +1,11 @@
-#include "TCPListener.h"
+#include "TCPListener.hpp"
 
 #include <sstream>
 #include <winsock2.h>
 #include <ws2tcpip.h>
 
-#include "Exceptions.h"
-#include "TCPConnection.h"
+#include "Exceptions.hpp"
+#include "TCPConnection.hpp"
 
 #pragma comment (lib, "Ws2_32.lib")
 

@@ -1,4 +1,4 @@
-#include "UDPClient.h"
+#include "UDPClient.hpp"
 
 UDPClient::UDPClient()
 		: bound(false), canSend(true), canReceive(true)

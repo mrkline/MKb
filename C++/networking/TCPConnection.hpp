@@ -1,7 +1,7 @@
 #pragma once
 
-#include "IP.h"
-#include "WinsockRequirement.h"
+#include "IP.hpp"
+#include "WinsockRequirement.hpp"
 
 /*!
 \brief A Transmission Control Protocol connection for

@@ -2,8 +2,8 @@
 
 #include <WinSock2.h>
 
-#include "IP.h"
-#include "WinsockRequirement.h"
+#include "IP.hpp"
+#include "WinsockRequirement.hpp"
 
 class TCPConnection;
 

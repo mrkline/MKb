@@ -1,11 +1,12 @@
-#include "IP.h"
+#include "IP.hpp"
 
 #include <sstream>
 #include <vector>
 
-#include "Exceptions.h"
+#include "Exceptions.hpp"
 
 using namespace std;
+using namespace Exceptions;
 
 IP::IP(const string& ipStr)
 {
