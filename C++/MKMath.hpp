@@ -52,7 +52,7 @@ namespace Math
 	Clamps a value between a low and high value using std::min and std::max
 	*/
 	template <class T>
-	inline const T Clamp (const T& value, const T& low, const T& high)
+	inline const T clamp(const T& value, const T& low, const T& high)
 	{
 		return std::min(std::max(value, low), high);
 	}
@@ -68,7 +68,7 @@ namespace Math
 	This allows for safer floating comparisons,
 	since direct ones may work poorly due to rounding error.
 	*/
-	inline bool Equals(float a, float b, float tolerance = kFloatRoundError)
+	inline bool equals(float a, float b, float tolerance = kFloatRoundError)
 	{
 		return (a + tolerance >= b) && (a - tolerance <= b);
 	}
@@ -84,7 +84,7 @@ namespace Math
 	This allows for safer floating comparisons,
 	since direct ones may work poorly due to rounding error.
 	*/
-	inline bool Equals(double a, double b, double tolerance = kDoubleRoundError)
+	inline bool equals(double a, double b, double tolerance = kDoubleRoundError)
 	{
 		return (a + tolerance >= b) && (a - tolerance <= b);
 	}
@@ -100,7 +100,7 @@ namespace Math
 	This allows for safer floating comparisons,
 	since direct ones may work poorly due to rounding error.
 	*/
-	inline bool IsZero(float a, float tolerance = kFloatRoundError)
+	inline bool isZero(float a, float tolerance = kFloatRoundError)
 	{
 		return (a + tolerance >= 0.0f) && (a - tolerance <= 0.0f);
 	}
@@ -116,7 +116,7 @@ namespace Math
 	This allows for safer floating comparisons,
 	since direct ones may work poorly due to rounding error.
 	*/
-	inline bool IsZero(double a, double tolerance = kDoubleRoundError)
+	inline bool isZero(double a, double tolerance = kDoubleRoundError)
 	{
 		return (a + tolerance >= 0.0) && (a - tolerance <= 0.0);
 	}
