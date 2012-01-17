@@ -24,6 +24,9 @@ public:
 	//! Initializes vector with a provided vector's values
 	Vector3(const Vector3& o) : X(o.X), Y(o.Y), Z(o.Z) {}
 
+	//! Initializes a 3D vector from a 2D one
+	Vector3(const Vector2& o) : X(o.x), Y(o.Y), Z(0.0f) {}
+
 	//! Initializes vector with the first three values in the provided array
 	explicit Vector3(float* arr) : X(arr[0]), Y(arr[1]), Z(arr[2]) {}
 

@@ -3,7 +3,6 @@
 #include <string>
 
 #include "MKMath.hpp"
-#include "Vector3.hpp"
 
 //! A two-dimensional vector using floats for each dimension
 class Vector2
@@ -228,11 +227,6 @@ public:
 	static float dotProduct(const Vector2& a, const Vector2& b)
 	{
 		return a.X * b.X + a.Y * b.Y;
-	}
-
-	static Vector3 crossProduct(const Vector2& a, const Vector2& b)
-	{
-		return Vector3(0.0f, 0.0f, a.X * b.Y - a.Y * b.X);
 	}
 
 	//! Gets the left world vector (-1, 0, 0)
