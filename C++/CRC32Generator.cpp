@@ -36,9 +36,7 @@ uint32_t CRC32Generator::CRC32Generate(void* data, size_t dataLength)
 	uint32_t crc = ~0;
 
 	for (uint8_t* cData = (uint8_t*)data; dataLength; --dataLength, ++cData)
-	{
 		crc = table[(crc & 0xFF) ^ *cData] ^ (crc >> 8);
-	}
 
 	return ~crc;
 }

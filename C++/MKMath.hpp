@@ -23,13 +23,17 @@ namespace Math
 	const double kPiDoubleRecip = 1.0 / kPiDouble;
 	//! Double represntation of Pi / 2
 	const double kHalfPiDouble = kPiDouble / 2.0;
-	//! Conversion ratio to convert angle measurements in degrees to radian angle mesurements
+	//! Conversion ratio to convert angle measurements in
+	//! degrees to radian angle mesurements
 	const float kDegToRad = kPi / 180.0f;
-	//! Conversion ratio to convert angle measurements in radians to degree angle mesurements
+	//! Conversion ratio to convert angle measurements in
+	//! radians to degree angle mesurements
 	const float kRadToDeg   = 180.0f / kPi;
-	//! Conversion ratio to convert angle measurements in degrees to radian angle mesurements
+	//! Conversion ratio to convert angle measurements in
+	//! degrees to radian angle mesurements
 	const double kDegToRadDouble = kPiDouble / 180.0;
-	//! Conversion ratio to convert angle measurements in radians to degree angle mesurements
+	//! Conversion ratio to convert angle measurements in
+	//! radians to degree angle mesurements
 	const double kRadToDegDouble = 180.0 / kPiDouble;
 	//! Rounding error of a float
 	//! \todo Get a more "real" value? Such as from std library?

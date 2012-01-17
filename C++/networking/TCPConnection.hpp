@@ -33,7 +33,8 @@ public:
 	TCPConnection(SOCKET connSock);
 
 	/*!
-	\brief Establishes a TCP connection between the client and a server at the given end point
+	\brief Establishes a TCP connection between the client and a server
+	       at the given end point
 	\param server The IP and port of the TCP server to connect to
 	\throws InvalidOperationException if the connection is already established
 	\throws NetworkException if Winsock's getaddrinfo, socket, or connect fail
@@ -53,7 +54,8 @@ public:
 	\param dataLen The amount (in bytes) of data to send
 	\returns The amount (in bytes) of data sent
 	\throws InvalidOperationException if the connection is not established,
-			sending has been shut down, or the other party has closed the connection
+	        sending has been shut down,
+	        or the other party has closed the connection
 	\throws NetworkException if Winsock's send fails
 
 	This operation is blocking.
@@ -65,9 +67,10 @@ public:
 	\param recvBuff The buffer to copy the incoming datagram into
 	\param recvBuffLen The amount (in bytes) of recvBuff that Receive is allowed to copy into
 	\returns The number of bytes received into recvBuff,
-			or 0 if the connection was closed gracefully
+	         or 0 if the connection was closed gracefully
 	\throws InvalidOperationException if the connection is not established,
-			receiving has been shut down, or the other party has closed the connection
+	        receiving has been shut down, or the other party has
+	        closed the connection
 	\throws NetworkException if Winsock's recv fails
 
 	This operation is blocking.

@@ -164,7 +164,12 @@ public:
 
 	//! Sets this vector's values from the first three values of the
 	//! provided array
-	void SetFromArray(float* asArray) { X = asArray[0]; Y = asArray[1]; Z = asArray[2]; }
+	void SetFromArray(float* asArray)
+	{
+		X = asArray[0];
+		Y = asArray[1];
+		Z = asArray[2];
+	}
 
 	//! Set's vector's components to their mulitplicative inverses
 	void SetToInverse() { X = 1.0f / X; Y = 1.0f / Y; Z = 1.0f / Z; }
@@ -178,7 +183,12 @@ public:
 	{ X *= o.X; Y *= o.Y; Z *= o.Z; }
 
 	//! Returns a copy of this vector, scaled by the provided vector
-	Vector3 GetScaledBy(const Vector3& o) const { Vector3 ret(*this); ret.Scale(o); return ret; }
+	Vector3 GetScaledBy(const Vector3& o) const
+	{
+		Vector3 ret(*this);
+		ret.Scale(o);
+		return ret;
+	}
 
 	//! Scales this vector by a provided scalar
 	void Scale(float v)

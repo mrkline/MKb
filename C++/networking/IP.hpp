@@ -19,7 +19,10 @@ public:
 	\param oct2 The third octet
 	\param oct3 The fourth octet
 	*/
-	IP(unsigned char oct0, unsigned char oct1, unsigned char oct2, unsigned char oct3);
+	IP(unsigned char oct0,
+	   unsigned char oct1,
+	   unsigned char oct2,
+	   unsigned char oct3);
 
 	/*!
 	\brief Constructs the IP from its binary representation
@@ -31,7 +34,8 @@ public:
 	\brief Gets a given octet
 	\param octetNum The index of the octet to return
 	\returns The specified octet
-	\throws ArgumentOutOfRangeException if octetNum is not within the range [0,4)
+	\throws ArgumentOutOfRangeException if octetNum is not
+	        within the range [0,4)
 	*/
 	unsigned char GetOctet(unsigned char octetNum) const;
 
@@ -39,7 +43,8 @@ public:
 	\brief Sets an octet to a new value
 	\param octetNum The index of the octet to set
 	\param val The new value of the octet
-	\throws ArgumentOutOfRangeException if octetNum is not within the range [0,4)
+	\throws ArgumentOutOfRangeException if octetNum is not
+	        within the range [0,4)
 	*/
 	void SetOctet(unsigned char octetNum, unsigned char val);
 
@@ -64,7 +69,8 @@ private:
 
 	/*!
 	Sets the IP octets from a string
-	\throws ArgumentException if an IP could not be constructed from the given string
+	\throws ArgumentException if an IP could not be constructed
+	        from the given string
 	*/
 	void OctetsFromString(const std::string& ipStr);
 
