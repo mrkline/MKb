@@ -1,8 +1,6 @@
 #include "TCPConnection.hpp"
 
 #include <sstream>
-#include <winsock2.h>
-#include <ws2tcpip.h>
 
 #include "Exceptions.hpp"
 
@@ -11,11 +9,12 @@ using namespace Exceptions;
 
 TCPConnection::TCPConnection()
 		: sock(INVALID_SOCKET)
-{ }
+{
+}
 
-TCPConnection::TCPConnection( SOCKET connSock )
-		: sock(connSock), canSend(true),
-		canReceive(true), closedByOtherParty(false)
+TCPConnection::TCPConnection( SockDesc connSock )
+		: sock(connSock), canSend(true), canReceive(true),
+		closedByOtherParty(false)
 {
 	if (connSock == INVALID_SOCKET)
 		throw ArgumentException("The provided socket is invalid.",
@@ -34,16 +33,14 @@ TCPConnection::~TCPConnection()
 void TCPConnection::Connect( const IPEndPoint& server )
 {
 	if (sock != INVALID_SOCKET)
-	{
 		throw InvalidOperationException("A connection has already been made.",
 		                                __FUNCTION__);
-	}
 
 
 	addrinfo *result = nullptr;
 	addrinfo hints;
 
-	ZeroMemory( &hints, sizeof(hints) );
+	memset(&hints, 0, sizeof(hints) );
 	hints.ai_family = AF_UNSPEC;
 	hints.ai_socktype = SOCK_STREAM;
 	hints.ai_protocol = IPPROTO_TCP;
@@ -51,12 +48,11 @@ void TCPConnection::Connect( const IPEndPoint& server )
 	stringstream ps;
 	ps << server.Port;
 
-	if (getaddrinfo(server.Address.GetAsString().c_str(), ps.str().c_str(),
-	                &hints, &result) != 0)
-	{
-		throw NetworkException("getaddrinfo failed while trying to set up"
-		                       " a connection.", __FUNCTION__);
-	}
+	if (getaddrinfo(server.Address.GetAsString().c_str(),
+	                ps.str().c_str(), &hints, &result) != 0)
+		throw NetworkException(
+		    "getaddrinfo failed while trying to set up a connection.",
+		    __FUNCTION__);
 
 	// Iterate through the given addresses, trying to connect
 	for (addrinfo* ptr = result; ptr != nullptr; ptr = ptr->ai_next)
@@ -69,7 +65,7 @@ void TCPConnection::Connect( const IPEndPoint& server )
 			throw NetworkException("Socket creation failed.", __FUNCTION__);
 		}
 
-		if (connect(sock, ptr->ai_addr, (int)ptr->ai_addrlen) == SOCKET_ERROR)
+		if (0 > connect(sock, ptr->ai_addr, (int)ptr->ai_addrlen))
 		{
 			closesocket(sock);
 			sock = INVALID_SOCKET;
@@ -81,8 +77,9 @@ void TCPConnection::Connect( const IPEndPoint& server )
 	freeaddrinfo(result);
 
 	if (sock == INVALID_SOCKET)
-		throw NetworkException("A connection to the server"
-		                       " could not be established.", __FUNCTION__);
+		throw NetworkException(
+		    "A connection to the server could not be established.",
+		    __FUNCTION__);
 
 	canSend = true;
 	canReceive = true;
@@ -91,19 +88,22 @@ void TCPConnection::Connect( const IPEndPoint& server )
 
 void TCPConnection::Disconnect()
 {
+	int how;
+
 	if (sock == INVALID_SOCKET)
 	{
 		throw InvalidOperationException(
-		    "The connection cannot be disconnected"
-		    " since it is not connected in the first place.",
+		    "The connection cannot be disconnected since it is not"
+		    " connected in the first place.",
 		    __FUNCTION__);
 	}
 
-	if (shutdown(sock, SD_BOTH) != 0)
-	{
-		throw NetworkException("Socket shutdown failed during disconnection.",
-		                       __FUNCTION__);
-	}
+	how = (canSend && canReceive) ?
+	      SD_BOTH : (canSend ? SD_SEND : (canReceive ? SD_RECEIVE : -1));
+
+	if (-1 != how)
+		shutdown(sock, how);
+	//	throw NetworkException("Socket shutdown failed during disconnection.", __FUNCTION__);
 
 	canSend = false;
 	canReceive = false;
@@ -119,26 +119,28 @@ size_t TCPConnection::Send(const char* data, size_t dataLen )
 {
 	if (sock == INVALID_SOCKET)
 	{
-		throw ("The connection cannot send data"
-		       " since no connection is established",
-		       __FUNCTION__);
+		throw InvalidOperationException("The connection cannot send data since"
+		                                " no connection is established",
+		                                __FUNCTION__);
 	}
 
 	if (!canSend)
 	{
-		throw InvalidOperationException("Sending has been shut down"
-		                                " on this connection.", __FUNCTION__);
+		throw InvalidOperationException(
+		    "Sending has been shut down on this connection.",
+		    __FUNCTION__);
 	}
 
 	if (closedByOtherParty)
 	{
-		throw InvalidOperationException("The other party has closed"
-		                                " the connection", __FUNCTION__);
+		throw InvalidOperationException(
+		    "The other party has closed the connection",
+		    __FUNCTION__);
 	}
 
 	int ret = send(sock, data, dataLen, 0);
 
-	if (ret == SOCKET_ERROR)
+	if (0 > ret)
 		throw NetworkException("Sending over the connection failed",
 		                       __FUNCTION__);
 
@@ -156,19 +158,20 @@ size_t TCPConnection::Receive( char* recvBuff, size_t recvBuffLen )
 
 	if (!canReceive)
 	{
-		throw InvalidOperationException("Receiving has been shut down"
-		                                " on this connection.", __FUNCTION__);
+		throw InvalidOperationException(
+		    "Receiving has been shut down on this connection.",
+		    __FUNCTION__);
 	}
 
 	if (closedByOtherParty)
 	{
-		throw InvalidOperationException("The other party has closed"
-		                                " the connection", __FUNCTION__);
+		throw InvalidOperationException(
+		    "The other party has closed the connection", __FUNCTION__);
 	}
 
 	int ret = recv(sock, recvBuff, recvBuffLen, 0);
 
-	if (ret == SOCKET_ERROR)
+	if (0 > ret)
 	{
 		throw NetworkException("Receiving over the connection failed.",
 		                       __FUNCTION__);
@@ -184,8 +187,9 @@ void TCPConnection::ShutDownSending()
 {
 	if (!canSend)
 	{
-		throw InvalidOperationException("Sending has already been shut down"
-		                                " on this connection.", __FUNCTION__);
+		throw InvalidOperationException(
+		    "Sending has already been shut down on this connection.",
+		    __FUNCTION__);
 	}
 
 	if (shutdown(sock, SD_SEND) != 0)
@@ -198,9 +202,9 @@ void TCPConnection::ShutDownReceiving()
 {
 	if (!canReceive)
 	{
-		throw InvalidOperationException("Receiving has already been shut down"
-		                                " on this connection.",
-		                                __FUNCTION__);
+		throw InvalidOperationException(
+		    "Receiving has already been shut down on this connection.",
+		    __FUNCTION__);
 	}
 
 	if (shutdown(sock, SD_RECEIVE) != 0)

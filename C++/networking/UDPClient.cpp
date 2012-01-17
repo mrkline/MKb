@@ -1,5 +1,7 @@
 #include "UDPClient.hpp"
 
+using namespace Exceptions;
+
 UDPClient::UDPClient()
 		: bound(false), canSend(true), canReceive(true)
 {
@@ -24,15 +26,19 @@ UDPClient::~UDPClient()
 
 void UDPClient::Bind( int port )
 {
-	SOCKADDR_IN ai;
+	struct sockaddr_in ai;
 
 	memset(&ai, 0, sizeof(ai));
 	ai.sin_family = AF_INET;
 	ai.sin_addr.s_addr = htonl(INADDR_ANY);
 	ai.sin_port = htons(port);
 
-	if (bind(sock, (sockaddr*)&ai, sizeof(ai)) != 0)
-		throw NetworkException("UDP socket could not be bound to the given port", __FUNCTION__);
+	if (bind(sock, (struct sockaddr*)&ai, sizeof(ai)) != 0)
+	{
+		throw NetworkException(
+		    "UDP socket could not be bound to the given port",
+		    __FUNCTION__);
+	}
 
 	bound = true;
 }
@@ -52,16 +58,21 @@ size_t UDPClient::Send(const char* data, size_t dataLen )
 	if (defaultDest == nullptr)
 	{
 		throw InvalidOperationException(
-		    "A default destination must be set before sending without a specified destination",
+		    "A default destination must be set before sending"
+		    " without a specified destination",
 		    __FUNCTION__);
 	}
 
 	if (!canSend)
-		throw InvalidOperationException("Sending has been shut down on this connection.", __FUNCTION__);
+	{
+		throw InvalidOperationException(
+		    "Sending has been shut down on this connection.", __FUNCTION__);
+	}
 
-	int ret = sendto(sock, data, dataLen, 0, (sockaddr*)defaultDest, sizeof(*defaultDest));
+	int ret = sendto(sock, data, dataLen, 0, (sockaddr*)defaultDest,
+	                 sizeof(*defaultDest));
 
-	if (ret == SOCKET_ERROR)
+	if (0 > ret)
 	{
 		throw NetworkException("Sending failed.", __FUNCTION__);
 	}
@@ -69,10 +80,14 @@ size_t UDPClient::Send(const char* data, size_t dataLen )
 	return ret;
 }
 
-size_t UDPClient::Send(const char* data, size_t dataLen, const IPEndPoint& destination )
+size_t UDPClient::Send(const char* data, size_t dataLen,
+                       const IPEndPoint& destination )
 {
 	if (!canSend)
-		throw InvalidOperationException("Sending has been shut down on this connection.", __FUNCTION__);
+	{
+		throw InvalidOperationException(
+		    "Sending has been shut down on this connection.", __FUNCTION__);
+	}
 
 	sockaddr_in dest;
 	memset(&dest, 0, sizeof(dest));
@@ -82,7 +97,7 @@ size_t UDPClient::Send(const char* data, size_t dataLen, const IPEndPoint& desti
 
 	int ret = sendto(sock, data, dataLen, 0, (sockaddr*)&dest, sizeof(dest));
 
-	if (ret == SOCKET_ERROR)
+	if (0 > ret)
 	{
 		throw NetworkException("Sending failed.", __FUNCTION__);
 	}
@@ -90,19 +105,26 @@ size_t UDPClient::Send(const char* data, size_t dataLen, const IPEndPoint& desti
 	return ret;
 }
 
-size_t UDPClient::Receive( char* recvBuff, size_t recvBuffLen, IP* from /*= nullptr*/ )
+size_t UDPClient::Receive( char* recvBuff, size_t recvBuffLen,
+                           IP* from /*= nullptr*/ )
 {
 	if (!bound)
 	{
-		throw InvalidOperationException("To receive from a UDP client, it must first be bound.",
-		                                __FUNCTION__);
+		throw InvalidOperationException(
+		    "To receive from a UDP client, it must first be bound.",
+		    __FUNCTION__);
 	}
 
 	if (!canReceive)
-		throw InvalidOperationException("Receiving has been shut down on this connection.", __FUNCTION__);
+	{
+		throw InvalidOperationException(
+		    "Receiving has been shut down on this connection.",
+		    __FUNCTION__);
+	}
 
 	int ret;
 
+#ifdef FMS_WINDOWS_BUILD
 	// Clear the LastError flag so we can check it after we run recvfrom
 	WSASetLastError(0);
 
@@ -124,11 +146,27 @@ size_t UDPClient::Receive( char* recvBuff, size_t recvBuffLen, IP* from /*= null
 	if (WSAGetLastError() == WSAEMSGSIZE)
 	{
 		throw InsufficientBufferException(
-		    "In UDP, the receiving buffer must be as large as the incoming datagram",
+		    "In UDP, the receiving buffer must be as large"
+		    " as the incoming datagram",
 		    __FUNCTION__);
 	}
+#else
+	if (from == nullptr)
+	{
+		sockaddr_in fa;
+		socklen_t fasz;
+		ret = recvfrom(sock, recvBuff, recvBuffLen, 0, (sockaddr *) &fa, &fasz);
+	}
+	else
+	{
+		ret = recvfrom(sock, recvBuff, recvBuffLen, 0, NULL, NULL);
+	}
 
-	if (ret == SOCKET_ERROR)
+	//! \todo Do we need to throw an exception on failure here like we do in
+	//!       Windows?
+#endif
+
+	if (0 > ret)
 		throw NetworkException("Receiving failed", __FUNCTION__);
 
 	return ret;
@@ -138,8 +176,9 @@ void UDPClient::ShutDownSending()
 {
 	if (!canSend)
 	{
-		throw InvalidOperationException("Sending has already been shut down on this connection.",
-		                                __FUNCTION__);
+		throw InvalidOperationException(
+		    "Sending has already been shut down on this connection.",
+		    __FUNCTION__);
 	}
 
 	if (shutdown(sock, SD_SEND) != 0)
@@ -152,8 +191,9 @@ void UDPClient::ShutDownReceiving()
 {
 	if (!canReceive)
 	{
-		throw InvalidOperationException("Receiving has already been shut down on this connection.",
-		                                __FUNCTION__);
+		throw InvalidOperationException(
+		    "Receiving has already been shut down on this connection.",
+		    __FUNCTION__);
 	}
 
 	if (shutdown(sock, SD_RECEIVE) != 0)

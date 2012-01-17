@@ -1,9 +1,12 @@
 #pragma once
 
-#include <WinSock2.h>
-
+#include "Portability.hpp"
 #include "IP.hpp"
-#include "WinsockRequirement.hpp"
+
+#ifdef FMS_WINDOWS_BUILD
+#  include "WinsockRequirement.hpp"
+#endif
+
 
 class TCPConnection;
 
@@ -23,16 +26,19 @@ public:
 	~TCPListener();
 
 	/*!
-	\brief Makes the listener begin listening for a maximum number of incoming connection requests
-	\param maxRequests The maximum number of connection requests this listener will place
-		on backlog to accept. The default is the maximum number of connections.
+	\brief Makes the listener begin listening for a maximum number of incoming
+	       connection requests
+	\param maxRequests The maximum number of connection requests this listener
+	       will place on backlog to accept. The default is the maximum number
+	       of connections.
 	\throws InvalidOperationException if the listener has already been started
 	\throws NetworkException if Winsock's socket, bind, or listen fail
 	*/
 	void Start(int maxRequests = SOMAXCONN);
 
 	/*!
-	\brief Stops the listener so that it no longer listens for incoming connection requests
+	\brief Stops the listener so that it no longer listens for incoming
+	       connection requests
 	\throws InvalidOperationException if the listener has not been started
 	\throws NetworkException if Winsock's shutdown fails
 	*/
@@ -43,7 +49,8 @@ public:
 
 	/*!
 	\brief Accepts an incoming connection request
-	\warning The code calling this method is responsible for deleting the returned connection
+	\warning The code calling this method is responsible for deleting
+	         the returned connection
 	\returns The accepted TCP connection
 	\throws InvalidOperationException if the listener has not been started
 	\throws NetworkException if Winsock's accept fails
@@ -55,7 +62,9 @@ private:
 	void operator=(const TCPListener&) {}
 	TCPListener(const TCPListener&) {}
 
+#ifdef FMS_WINDOWS_BUILD
 	WinsockRequirement ws;
-	SOCKET listenSock;
+#endif
+	SockDesc listenSock;
 	addrinfo* ai;
 };

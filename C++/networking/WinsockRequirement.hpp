@@ -4,8 +4,6 @@
 
 #include "Exceptions.hpp"
 
-using namespace Exceptions;
-
 /*!
 \brief Wraps the startups and shutdown functions of Winsock.
 	Classes which use Winsock should have a member instance of this class
@@ -18,7 +16,8 @@ public:
 	WinsockRequirement()
 	{
 		if (WSAStartup(MAKEWORD(2, 2), &wsd) != 0)
-			throw NetworkException("Winsock failed during initialization", __FUNCTION__);
+			throw NetworkException("Winsock failed during initialization",
+			                       __FUNCTION__);
 	}
 
 	~WinsockRequirement()
@@ -29,6 +28,7 @@ public:
 	static const WSADATA& GetWinsockData() { return wsd; }
 
 private:
-	//! Made static so that an instance isn't generated for each instance of the object
+	//! Made static so that an instance isn't generated for each instance
+	//! of the object
 	static WSADATA wsd;
 };

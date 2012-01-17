@@ -1,15 +1,16 @@
 #include "TCPListener.hpp"
 
 #include <sstream>
-#include <winsock2.h>
-#include <ws2tcpip.h>
 
 #include "Exceptions.hpp"
 #include "TCPConnection.hpp"
 
-#pragma comment (lib, "Ws2_32.lib")
+#ifdef FMS_WINDOWS_BUILD
+#  pragma comment (lib, "Ws2_32.lib")
+#endif
 
 using namespace std;
+using namespace Exceptions;
 
 TCPListener::TCPListener( int port )
 		: listenSock(INVALID_SOCKET)
@@ -19,7 +20,7 @@ TCPListener::TCPListener( int port )
 
 	addrinfo hints;
 
-	ZeroMemory(&hints, sizeof(hints));
+	memset(&hints, 0, sizeof(hints));
 	hints.ai_family = AF_INET;
 	hints.ai_socktype = SOCK_STREAM;
 	hints.ai_protocol = IPPROTO_TCP;
@@ -42,8 +43,8 @@ void TCPListener::Start( int maxRequests /*= SOMAXCONN*/ )
 {
 	if (listenSock != INVALID_SOCKET)
 	{
-		throw InvalidOperationException("The listener has already been started.",
-		                                __FUNCTION__);
+		throw InvalidOperationException(
+		    "The listener has already been started.", __FUNCTION__);
 	}
 
 	listenSock = socket(ai->ai_family, ai->ai_socktype, ai->ai_protocol);
@@ -51,17 +52,18 @@ void TCPListener::Start( int maxRequests /*= SOMAXCONN*/ )
 	if (listenSock == INVALID_SOCKET)
 		throw NetworkException("Socket creation failed.", __FUNCTION__);
 
-	if (bind(listenSock, ai->ai_addr, (int)ai->ai_addrlen) == SOCKET_ERROR)
+	if (0 > bind(listenSock, ai->ai_addr, (int)ai->ai_addrlen))
 	{
 		closesocket(listenSock);
 		throw NetworkException("A socket could not be bound to its given port.",
 		                       __FUNCTION__);
 	}
 
-	if (listen(listenSock, maxRequests) == SOCKET_ERROR)
+	if (0 > listen(listenSock, maxRequests))
 	{
-		throw NetworkException("A socket failed on listening for connection requests.",
-		                       __FUNCTION__);
+		throw NetworkException(
+		    "A socket failed on listening for connection requests.",
+		    __FUNCTION__);
 	}
 }
 
@@ -85,17 +87,17 @@ TCPConnection* TCPListener::Accept()
 {
 	if (listenSock == INVALID_SOCKET)
 	{
-		throw InvalidOperationException("The listener must be started before it"
-		                                " can accept connections.",
-		                                __FUNCTION__);
+		throw InvalidOperationException(
+		    "The listener must be started before it can accept connections.",
+		    __FUNCTION__);
 	}
 
-	SOCKET connSock = accept(listenSock, NULL, NULL);
+	SockDesc connSock = accept(listenSock, NULL, NULL);
 	if (connSock == INVALID_SOCKET)
 	{
-		throw NetworkException("The listener failed while accepting"
-		                       " a connection.",
-		                       __FUNCTION__);
+		throw NetworkException(
+		    "The listener failed while accepting a connection.",
+		    __FUNCTION__);
 	}
 
 	return new TCPConnection(connSock);

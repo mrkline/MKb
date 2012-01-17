@@ -1,7 +1,11 @@
 #pragma once
 
+#include "Portability.hpp"
 #include "IP.hpp"
-#include "WinsockRequirement.hpp"
+
+#ifdef FMS_WINDOWS_BUILD
+#  include "WinsockRequirement.hpp"
+#endif
 
 /*!
 \brief A Transmission Control Protocol connection for
@@ -13,6 +17,7 @@ TCP is a reliable connection-based protocol which guarantees that data will be
 received without transmission errors and in the order that it was sent.
 Data is sent as a continuous stream.
 */
+
 class TCPConnection
 {
 public:
@@ -30,7 +35,7 @@ public:
 	This should not be used by client code and is intended to be used
 	by TCPListener to accept connections.
 	*/
-	TCPConnection(SOCKET connSock);
+	TCPConnection(SockDesc connSock);
 
 	/*!
 	\brief Establishes a TCP connection between the client and a server
@@ -54,8 +59,8 @@ public:
 	\param dataLen The amount (in bytes) of data to send
 	\returns The amount (in bytes) of data sent
 	\throws InvalidOperationException if the connection is not established,
-	        sending has been shut down,
-	        or the other party has closed the connection
+	        sending has been shut down, or the other party has closed the
+	        connection
 	\throws NetworkException if Winsock's send fails
 
 	This operation is blocking.
@@ -65,12 +70,13 @@ public:
 	/*!
 	\brief Receives data over the established connection
 	\param recvBuff The buffer to copy the incoming datagram into
-	\param recvBuffLen The amount (in bytes) of recvBuff that Receive is allowed to copy into
+	\param recvBuffLen The amount (in bytes) of recvBuff that Receive
+	       is allowed to copy into
 	\returns The number of bytes received into recvBuff,
-	         or 0 if the connection was closed gracefully
+			or 0 if the connection was closed gracefully
 	\throws InvalidOperationException if the connection is not established,
-	        receiving has been shut down, or the other party has
-	        closed the connection
+	        receiving has been shut down, or the other party has closed the
+	        connection
 	\throws NetworkException if Winsock's recv fails
 
 	This operation is blocking.
@@ -96,9 +102,10 @@ private:
 	void operator=(const TCPConnection&) {}
 	TCPConnection(const TCPConnection&) {}
 
-
+#ifdef FMS_WINDOWS_BUILD
 	WinsockRequirement ws;
-	SOCKET sock;
+#endif
+	SockDesc sock;
 	bool canSend;
 	bool canReceive;
 	bool closedByOtherParty;

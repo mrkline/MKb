@@ -1,8 +1,12 @@
 #pragma once
 
+#include "Portability.hpp"
 #include "IP.hpp"
-#include "WinsockRequirement.hpp"
 #include "Exceptions.hpp"
+
+#ifdef FMS_WINDOWS_BUILD
+#  include "WinsockRequirement.hpp"
+#endif
 
 /*!
 \brief A User Datagram Protocol client for
@@ -11,14 +15,16 @@
 \todo Multicast?
 \todo DNS?
 
-In contrast to TCP, UDP is a connectionless protocol which provides no guarantees
-to reliability, ordering, or data integrity. Data is sent in packets known as datagrams.
+In contrast to TCP, UDP is a connectionless protocol which provides no
+guarantees to reliability, ordering, or data integrity. Data is sent in packets
+known as datagrams.
 */
 class UDPClient
 {
 public:
-	class InsufficientBufferException : public NetworkException
+	class InsufficientBufferException : public Exceptions::NetworkException
 	{
+		//! \todo Move me into Exceptions.h
 	public:
 		InsufficientBufferException(const char* exceptionMessage,
 		                            const char* callingFunctionName = nullptr)
@@ -46,7 +52,8 @@ public:
 	void Bind(int port);
 
 	/*!
-	\brief Sets a default destination for the Send() overload with no specified destination
+	\brief Sets a default destination for the Send() overload with
+	       no specified destination
 	\param destination The destination IP and port to send to
 	*/
 	void SetDefaultDestination(const IPEndPoint& destination);
@@ -76,8 +83,10 @@ public:
 	/*!
 	\brief Receives data, optionally providing the sender's IP and port
 	\param recvBuff The buffer to copy the incoming datagram into
-	\param recvBuffLen The amount (in bytes) of recvBuff that Receive is allowed to copy into
-	\param from Optional. Upon completion, this will contain the end point the datagram originated from
+	\param recvBuffLen The amount (in bytes) of recvBuff that Receive
+	       is allowed to copy into
+	\param from Optional. Upon completion, this will contain the end point
+	       the datagram originated from
 	\returns The number of bytes received into recvBuff
 
 	This operation is blocking.
@@ -99,8 +108,10 @@ public:
 	void ShutDownReceiving();
 
 private:
+#ifdef FMS_WINDOWS_BUILD
 	WinsockRequirement ws;
-	SOCKET sock;
+#endif
+	SockDesc sock;
 	sockaddr_in* defaultDest;
 	bool bound;
 	bool canSend;
