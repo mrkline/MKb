@@ -16,7 +16,7 @@ static const float kIdentityMatrix[16] = { 1, 0, 0, 0,
 Transform::Transform(ConstructType type)
 {
 	if (type == E_MT_IDENTITY)
-		SetToIdentity();
+		setToIdentity();
 	else
 		memset(matrix, 0, sizeof(float) * 16);
 }
@@ -31,7 +31,7 @@ Transform::Transform(const Transform& other)
 	*this = other;
 }
 
-void Transform::GetInverse(Transform& out) const
+void Transform::getInverse(Transform& out) const
 {
 	const Transform &m = *this;
 
@@ -42,7 +42,7 @@ void Transform::GetInverse(Transform& out) const
 	          (m(0, 1) * m(1, 3) - m(0, 3) * m(1, 1)) * (m(2, 0) * m(3, 2) - m(2, 2) * m(3, 0)) +
 	          (m(0, 2) * m(1, 3) - m(0, 3) * m(1, 2)) * (m(2, 0) * m(3, 1) - m(2, 1) * m(3, 0));
 
-	if (Math::IsZero(d))
+	if (Math::isZero(d))
 	{
 		throw MathException("The provided transform has no inverse.",
 		                    __FUNCTION__);
@@ -100,7 +100,7 @@ void Transform::GetInverse(Transform& out) const
 	                 m(0, 2) * (m(1, 0) * m(2, 1) - m(1, 1) * m(2, 0)));
 }
 
-void Transform::GetTransposed(Transform& out) const
+void Transform::getTransposed(Transform& out) const
 {
 	out[ 0] = matrix[ 0];
 	out[ 1] = matrix[ 4];
@@ -123,76 +123,74 @@ void Transform::GetTransposed(Transform& out) const
 	out[15] = matrix[15];
 }
 
-void Transform::Interpolate(const Transform& other, float t, Transform& out) const
+void Transform::interpolate(const Transform& other, float t, Transform& out) const
 {
 	for (unsigned int c = 0; c < 16; ++c)
 		out[c] = matrix[c] + (other[c] - matrix[c]) * t;
 }
 
-bool Transform::Equals(const Transform& other, float roundingTolerance) const
+bool Transform::equals(const Transform& other, float roundingTolerance) const
 {
 	for (unsigned int c = 0; c < 16; ++c)
 	{
-		if (!Math::Equals(matrix[c], other[c], roundingTolerance))
+		if (!Math::equals(matrix[c], other[c], roundingTolerance))
 			return false;
 	}
 
 	return true;
 }
 
-bool Transform::IsIdentity() const
+bool Transform::isIdentity() const
 {
 	for (unsigned int c = 0; c < 16; ++c)
 	{
-		if (!Math::Equals(matrix[c], kIdentityMatrix[c]))
+		if (!Math::equals(matrix[c], kIdentityMatrix[c]))
 			return false;
 	}
 	return true;
 }
 
-bool Transform::IsOrthogonal() const
+bool Transform::isOrthogonal() const
 {
 	float dp=matrix[0] * matrix[4] + matrix[1] * matrix[5] + matrix[2]
 	         * matrix[6] + matrix[3] * matrix[7];
 
 
-	if (!Math::IsZero(dp))
+	if (!Math::isZero(dp))
 		return false;
 
 	dp = matrix[0] * matrix[8] + matrix[1] * matrix[9] + matrix[2]
 	     * matrix[10] + matrix[3] * matrix[11];
 
-	if (!Math::IsZero(dp))
+	if (!Math::isZero(dp))
 		return false;
 
 	dp = matrix[0] * matrix[12] + matrix[1] * matrix[13] + matrix[2]
 	     * matrix[14] + matrix[3] * matrix[15];
-	if (!Math::IsZero(dp))
+	if (!Math::isZero(dp))
 		return false;
 	dp = matrix[4] * matrix[8] + matrix[5] * matrix[9] + matrix[6]
 	     * matrix[10] + matrix[7] * matrix[11];
 
-	if (!Math::IsZero(dp))
+	if (!Math::isZero(dp))
 		return false;
 
 	dp = matrix[4] * matrix[12] + matrix[5] * matrix[13] + matrix[6]
 	     * matrix[14] + matrix[7] * matrix[15];
 
-	if (!Math::IsZero(dp))
+	if (!Math::isZero(dp))
 		return false;
 
 	dp = matrix[8] * matrix[12] + matrix[9] * matrix[13] + matrix[10]
 	     * matrix[14] + matrix[11] * matrix[15];
 
-	return (Math::IsZero(dp));
+	return (Math::isZero(dp));
 }
 
-void Transform::GetRotationRadians(Vector3& vecOut) const
+void Transform::getRotationRadians(Vector3& vecOut) const
 {
-	// Original (Irrlicht) code used 64-bit floats.
-
 	Vector3 scale;
-	GetScale(scale);
+	getScale(scale);
 	const Vector3 invScale(1.0f / scale.X, 1.0f / scale.Y, 1.0f / scale.Z);
 
 	// was 64-bit
@@ -202,7 +200,7 @@ void Transform::GetRotationRadians(Vector3& vecOut) const
 
 	float rotx, roty, X, Z;
 
-	if (!Math::IsZero(C))
+	if (!Math::isZero(C))
 	{
 		const float invC = 1.0f / C;
 		rotx = matrix[10] * invC * invScale.Z;
@@ -232,43 +230,43 @@ void Transform::GetRotationRadians(Vector3& vecOut) const
 
 }
 
-void Transform::GetRotationDegrees(Vector3& vecOut) const
+void Transform::getRotationDegrees(Vector3& vecOut) const
 {
-	GetRotationRadians(vecOut);
-	vecOut.Scale(Math::kRadToDeg);
+	getRotationRadians(vecOut);
+	vecOut.scale(Math::kRadToDeg);
 }
 
-void Transform::GetScale(Vector3& vecOut) const
+void Transform::getScale(Vector3& vecOut) const
 {
 	// See http://www.robertblum.com/articles/2005/02/14/decomposing-matrices
 
 	// Deal with the 0 rotation case first
-	if (Math::IsZero(matrix[1]) && Math::IsZero(matrix[2]) &&
-	        Math::IsZero(matrix[4]) && Math::IsZero(matrix[6]) &&
-	        Math::IsZero(matrix[8]) && Math::IsZero(matrix[9]))
+	if (Math::isZero(matrix[1]) && Math::isZero(matrix[2]) &&
+	        Math::isZero(matrix[4]) && Math::isZero(matrix[6]) &&
+	        Math::isZero(matrix[8]) && Math::isZero(matrix[9]))
 	{
-		vecOut.Set(matrix[0], matrix[5], matrix[10]);
+		vecOut.set(matrix[0], matrix[5], matrix[10]);
 	}
 	else
 	{
 		// We have to do the full calculation.
-		vecOut.Set(sqrtf(matrix[0] * matrix[0] + matrix[1] * matrix[1] + matrix[2] * matrix[2]),
+		vecOut.set(sqrtf(matrix[0] * matrix[0] + matrix[1] * matrix[1] + matrix[2] * matrix[2]),
 		           sqrtf(matrix[4] * matrix[4] + matrix[5] * matrix[5] + matrix[6] * matrix[6]),
 		           sqrtf(matrix[8] * matrix[8] + matrix[9] * matrix[9] + matrix[10] * matrix[10]));
 	}
 }
 
-void Transform::GetTranslation(Vector3& vecOut) const
+void Transform::getTranslation(Vector3& vecOut) const
 {
-	vecOut.Set(matrix[12], matrix[13], matrix[14]);
+	vecOut.set(matrix[12], matrix[13], matrix[14]);
 }
 
-void Transform::SetToIdentity()
+void Transform::setToIdentity()
 {
 	memcpy(matrix, kIdentityMatrix, sizeof(float) * 16);
 }
 
-void Transform::SetAsProductOf(const Transform& t1, const Transform& t2)
+void Transform::setAsProductOf(const Transform& t1, const Transform& t2)
 {
 	const float* m1 = t1.matrix;
 	const float* m2 = t2.matrix;
@@ -294,7 +292,7 @@ void Transform::SetAsProductOf(const Transform& t1, const Transform& t2)
 	matrix[15] = m1[3]*m2[12] + m1[7]*m2[13] + m1[11]*m2[14] + m1[15]*m2[15];
 }
 
-void Transform::SetInverseRotationRadians(const Vector3& rotation)
+void Transform::setInverseRotationRadians(const Vector3& rotation)
 {
 	float cr = cos( rotation.X );
 	float sr = sin( rotation.X );
@@ -319,19 +317,19 @@ void Transform::SetInverseRotationRadians(const Vector3& rotation)
 	matrix[10] = cr*cp;
 }
 
-void Transform::SetInverseRotationDegrees(const Vector3& rotation)
+void Transform::setInverseRotationDegrees(const Vector3& rotation)
 {
-	SetInverseRotationRadians(rotation.GetScaledBy(Math::kDegToRad));
+	setInverseRotationRadians(rotation.getScaledBy(Math::kDegToRad));
 }
 
-void Transform::SetInverseTranslation(const Vector3& translation)
+void Transform::setInverseTranslation(const Vector3& translation)
 {
 	matrix[12] = -translation.X;
 	matrix[13] = -translation.Y;
 	matrix[14] = -translation.Z;
 }
 
-void Transform::SetRotationRadians(const Vector3& rotation)
+void Transform::setRotationRadians(const Vector3& rotation)
 {
 	const float cr = cos( rotation.X );
 	const float sr = sin( rotation.X );
@@ -356,31 +354,31 @@ void Transform::SetRotationRadians(const Vector3& rotation)
 	matrix[10] = cr * cp;
 }
 
-void Transform::SetRotationDegrees(const Vector3& rotation)
+void Transform::setRotationDegrees(const Vector3& rotation)
 {
-	SetRotationRadians(rotation.GetScaledBy(Math::kDegToRad));
+	setRotationRadians(rotation.getScaledBy(Math::kDegToRad));
 }
 
-void Transform::SetTranslation(const Vector3& translation)
+void Transform::setTranslation(const Vector3& translation)
 {
 	matrix[12] = translation.X;
 	matrix[13] = translation.Y;
 	matrix[14] = translation.Z;
 }
 
-void Transform::SetScale(const Vector3& scale)
+void Transform::setScale(const Vector3& scale)
 {
 	matrix[0] = scale.X;
 	matrix[5] = scale.Y;
 	matrix[10] = scale.Z;
 }
 
-void Transform::SetFromArray(const float* transformMatrix)
+void Transform::setFromArray(const float* transformMatrix)
 {
 	memcpy(matrix, transformMatrix, sizeof(float) * 16);
 }
 
-void Transform::InverseRotatePoint(Vector3& point) const
+void Transform::inverseRotatePoint(Vector3& point) const
 {
 	Vector3& tmp = point;
 	point.X = tmp.X * matrix[0] + tmp.Y * matrix[1] + tmp.Z *matrix[2];
@@ -388,14 +386,14 @@ void Transform::InverseRotatePoint(Vector3& point) const
 	point.Z = tmp.X * matrix[8] + tmp.Y * matrix[9] + tmp.Z * matrix[10];
 }
 
-void Transform::InverseTranslatePoint(Vector3& point) const
+void Transform::inverseTranslatePoint(Vector3& point) const
 {
 	point.X = point.X - matrix[12];
 	point.Y = point.Y - matrix[13];
 	point.Z = point.Z - matrix[14];
 }
 
-void Transform::RotatePoint(Vector3& point) const
+void Transform::rotatePoint(Vector3& point) const
 {
 	Vector3 tmp(point);
 	point.X = tmp.X * matrix[0] + tmp.Y * matrix[4] + tmp.Z * matrix[8];
@@ -403,21 +401,21 @@ void Transform::RotatePoint(Vector3& point) const
 	point.Z = tmp.X * matrix[2] + tmp.Y * matrix[6] + tmp.Z * matrix[10];
 }
 
-void Transform::TranslatePoint(Vector3& point) const
+void Transform::translatePoint(Vector3& point) const
 {
 	point.X = point.X + matrix[12];
 	point.Y = point.Y + matrix[13];
 	point.Z = point.Z + matrix[14];
 }
 
-void Transform::ScalePoint(Vector3& point) const
+void Transform::scalePoint(Vector3& point) const
 {
 	Vector3 scale;
-	GetScale(scale);
-	point.Scale(scale);
+	getScale(scale);
+	point.scale(scale);
 }
 
-void Transform::TransformPoint(Vector3& point) const
+void Transform::transformPoint(Vector3& point) const
 {
 	float vector[3];
 
@@ -436,7 +434,7 @@ void Transform::TransformPoint(Vector3& point) const
 Transform Transform::operator*(const Transform& m2) const
 {
 	Transform m3(E_MT_EMPTY);
-	m3.SetAsProductOf(*this, m2);
+	m3.setAsProductOf(*this, m2);
 	return m3;
 }
 
@@ -454,7 +452,7 @@ Transform Transform::operator*(const float scalar) const
 Transform& Transform::operator*=(const Transform& other)
 {
 	Transform temp(matrix);
-	SetAsProductOf(temp, other);
+	setAsProductOf(temp, other);
 	return *this;
 }
 

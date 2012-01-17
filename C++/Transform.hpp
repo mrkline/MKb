@@ -48,7 +48,7 @@ public:
 
 	The inverse is calculated using Cramers rule.
 	*/
-	void GetInverse(Transform& out) const;
+	void getInverse(Transform& out) const;
 
 	/*!
 	\brief Returns a transform  that is the inverse of this one, if possible
@@ -57,10 +57,10 @@ public:
 
 	The inverse is calculated using Cramers rule.
 	*/
-	Transform GetInverse() const
+	Transform getInverse() const
 	{
 		Transform temp;
-		GetInverse(temp);
+		getInverse(temp);
 		return temp;
 	}
 
@@ -70,10 +70,10 @@ public:
 
 	The inverse is calculated using Cramers rule.
 	*/
-	void SetToInverse()
+	void setToInverse()
 	{
 		Transform temp;
-		GetInverse(temp);
+		getInverse(temp);
 		*this = temp;
 	}
 
@@ -81,16 +81,16 @@ public:
 	\brief Sets a transform ot the transpose of this one, if possible
 	\param out The transform to set to the transpose
 	*/
-	void GetTransposed(Transform& out) const;
+	void getTransposed(Transform& out) const;
 
 	/*!
 	\brief Get a transform equal to this transform after being transposed
 	\return The transpose of this transform
 	*/
-	Transform GetTransposed() const
+	Transform getTransposed() const
 	{
 		Transform ret;
-		GetTransposed(ret);
+		getTransposed(ret);
 		return ret;
 	}
 
@@ -101,7 +101,7 @@ public:
 	\param out The transform to set to the interpolation
 	\todo Make this method static, as dot and cross in Vector3
 	*/
-	void Interpolate(const Transform& other, float t, Transform& out) const;
+	void interpolate(const Transform& other, float t, Transform& out) const;
 
 	/*!
 	\brief Get a transform equal to this transform interpolated with another
@@ -110,10 +110,10 @@ public:
 	\return The interpolation between this transform and other at t
 	\todo Make this method static, as with dot and cross in Vector3
 	*/
-	Transform Interpolate(const Transform& other, float t)
+	Transform interpolate(const Transform& other, float t)
 	{
 		Transform ret;
-		Interpolate(other, t, ret);
+		interpolate(other, t, ret);
 		return ret;
 	}
 
@@ -121,29 +121,29 @@ public:
 	\brief Checks equality using Math::kFloatRoundError as tolerance
 	\see Math::kFloatRoundError
 	*/
-	bool Equals(const Transform& other,
+	bool equals(const Transform& other,
 	            float roundingTolerance = Math::kFloatRoundError) const;
 
 	//! Returns true if this transform is an identity matrix
-	bool IsIdentity() const;
+	bool isIdentity() const;
 
 	//! Returns true if this transform is orthagonal
-	bool IsOrthogonal() const;
+	bool isOrthogonal() const;
 
 	/*!
 	\brief Sets a vector to the rotation of this transform in degrees
 	\param vecOut Upon completion, vecOut contains the rotation in degrees
 	*/
-	void GetRotationDegrees(Vector3& vecOut) const;
+	void getRotationDegrees(Vector3& vecOut) const;
 
 	/*!
 	\brief Gets the rotation of this transform in degrees
 	\return The rotation of this transform in degrees
 	*/
-	Vector3 GetRotationDegrees() const
+	Vector3 getRotationDegrees() const
 	{
 		Vector3 ret;
-		GetRotationDegrees(ret);
+		getRotationDegrees(ret);
 		return ret;
 	}
 
@@ -151,16 +151,16 @@ public:
 	\brief Sets a vector to the rotation of this transform in radians
 	\param vecOut Upon completion, vecOut contains the rotation in radians
 	*/
-	void GetRotationRadians(Vector3& vecOut) const;
+	void getRotationRadians(Vector3& vecOut) const;
 
 	/*!
 	\brief Gets the rotation of this transform in radians
 	\return The rotation of this transform in radians
 	*/
-	Vector3 GetRotationRadians() const
+	Vector3 getRotationRadians() const
 	{
 		Vector3 ret;
-		GetRotationRadians(ret);
+		getRotationRadians(ret);
 		return ret;
 	}
 
@@ -171,7 +171,7 @@ public:
 	Note that this always returns the absolute values of the scale components.
 	Negative scales cannot be recovered.
 	*/
-	void GetScale(Vector3& vecOut) const;
+	void getScale(Vector3& vecOut) const;
 
 	/*!
 	\brief Gets the scale of this transform
@@ -180,10 +180,10 @@ public:
 	Note that this always returns the absolute values of the scale components.
 	Negative scales cannot be recovered.
 	*/
-	Vector3 GetScale() const
+	Vector3 getScale() const
 	{
 		Vector3 ret;
-		GetScale(ret);
+		getScale(ret);
 		return ret;
 	}
 
@@ -191,16 +191,16 @@ public:
 	\brief Sets a vector to the translation from this transform
 	\param vecOut Upon completion, vecOut contains the translation of this transform
 	*/
-	void GetTranslation(Vector3& vecOut) const;
+	void getTranslation(Vector3& vecOut) const;
 
 	/*!
 	\brief Gets the translation of this transform
 	\return The translation of this transform
 	*/
-	Vector3 GetTranslation() const
+	Vector3 getTranslation() const
 	{
 		Vector3 ret;
-		GetTranslation(ret);
+		getTranslation(ret);
 		return ret;
 	}
 
@@ -208,65 +208,77 @@ public:
 	\brief Gets the 16-element (4 x 4) array that makes up this transfor matrix
 	\return A pointer to the array
 	*/
-	float* GetArray() { return matrix; }
+	float* getArray() { return matrix; }
 
 	/*!
 	\brief Gets the 16-element (4 x 4) array that makes up this transfor matrix
 	\return A pointer to the array
 	*/
-	const float* GetArray() const { return matrix; }
+	const float* getArray() const { return matrix; }
 
 	//! Sets the transform to the identity transform
-	void SetToIdentity();
+	void setToIdentity();
 
 	/*!
 	\brief Sets the transform to a product of two other transforms
 	\param t1 The first transform to multiply
 	\param t2 The second transform to multiply
 	*/
-	void SetAsProductOf(const Transform& t1, const Transform& t2);
+	void setAsProductOf(const Transform& t1, const Transform& t2);
 
 	//! Sets the rotation to the inverse of the provided rotation in degrees
-	void SetInverseRotationDegrees(const Vector3& rotation);
+	void setInverseRotationDegrees(const Vector3& rotation);
+
 	//! Sets the rotation to the inverse of the provided rotation in radians
-	void SetInverseRotationRadians(const Vector3& rotation);
+	void setInverseRotationRadians(const Vector3& rotation);
+
 	//! Sets the translation to the inverse of the provided translation
-	void SetInverseTranslation(const Vector3& translation);
+	void setInverseTranslation(const Vector3& translation);
+
 	//! Sets the rotation of this transform to the provided one in degrees
-	void SetRotationDegrees(const Vector3& rotation);
+	void setRotationDegrees(const Vector3& rotation);
+
 	//! Sets the rotation of this transform to the provided one in radians
-	void SetRotationRadians(const Vector3& rotation);
+	void setRotationRadians(const Vector3& rotation);
+
 	//! Sets the translation of this transform
-	void SetTranslation(const Vector3& translation);
+	void setTranslation(const Vector3& translation);
+
 	//! Sets the scale of this transform
-	void SetScale(const Vector3& rotation);
+	void setScale(const Vector3& rotation);
+
 	//! Sets the transform from the first 16 values of an array
-	void SetFromArray(const float* transformMatrix);
+	void setFromArray(const float* transformMatrix);
 
 	//! Rotates a point using the inverse of this transform's rotation
-	void InverseRotatePoint(Vector3& pointOut) const;
+	void inverseRotatePoint(Vector3& pointOut) const;
+
 	//! Translates a point using the inverse of this transforms's translation
-	void InverseTranslatePoint(Vector3& pointOut) const;
+	void inverseTranslatePoint(Vector3& pointOut) const;
+
 	//! Rotates a point using this transforms's rotation
-	void RotatePoint(Vector3& pointOut) const;
+	void rotatePoint(Vector3& pointOut) const;
 	//! Translates a point using this transform's translation
-	void TranslatePoint(Vector3& pointOut) const;
+	//
+	void translatePoint(Vector3& pointOut) const;
+
 	//! Scales a point using this transform's scale
-	void ScalePoint(Vector3& pointOut) const;
+	void scalePoint(Vector3& pointOut) const;
+
 	//! Transforms a point using this transform
-	void TransformPoint(Vector3& pointOut) const;
+	void transformPoint(Vector3& pointOut) const;
 
 	/*!
 	\brief Tests for equality, using Math::kFloatRoundError as tolerance
 	\see Equals
 	*/
-	bool operator==(const Transform& other) const { return Equals(other); }
+	bool operator==(const Transform& other) const { return equals(other); }
 
 	/*!
 	\brief Tests for inequality, using Math::kFloatRoundError as tolerance
 	\see Equals
 	*/
-	bool operator!=(const Transform& other) const { return !Equals(other); }
+	bool operator!=(const Transform& other) const { return !equals(other); }
 	Transform operator*(const Transform& m2) const;
 	Transform operator*(const float scalar) const;
 	Transform& operator*=(const Transform& other);
