@@ -5,14 +5,14 @@ using namespace Exceptions;
 UDPClient::UDPClient()
 		: bound(false), canSend(true), canReceive(true)
 {
-	Init();
+	init();
 }
 
 UDPClient::UDPClient(int port)
 		: canSend(true), canReceive(true)
 {
-	Init();
-	Bind(port);
+	init();
+	bind(port);
 }
 
 UDPClient::~UDPClient()
@@ -24,7 +24,7 @@ UDPClient::~UDPClient()
 		delete defaultDest;
 }
 
-void UDPClient::Bind( int port )
+void UDPClient::bind( int port )
 {
 	struct sockaddr_in ai;
 
@@ -33,7 +33,7 @@ void UDPClient::Bind( int port )
 	ai.sin_addr.s_addr = htonl(INADDR_ANY);
 	ai.sin_port = htons(port);
 
-	if (bind(sock, (struct sockaddr*)&ai, sizeof(ai)) != 0)
+	if (::bind(sock, (struct sockaddr*)&ai, sizeof(ai)) != 0)
 	{
 		throw NetworkException(
 		    "UDP socket could not be bound to the given port",
@@ -43,17 +43,17 @@ void UDPClient::Bind( int port )
 	bound = true;
 }
 
-void UDPClient::SetDefaultDestination( const IPEndPoint& destination )
+void UDPClient::setDefaultDestination( const IPEndPoint& destination )
 {
 	defaultDest = new sockaddr_in;
 
 	memset(defaultDest, 0, sizeof(*defaultDest));
 	defaultDest->sin_family = AF_INET;
 	defaultDest->sin_port = htons(destination.Port);
-	defaultDest->sin_addr.s_addr = destination.Address.GetAsBinary();
+	defaultDest->sin_addr.s_addr = destination.Address.getAsBinary();
 }
 
-size_t UDPClient::Send(const char* data, size_t dataLen )
+size_t UDPClient::send(const char* data, size_t dataLen )
 {
 	if (defaultDest == nullptr)
 	{
@@ -80,7 +80,7 @@ size_t UDPClient::Send(const char* data, size_t dataLen )
 	return ret;
 }
 
-size_t UDPClient::Send(const char* data, size_t dataLen,
+size_t UDPClient::send(const char* data, size_t dataLen,
                        const IPEndPoint& destination )
 {
 	if (!canSend)
@@ -93,7 +93,7 @@ size_t UDPClient::Send(const char* data, size_t dataLen,
 	memset(&dest, 0, sizeof(dest));
 	dest.sin_family = AF_INET;
 	dest.sin_port = htons(destination.Port);
-	dest.sin_addr.s_addr = destination.Address.GetAsBinary();
+	dest.sin_addr.s_addr = destination.Address.getAsBinary();
 
 	int ret = sendto(sock, data, dataLen, 0, (sockaddr*)&dest, sizeof(dest));
 
@@ -105,7 +105,7 @@ size_t UDPClient::Send(const char* data, size_t dataLen,
 	return ret;
 }
 
-size_t UDPClient::Receive( char* recvBuff, size_t recvBuffLen,
+size_t UDPClient::receive( char* recvBuff, size_t recvBuffLen,
                            IP* from /*= nullptr*/ )
 {
 	if (!bound)
@@ -172,7 +172,7 @@ size_t UDPClient::Receive( char* recvBuff, size_t recvBuffLen,
 	return ret;
 }
 
-void UDPClient::ShutDownSending()
+void UDPClient::shutDownSending()
 {
 	if (!canSend)
 	{
@@ -187,7 +187,7 @@ void UDPClient::ShutDownSending()
 	canSend = false;
 }
 
-void UDPClient::ShutDownReceiving()
+void UDPClient::shutDownReceiving()
 {
 	if (!canReceive)
 	{
@@ -202,7 +202,7 @@ void UDPClient::ShutDownReceiving()
 	canReceive = false;
 }
 
-void UDPClient::Init()
+void UDPClient::init()
 {
 	sock = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
 	if (sock == INVALID_SOCKET)

@@ -1,11 +1,16 @@
 #pragma once
 
 #include <string>
+#include <stdint.h>
 
 //! An IPv4 address
 class IP
 {
 public:
+
+	//! Default constructor. Sets the ip to 0.0.0.0
+	IP();
+
 	/*!
 	\brief Constructs the IP from a string
 	\param ipStr The string representation of the IP address
@@ -26,7 +31,19 @@ public:
 	\brief Constructs the IP from its binary representation
 	\param bin The binary representation of the IP address
 	*/
-	IP(unsigned int bin);
+	IP(uint32_t bin);
+
+	/*!
+	\brief Sets the IP from individual octets
+	void set(unsigned char oct0, unsigned char oct1,
+	         unsigned char oct2, unsigned char oct3);
+	\param oct0 The first octet
+	\param oct1 The second octet
+	\param oct2 The third octet
+	\param oct3 The fourth octet
+	*/
+	void set(unsigned char oct0, unsigned char oct1,
+	         unsigned char oct2, unsigned char oct3);
 
 	/*!
 	\brief Gets a given octet
@@ -34,7 +51,7 @@ public:
 	\returns The specified octet
 	\throws ArgumentOutOfRangeException if octetNum is not within the range [0,4)
 	*/
-	unsigned char GetOctet(unsigned char octetNum) const;
+	unsigned char getOctet(unsigned char octetNum) const;
 
 	/*!
 	\brief Sets an octet to a new value
@@ -42,16 +59,17 @@ public:
 	\param val The new value of the octet
 	\throws ArgumentOutOfRangeException if octetNum is not within the range [0,4)
 	*/
-	void SetOctet(unsigned char octetNum, unsigned char val);
+	void setOctet(unsigned char octetNum, unsigned char val);
+
 
 	//! Gets the IP as a string
-	const std::string& GetAsString() const { return strRep; }
+	const std::string& getAsString() const { return strRep; }
 
 	//! Gets the binary represetnation of the string
-	unsigned int GetAsBinary() const;
+	uint32_t getAsBinary() const;
 
 	IP& operator=(const std::string& str);
-	IP& operator=(unsigned int bin);
+	IP& operator=(uint32_t bin);
 
 	bool operator==(const IP& other) const;
 	bool operator!=(const IP& other) const { return !operator==(other); }
@@ -61,20 +79,20 @@ private:
 	std::string strRep;
 
 	//! Updates the internal string representation of the IP based on the octets
-	void UpdateString();
+	void updateString();
 
 	/*!
 	Sets the IP octets from a string
 	\throws ArgumentException if an IP could not be constructed from the given
 	        string
 	*/
-	void OctetsFromString(const std::string& ipStr);
+	void octetsFromString(const std::string& ipStr);
 
 	/*!
 	\brief Sets the IP octets from a binary representation
 	\param bin The binary representation of the IP address
 	*/
-	void OctetsFromBinary(unsigned int bin);
+	void octetsFromBinary(uint32_t bin);
 };
 
 //! An IP end point consisting of an address and a port

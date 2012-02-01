@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Portability.hpp"
+#include "Socket.hpp"
 #include "IP.hpp"
 #include "Exceptions.hpp"
 
@@ -19,7 +19,7 @@ In contrast to TCP, UDP is a connectionless protocol which provides no
 guarantees to reliability, ordering, or data integrity. Data is sent in packets
 known as datagrams.
 */
-class UDPClient
+class UDPClient : public Socket
 {
 public:
 	class InsufficientBufferException : public Exceptions::NetworkException
@@ -49,14 +49,14 @@ public:
 
 	This must be done before Receive is called
 	*/
-	void Bind(int port);
+	void bind(int port);
 
 	/*!
 	\brief Sets a default destination for the Send() overload with
 	       no specified destination
 	\param destination The destination IP and port to send to
 	*/
-	void SetDefaultDestination(const IPEndPoint& destination);
+	void setDefaultDestination(const IPEndPoint& destination);
 
 	/*!
 	\brief Sends data to the default destination
@@ -67,7 +67,7 @@ public:
 
 	This operation is blocking.
 	*/
-	size_t Send(const char* data, size_t dataLen);
+	size_t send(const char* data, size_t dataLen);
 
 	/*!
 	\brief Sends data to a specified end point
@@ -78,7 +78,7 @@ public:
 
 	This operation is blocking.
 	*/
-	size_t Send(const char* data, size_t dataLen, const IPEndPoint& destination);
+	size_t send(const char* data, size_t dataLen, const IPEndPoint& destination);
 
 	/*!
 	\brief Receives data, optionally providing the sender's IP and port
@@ -91,32 +91,31 @@ public:
 
 	This operation is blocking.
 	*/
-	size_t Receive(char* recvBuff, size_t recvBuffLen, IP* from = nullptr);
+	size_t receive(char* recvBuff, size_t recvBuffLen, IP* from = nullptr);
 
 	/*!
 	\brief Shuts down sending operations on the connection
 	\throws InvalidOperationException if sending has already been shut down
 	\throws NetworkException if Winsock's shutdown fails
 	*/
-	void ShutDownSending();
+	void shutDownSending();
 
 	/*!
 	\brief Shuts down receiving operations on the connection
 	\throws InvalidOperationException if receiving has already been shut down
 	\throws NetworkException if Winsock's shutdown fails
 	*/
-	void ShutDownReceiving();
+	void shutDownReceiving();
 
 private:
 #ifdef FMS_WINDOWS_BUILD
 	WinsockRequirement ws;
 #endif
-	SockDesc sock;
 	sockaddr_in* defaultDest;
 	bool bound;
 	bool canSend;
 	bool canReceive;
 
 	// Does common work shared by both constructors
-	void Init();
+	void init();
 };

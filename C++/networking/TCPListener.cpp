@@ -39,7 +39,7 @@ TCPListener::~TCPListener()
 		closesocket(listenSock);
 }
 
-void TCPListener::Start( int maxRequests /*= SOMAXCONN*/ )
+void TCPListener::start( int maxRequests /*= SOMAXCONN*/ )
 {
 	if (listenSock != INVALID_SOCKET)
 	{
@@ -67,7 +67,7 @@ void TCPListener::Start( int maxRequests /*= SOMAXCONN*/ )
 	}
 }
 
-void TCPListener::Stop()
+void TCPListener::stop()
 {
 	if (listenSock == INVALID_SOCKET)
 	{
@@ -83,7 +83,7 @@ void TCPListener::Stop()
 	}
 }
 
-TCPConnection* TCPListener::Accept()
+TCPConnection* TCPListener::accept()
 {
 	if (listenSock == INVALID_SOCKET)
 	{
@@ -92,7 +92,7 @@ TCPConnection* TCPListener::Accept()
 		    __FUNCTION__);
 	}
 
-	SockDesc connSock = accept(listenSock, NULL, NULL);
+	SockDesc connSock = ::accept(listenSock, NULL, NULL);
 	if (connSock == INVALID_SOCKET)
 	{
 		throw NetworkException(

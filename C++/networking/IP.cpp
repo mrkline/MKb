@@ -2,16 +2,23 @@
 
 #include <sstream>
 #include <vector>
+#include <cstring>
 
 #include "Exceptions.hpp"
 
 using namespace std;
 using namespace Exceptions;
 
+IP::IP()
+{
+	memset(octets, 0, sizeof(octets));
+	updateString();
+}
+
 IP::IP(const string& ipStr)
 {
-	OctetsFromString(ipStr);
-	UpdateString();
+	octetsFromString(ipStr);
+	updateString();
 }
 
 IP::IP(unsigned char oct0, unsigned char oct1,
@@ -22,51 +29,63 @@ IP::IP(unsigned char oct0, unsigned char oct1,
 	octets[2] = oct2;
 	octets[3] = oct3;
 
-	UpdateString();
+	updateString();
 }
 
-IP::IP(unsigned int bin)
+IP::IP(uint32_t bin)
 {
-	OctetsFromBinary(bin);
-	UpdateString();
+	octetsFromBinary(bin);
+	updateString();
 }
 
-unsigned char IP::GetOctet( unsigned char octetNum ) const
+void IP::set(unsigned char oct0, unsigned char oct1,
+             unsigned char oct2, unsigned char oct3)
+{
+	octets[0] = oct0;
+	octets[1] = oct1;
+	octets[2] = oct2;
+	octets[3] = oct3;
+
+	updateString();
+}
+
+unsigned char IP::getOctet(unsigned char octetNum) const
 {
 	if (octetNum > 3)
-		throw ArgumentOutOfRangeException("IPs have octets [0,4)", __FUNCTION__);
+		throw ArgumentOutOfRangeException("IPs have octets [0,4)",
+		                                  __FUNCTION__);
 
 	return octets[octetNum];
 }
 
-void IP::SetOctet( unsigned char octetNum, unsigned char val )
+void IP::setOctet(unsigned char octetNum, unsigned char val)
 {
 	if (octetNum > 3)
 		throw ArgumentOutOfRangeException("IPs have octets [0,4)",
 		                                  __FUNCTION__);
 
 	octets[octetNum] = val;
-	UpdateString();
+	updateString();
 }
 
-unsigned int IP::GetAsBinary() const
+uint32_t IP::getAsBinary() const
 {
-	typedef unsigned int ui; // to save some typing
+	typedef uint32_t ui; // to save some typing
 	return ((ui)octets[0] << 24) + ((ui)octets[1] << 16)
 	       + ((ui)octets[2] << 8) + (ui)octets[3];
 }
 
-IP& IP::operator=( const std::string& str )
+IP& IP::operator=(const std::string& str)
 {
-	OctetsFromString(str);
-	UpdateString();
+	octetsFromString(str);
+	updateString();
 	return *this;
 }
 
-IP& IP::operator=(unsigned int bin )
+IP& IP::operator=(uint32_t bin )
 {
-	OctetsFromBinary(bin);
-	UpdateString();
+	octetsFromBinary(bin);
+	updateString();
 	return *this;
 }
 
@@ -80,7 +99,7 @@ bool IP::operator==(const IP& other) const
 	return true;
 }
 
-void IP::UpdateString()
+void IP::updateString()
 {
 	stringstream ss;
 	ss << (int)octets[0] << "." << (int)octets[1] << "."
@@ -88,7 +107,7 @@ void IP::UpdateString()
 	strRep = ss.str();
 }
 
-void IP::OctetsFromString( const string& ipStr )
+void IP::octetsFromString(const string& ipStr)
 {
 	// Split the string using '.' as the delimetor
 	vector<string> octetStrs;
@@ -111,7 +130,7 @@ void IP::OctetsFromString( const string& ipStr )
 	octets[3] = atoi(octetStrs[3].c_str());
 }
 
-void IP::OctetsFromBinary(unsigned int bin )
+void IP::octetsFromBinary(uint32_t bin)
 {
 	octets[0] = (0xFF000000 & bin) >> 24;
 	octets[1] = (0x00FF0000 & bin) >> 16;

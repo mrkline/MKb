@@ -19,6 +19,7 @@
 #  include <resolv.h>
 #  include <netdb.h>
 #  include <sys/stat.h>
+#  include <sys/select.h>
 #  define SockDesc              int
 #  define SOCKET_IS_VALID(s)    ((s) >= 0)
 #  define INVALID_SOCKET        (-1)

@@ -8,12 +8,11 @@ using namespace std;
 using namespace Exceptions;
 
 TCPConnection::TCPConnection()
-		: sock(INVALID_SOCKET)
 {
 }
 
 TCPConnection::TCPConnection( SockDesc connSock )
-		: sock(connSock), canSend(true), canReceive(true),
+		: canSend(true), canReceive(true),
 		closedByOtherParty(false)
 {
 	if (connSock == INVALID_SOCKET)
@@ -30,7 +29,7 @@ TCPConnection::~TCPConnection()
 	}
 }
 
-void TCPConnection::Connect( const IPEndPoint& server )
+void TCPConnection::connect(const IPEndPoint& server)
 {
 	if (sock != INVALID_SOCKET)
 		throw InvalidOperationException("A connection has already been made.",
@@ -48,7 +47,7 @@ void TCPConnection::Connect( const IPEndPoint& server )
 	stringstream ps;
 	ps << server.Port;
 
-	if (getaddrinfo(server.Address.GetAsString().c_str(),
+	if (getaddrinfo(server.Address.getAsString().c_str(),
 	                ps.str().c_str(), &hints, &result) != 0)
 		throw NetworkException(
 		    "getaddrinfo failed while trying to set up a connection.",
@@ -65,7 +64,7 @@ void TCPConnection::Connect( const IPEndPoint& server )
 			throw NetworkException("Socket creation failed.", __FUNCTION__);
 		}
 
-		if (0 > connect(sock, ptr->ai_addr, (int)ptr->ai_addrlen))
+		if (0 > ::connect(sock, ptr->ai_addr, (int)ptr->ai_addrlen))
 		{
 			closesocket(sock);
 			sock = INVALID_SOCKET;
@@ -86,7 +85,7 @@ void TCPConnection::Connect( const IPEndPoint& server )
 	closedByOtherParty = false;
 }
 
-void TCPConnection::Disconnect()
+void TCPConnection::disconnect()
 {
 	int how;
 
@@ -115,7 +114,7 @@ void TCPConnection::Disconnect()
 	sock = INVALID_SOCKET;
 }
 
-size_t TCPConnection::Send(const char* data, size_t dataLen )
+size_t TCPConnection::send(const char* data, size_t dataLen )
 {
 	if (sock == INVALID_SOCKET)
 	{
@@ -138,7 +137,7 @@ size_t TCPConnection::Send(const char* data, size_t dataLen )
 		    __FUNCTION__);
 	}
 
-	int ret = send(sock, data, dataLen, 0);
+	int ret = ::send(sock, data, dataLen, 0);
 
 	if (0 > ret)
 		throw NetworkException("Sending over the connection failed",
@@ -147,7 +146,7 @@ size_t TCPConnection::Send(const char* data, size_t dataLen )
 	return ret;
 }
 
-size_t TCPConnection::Receive( char* recvBuff, size_t recvBuffLen )
+size_t TCPConnection::receive( char* recvBuff, size_t recvBuffLen )
 {
 	if (sock == INVALID_SOCKET)
 	{
@@ -183,7 +182,7 @@ size_t TCPConnection::Receive( char* recvBuff, size_t recvBuffLen )
 	return ret;
 }
 
-void TCPConnection::ShutDownSending()
+void TCPConnection::shutDownSending()
 {
 	if (!canSend)
 	{
@@ -198,7 +197,7 @@ void TCPConnection::ShutDownSending()
 	canSend = false;
 }
 
-void TCPConnection::ShutDownReceiving()
+void TCPConnection::shutDownReceiving()
 {
 	if (!canReceive)
 	{

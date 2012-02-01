@@ -34,7 +34,7 @@ public:
 	\throws InvalidOperationException if the listener has already been started
 	\throws NetworkException if Winsock's socket, bind, or listen fail
 	*/
-	void Start(int maxRequests = SOMAXCONN);
+	void start(int maxRequests = SOMAXCONN);
 
 	/*!
 	\brief Stops the listener so that it no longer listens for incoming
@@ -42,10 +42,10 @@ public:
 	\throws InvalidOperationException if the listener has not been started
 	\throws NetworkException if Winsock's shutdown fails
 	*/
-	void Stop();
+	void stop();
 
 	//! Returns true if the listener has been successfully started
-	bool IsRunning() { return listenSock != INVALID_SOCKET; }
+	bool isRunning() { return listenSock != INVALID_SOCKET; }
 
 	/*!
 	\brief Accepts an incoming connection request
@@ -55,7 +55,7 @@ public:
 	\throws InvalidOperationException if the listener has not been started
 	\throws NetworkException if Winsock's accept fails
 	*/
-	TCPConnection* Accept();
+	TCPConnection* accept();
 
 private:
 	// Disallow copy and assign

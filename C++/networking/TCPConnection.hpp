@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Portability.hpp"
+#include "Socket.hpp"
 #include "IP.hpp"
 
 #ifdef FMS_WINDOWS_BUILD
@@ -18,7 +18,7 @@ received without transmission errors and in the order that it was sent.
 Data is sent as a continuous stream.
 */
 
-class TCPConnection
+class TCPConnection : public Socket
 {
 public:
 
@@ -44,14 +44,14 @@ public:
 	\throws InvalidOperationException if the connection is already established
 	\throws NetworkException if Winsock's getaddrinfo, socket, or connect fail
 	*/
-	void Connect(const IPEndPoint& server);
+	void connect(const IPEndPoint& server);
 
 	/*!
 	\brief Closes the TCP connection
 	\throws InvalidOperationException if the connection isn't established
 	\throws NetworkException if Winsock's shutdown or closesocket fail
 	*/
-	void Disconnect();
+	void disconnect();
 
 	/*!
 	\brief Sends data over the established connection
@@ -65,7 +65,7 @@ public:
 
 	This operation is blocking.
 	*/
-	size_t Send(const char* data, size_t dataLen);
+	size_t send(const char* data, size_t dataLen);
 
 	/*!
 	\brief Receives data over the established connection
@@ -81,21 +81,21 @@ public:
 
 	This operation is blocking.
 	*/
-	size_t Receive(char* recvBuff, size_t recvBuffLen);
+	size_t receive(char* recvBuff, size_t recvBuffLen);
 
 	/*!
 	\brief Shuts down sending operations on the connection
 	\throws InvalidOperationException if sending has already been shut down
 	\throws NetworkException if Winsock's shutdown fails
 	*/
-	void ShutDownSending();
+	void shutDownSending();
 
 	/*!
 	\brief Shuts down receiving operations on the connection
 	\throws InvalidOperationException if receiving has already been shut down
 	\throws NetworkException if Winsock's shutdown fails
 	*/
-	void ShutDownReceiving();
+	void shutDownReceiving();
 
 private:
 	// Disallow copy and assign
@@ -105,7 +105,6 @@ private:
 #ifdef FMS_WINDOWS_BUILD
 	WinsockRequirement ws;
 #endif
-	SockDesc sock;
 	bool canSend;
 	bool canReceive;
 	bool closedByOtherParty;
