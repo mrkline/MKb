@@ -6,7 +6,7 @@
 class Socket
 {
 public:
-	Socket() : sock(INVALID_SOCKET) { }
+	Socket(SockDesc s = INVALID_SOCKET) : sock(s) { }
 	SockDesc getSocket() { return sock; }
 
 protected:

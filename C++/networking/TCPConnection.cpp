@@ -12,7 +12,7 @@ TCPConnection::TCPConnection()
 }
 
 TCPConnection::TCPConnection( SockDesc connSock )
-		: canSend(true), canReceive(true),
+		: Socket(connSock), canSend(true), canReceive(true),
 		closedByOtherParty(false)
 {
 	if (connSock == INVALID_SOCKET)
