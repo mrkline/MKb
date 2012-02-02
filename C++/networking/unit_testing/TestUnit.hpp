@@ -31,23 +31,23 @@ namespace UnitTesting
 		}
 
 		//! Returns this unit's name
-		virtual const char* GetUnitName() const = 0;
+		virtual const char* getUnitName() const = 0;
 
 		//! Executes all Tests and prints a summary of the unit
-		void RunUnit()
+		void runUnit()
 		{
-			const char* name = GetUnitName();
+			const char* name = getUnitName();
 
-			LoadTests();
+			loadTests();
 
 			for (auto iter = unrunTests.begin();
 			        iter != unrunTests.end(); ++iter)
 			{
 				Test* curr = *iter;
-				const char* currName = curr->GetName();
+				const char* currName = curr->getName();
 				try
 				{
-					curr->Run();
+					curr->run();
 					printf("SUCCESS: %s test succeeded\n", currName);
 					succeededTests.push_back(curr);
 				}
@@ -79,7 +79,7 @@ namespace UnitTesting
 				for (auto iter = succeededTests.begin();
 				        iter != succeededTests.end(); ++iter)
 				{
-					printf("\t\t%s\n", (*iter)->GetName());
+					printf("\t\t%s\n", (*iter)->getName());
 				}
 			}
 
@@ -89,7 +89,7 @@ namespace UnitTesting
 				for (auto iter = failedTests.begin();
 				        iter != failedTests.end(); ++iter)
 				{
-					printf("\t\t%s\n", (*iter)->GetName());
+					printf("\t\t%s\n", (*iter)->getName());
 				}
 			}
 		}
@@ -97,7 +97,7 @@ namespace UnitTesting
 	protected:
 		//! Loads tests into unrunTests.
 		//Tests will automatically be deleted on this unit's destruction
-		virtual void LoadTests() = 0;
+		virtual void loadTests() = 0;
 
 		std::list<Test*> unrunTests;
 

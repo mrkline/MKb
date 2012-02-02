@@ -8,9 +8,9 @@ namespace UnitTesting
 {
 	class NetworkTestUnit : public TestUnit
 	{
-		const char* GetUnitName() const { return "Network"; }
+		const char* getUnitName() const { return "Network"; }
 
-		void LoadTests()
+		void loadTests()
 		{
 			unrunTests.push_back(new IPTest());
 			unrunTests.push_back(new TCPTest());

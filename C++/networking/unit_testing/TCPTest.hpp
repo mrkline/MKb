@@ -8,9 +8,9 @@ namespace UnitTesting
 {
 	class TCPTest : public Test
 	{
-		const char* GetName() const { return "TCP"; }
+		const char* getName() const { return "TCP"; }
 
-		void Run()
+		void run()
 		{
 			const char* testData = "Twenty-five or six to four";
 			const size_t testDataLen = strlen(testData);
@@ -25,15 +25,15 @@ namespace UnitTesting
 				TCPConnection client;
 
 				// Start the server and connect to it
-				server.Start();
-				client.Connect(IPEndPoint(IP(127, 0, 0, 1), port));
+				server.start();
+				client.connect(IPEndPoint(IP(127, 0, 0, 1), port));
 
 				// Accept the connection
-				TCPConnection* serverConn = server.Accept();
+				TCPConnection* serverConn = server.accept();
 
 				// Test sending from the server to the client
-				serverConn->Send(testData, testDataLen);
-				client.Receive(buff, testDataLen);
+				serverConn->send(testData, testDataLen);
+				client.receive(buff, testDataLen);
 
 				if (strcmp(testData, buff) != 0)
 				{
@@ -45,11 +45,11 @@ namespace UnitTesting
 				// the client to the server
 				memset(buff, 0, testDataLen);
 
-				serverConn->ShutDownSending();
-				client.ShutDownReceiving();
+				serverConn->shutDownSending();
+				client.shutDownReceiving();
 
-				client.Send(testData, testDataLen);
-				serverConn->Receive(buff, testDataLen);
+				client.send(testData, testDataLen);
+				serverConn->receive(buff, testDataLen);
 
 				if (strcmp(testData, buff) != 0)
 				{
@@ -58,15 +58,15 @@ namespace UnitTesting
 				}
 
 				// Shut down the connections
-				client.Disconnect();
+				client.disconnect();
 
-				if (serverConn->Receive(buff, testDataLen) != 0)
+				if (serverConn->receive(buff, testDataLen) != 0)
 				{
 					throw TestFailedException("The server was not notified"
 					                          " when the client disconnected");
 				}
 
-				serverConn->Disconnect();
+				serverConn->disconnect();
 
 				delete serverConn;
 				free(buff);

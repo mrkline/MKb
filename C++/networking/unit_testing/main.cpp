@@ -19,13 +19,13 @@ int main()
 		TestUnit* curr = *iter;
 		try
 		{
-			printf("Beginning test unit %s...\n\n", curr->GetUnitName());
-			curr->RunUnit();
+			printf("Beginning test unit %s...\n\n", curr->getUnitName());
+			curr->runUnit();
 		}
 		catch (...)
 		{
 			printf("The test unit %s threw an unexpected exception.\n",
-			       curr->GetUnitName());
+			       curr->getUnitName());
 		}
 		delete *iter;
 	}

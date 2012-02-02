@@ -18,12 +18,12 @@ namespace UnitTesting
 	{
 	public:
 		//! Returns the name of the test
-		virtual const char* GetName() const = 0;
+		virtual const char* getName() const = 0;
 
 		/*!
 		\brief Runs the test. Error reporting is done via exceptions
 		\throws TestFailedException if the test fails in an anticipated manner.
 		*/
-		virtual void Run() = 0;
+		virtual void run() = 0;
 	};
 } // end namespace UnitTesting
