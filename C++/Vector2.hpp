@@ -55,6 +55,18 @@ public:
 	Vector2& operator-=(float v)
 	{ X -= v; Y -= v; return *this; }
 
+	Vector2 operator*(float v) const
+	{ return Vector2(X * v, Y * v); }
+
+	Vector2& operator*=(float v)
+	{ X *= v; Y *= v; return *this; }
+
+	Vector2 operator/(float v) const
+	{ return Vector2(X / v, Y / v); }
+
+	Vector2& operator/=(float v)
+	{ X /= v; Y /= v; return *this; }
+
 	//! Comparison operators can be used to sort vectors with respect to X,
 	//! then Y
 	bool operator<=(const Vector2& o) const
