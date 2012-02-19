@@ -3,6 +3,7 @@
 #include <string>
 
 #include "MKMath.hpp"
+#include "Vector2.hpp"
 
 //! A three-dimensional vector using floats for each dimension
 class Vector3
@@ -25,7 +26,7 @@ public:
 	Vector3(const Vector3& o) : X(o.X), Y(o.Y), Z(o.Z) {}
 
 	//! Initializes a 3D vector from a 2D one
-	Vector3(const Vector2& o) : X(o.x), Y(o.Y), Z(0.0f) {}
+	Vector3(const Vector2& o) : X(o.X), Y(o.Y), Z(0.0f) {}
 
 	//! Initializes vector with the first three values in the provided array
 	explicit Vector3(float* arr) : X(arr[0]), Y(arr[1]), Z(arr[2]) {}
@@ -59,16 +60,16 @@ public:
 	Vector3& operator-=(float v)
 	{ X -= v; Y -= v; Z -= v; return *this; }
 
-	Vector2 operator*(float v) const
-	{ return Vector2(X * v, Y * v, Z * v); }
+	Vector3 operator*(float v) const
+	{ return Vector3(X * v, Y * v, Z * v); }
 
-	Vector2& operator*=(float v)
+	Vector3& operator*=(float v)
 	{ X *= v; Y *= v; Z *= v; return *this; }
 
-	Vector2 operator/(float v) const
-	{ return Vector2(X / v, Y / v, Z / v); }
+	Vector3 operator/(float v) const
+	{ return Vector3(X / v, Y / v, Z / v); }
 
-	Vector2& operator/=(float v)
+	Vector3& operator/=(float v)
 	{ X /= v; Y /= v; Z /= v; return *this; }
 
 	//! Comparison operators can be used to sort vectors with respect to X,
