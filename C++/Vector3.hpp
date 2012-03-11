@@ -134,7 +134,7 @@ public:
 	\see Math::kFloatRoundError
 	*/
 	bool isWithinTolerance(const Vector3& o,
-	                       float tolerance = Math::kFloatRoundError) const
+	                       int tolerance = Math::kUlpsEquality) const
 	{
 		return Math::equals(X, o.X, tolerance)
 		       && Math::equals(Y, o.Y, tolerance)

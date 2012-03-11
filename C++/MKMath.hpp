@@ -2,12 +2,15 @@
 
 #include <algorithm>
 #include <cmath>
+#include <cstdint>
 
 /*!
 \brief Contains constants and functions for common math operations.
 
 Operations already contained in the C++ STL are not re-implemented here.
-The STL should be used  directly for such operations.
+The STL should be used  directly for such operations. Floating point equality
+operations are borrowed from
+http://altdevblogaday.com/2012/02/22/comparing-floating-point-numbers-2012-edition/
 */
 namespace Math
 {
@@ -35,12 +38,8 @@ namespace Math
 	//! Conversion ratio to convert angle measurements in
 	//! radians to degree angle mesurements
 	const double kRadToDegDouble = 180.0 / kPiDouble;
-	//! Rounding error of a float
-	//! \todo Get a more "real" value? Such as from std library?
-	const float kFloatRoundError = 0.1f;
-	//! Rounding error of a double
-	//! \todo Get a more "real" value? Such as from std library?
-	const double kDoubleRoundError = 0.01;
+	//! Default number of Ulps considered for floating-point equality
+	const int kUlpsEquality = 2;
 
 	/*!
 	\brief Clamps a value between a low and high value
@@ -68,9 +67,23 @@ namespace Math
 	This allows for safer floating comparisons,
 	since direct ones may work poorly due to rounding error.
 	*/
-	inline bool equals(float a, float b, float tolerance = kFloatRoundError)
+	inline bool equals(float a, float b, int tolerance = kUlpsEquality)
 	{
-		return (a + tolerance >= b) && (a - tolerance <= b);
+		union FloatUnion
+		{
+			FloatUnion(float flt) : f(flt) { }
+			bool isPositive() const { return (i >> 31) != 0; }
+			int32_t i;
+			float f;
+		};
+
+		FloatUnion uA(a);
+		FloatUnion uB(b);
+
+		if (uA.isPositive() == uB.isPositive())
+			 return abs(uA.i - uB.i) <= tolerance;
+		else
+			return a == b;
 	}
 
 	/*!
@@ -84,9 +97,23 @@ namespace Math
 	This allows for safer floating comparisons,
 	since direct ones may work poorly due to rounding error.
 	*/
-	inline bool equals(double a, double b, double tolerance = kDoubleRoundError)
+	inline bool equals(double a, double b, int tolerance = kUlpsEquality)
 	{
-		return (a + tolerance >= b) && (a - tolerance <= b);
+		union DoubleUnion
+		{
+			DoubleUnion(double dub) : d(dub) { }
+			bool isPositive() const { return (i >> 63) != 0; }
+			int64_t i;
+			double d;
+		};
+
+		DoubleUnion uA(a);
+		DoubleUnion uB(b);
+
+		if (uA.isPositive() == uB.isPositive())
+			 return abs(uA.i - uB.i) <= tolerance;
+		else
+			return a == b;
 	}
 
 	/*!
@@ -100,9 +127,9 @@ namespace Math
 	This allows for safer floating comparisons,
 	since direct ones may work poorly due to rounding error.
 	*/
-	inline bool isZero(float a, float tolerance = kFloatRoundError)
+	inline bool isZero(float a, int tolerance = kUlpsEquality)
 	{
-		return (a + tolerance >= 0.0f) && (a - tolerance <= 0.0f);
+		return equals(a, 0.0f, tolerance);
 	}
 
 	/*!
@@ -116,9 +143,9 @@ namespace Math
 	This allows for safer floating comparisons,
 	since direct ones may work poorly due to rounding error.
 	*/
-	inline bool isZero(double a, double tolerance = kDoubleRoundError)
+	inline bool isZero(double a, int tolerance = kUlpsEquality)
 	{
-		return (a + tolerance >= 0.0) && (a - tolerance <= 0.0);
+		return equals(a, 0.0, tolerance);
 	}
 
 } // end namespace Math

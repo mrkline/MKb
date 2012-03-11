@@ -33,7 +33,7 @@ Transform::Transform(const Transform& other)
 
 void Transform::getInverse(Transform& out) const
 {
-	const Transform &m = *this;
+	const Transform& m = *this;
 
 	float d = (m(0, 0) * m(1, 1) - m(0, 1) * m(1, 0)) * (m(2, 2) * m(3, 3) - m(2, 3) * m(3, 2)) -
 	          (m(0, 0) * m(1, 2) - m(0, 2) * m(1, 0)) * (m(2, 1) * m(3, 3) - m(2, 3) * m(3, 1)) +
@@ -42,8 +42,7 @@ void Transform::getInverse(Transform& out) const
 	          (m(0, 1) * m(1, 3) - m(0, 3) * m(1, 1)) * (m(2, 0) * m(3, 2) - m(2, 2) * m(3, 0)) +
 	          (m(0, 2) * m(1, 3) - m(0, 3) * m(1, 2)) * (m(2, 0) * m(3, 1) - m(2, 1) * m(3, 0));
 
-	if (Math::isZero(d))
-	{
+	if (Math::isZero(d)) {
 		throw MathException("The provided transform has no inverse.",
 		                    __FUNCTION__);
 	}
@@ -131,8 +130,7 @@ void Transform::interpolate(const Transform& other, float t, Transform& out) con
 
 bool Transform::equals(const Transform& other, float roundingTolerance) const
 {
-	for (unsigned int c = 0; c < 16; ++c)
-	{
+	for (unsigned int c = 0; c < 16; ++c) {
 		if (!Math::equals(matrix[c], other[c], roundingTolerance))
 			return false;
 	}
@@ -142,8 +140,7 @@ bool Transform::equals(const Transform& other, float roundingTolerance) const
 
 bool Transform::isIdentity() const
 {
-	for (unsigned int c = 0; c < 16; ++c)
-	{
+	for (unsigned int c = 0; c < 16; ++c) {
 		if (!Math::equals(matrix[c], kIdentityMatrix[c]))
 			return false;
 	}
@@ -152,8 +149,8 @@ bool Transform::isIdentity() const
 
 bool Transform::isOrthogonal() const
 {
-	float dp=matrix[0] * matrix[4] + matrix[1] * matrix[5] + matrix[2]
-	         * matrix[6] + matrix[3] * matrix[7];
+	float dp = matrix[0] * matrix[4] + matrix[1] * matrix[5] + matrix[2]
+	           * matrix[6] + matrix[3] * matrix[7];
 
 
 	if (!Math::isZero(dp))
@@ -193,15 +190,14 @@ void Transform::getRotationRadians(Vector3& vecOut) const
 	getScale(scale);
 	const Vector3 invScale(1.0f / scale.X, 1.0f / scale.Y, 1.0f / scale.Z);
 
-	// was 64-bit
-	float Y = -asin(matrix[2]*invScale.X);
-	// was 64-bit
+	// was 64-bit in Irrlicht
+	float Y = -asin(matrix[2] * invScale.X);
+	// was 64-bit in Irrlicht
 	const float C = cos(Y);
 
 	float rotx, roty, X, Z;
 
-	if (!Math::isZero(C))
-	{
+	if (!Math::isZero(C)) {
 		const float invC = 1.0f / C;
 		rotx = matrix[10] * invC * invScale.Z;
 		roty = matrix[6] * invC * invScale.Y;
@@ -210,8 +206,7 @@ void Transform::getRotationRadians(Vector3& vecOut) const
 		roty = matrix[1] * invC * invScale.X;
 		Z = atan2( roty, rotx );
 	}
-	else
-	{
+	else {
 		X = 0.0;
 		rotx = matrix[5] * invScale.Y;
 		roty = -matrix[4] * invScale.Y;
@@ -243,12 +238,10 @@ void Transform::getScale(Vector3& vecOut) const
 	// Deal with the 0 rotation case first
 	if (Math::isZero(matrix[1]) && Math::isZero(matrix[2]) &&
 	        Math::isZero(matrix[4]) && Math::isZero(matrix[6]) &&
-	        Math::isZero(matrix[8]) && Math::isZero(matrix[9]))
-	{
+	        Math::isZero(matrix[8]) && Math::isZero(matrix[9])) {
 		vecOut.set(matrix[0], matrix[5], matrix[10]);
 	}
-	else
-	{
+	else {
 		// We have to do the full calculation.
 		vecOut.set(sqrtf(matrix[0] * matrix[0] + matrix[1] * matrix[1] + matrix[2] * matrix[2]),
 		           sqrtf(matrix[4] * matrix[4] + matrix[5] * matrix[5] + matrix[6] * matrix[6]),
@@ -271,25 +264,25 @@ void Transform::setAsProductOf(const Transform& t1, const Transform& t2)
 	const float* m1 = t1.matrix;
 	const float* m2 = t2.matrix;
 
-	matrix[0] = m1[0]*m2[0] + m1[4]*m2[1] + m1[8]*m2[2] + m1[12]*m2[3];
-	matrix[1] = m1[1]*m2[0] + m1[5]*m2[1] + m1[9]*m2[2] + m1[13]*m2[3];
-	matrix[2] = m1[2]*m2[0] + m1[6]*m2[1] + m1[10]*m2[2] + m1[14]*m2[3];
-	matrix[3] = m1[3]*m2[0] + m1[7]*m2[1] + m1[11]*m2[2] + m1[15]*m2[3];
+	matrix[0] = m1[0] * m2[0] + m1[4] * m2[1] + m1[8] * m2[2] + m1[12] * m2[3];
+	matrix[1] = m1[1] * m2[0] + m1[5] * m2[1] + m1[9] * m2[2] + m1[13] * m2[3];
+	matrix[2] = m1[2] * m2[0] + m1[6] * m2[1] + m1[10] * m2[2] + m1[14] * m2[3];
+	matrix[3] = m1[3] * m2[0] + m1[7] * m2[1] + m1[11] * m2[2] + m1[15] * m2[3];
 
-	matrix[4] = m1[0]*m2[4] + m1[4]*m2[5] + m1[8]*m2[6] + m1[12]*m2[7];
-	matrix[5] = m1[1]*m2[4] + m1[5]*m2[5] + m1[9]*m2[6] + m1[13]*m2[7];
-	matrix[6] = m1[2]*m2[4] + m1[6]*m2[5] + m1[10]*m2[6] + m1[14]*m2[7];
-	matrix[7] = m1[3]*m2[4] + m1[7]*m2[5] + m1[11]*m2[6] + m1[15]*m2[7];
+	matrix[4] = m1[0] * m2[4] + m1[4] * m2[5] + m1[8] * m2[6] + m1[12] * m2[7];
+	matrix[5] = m1[1] * m2[4] + m1[5] * m2[5] + m1[9] * m2[6] + m1[13] * m2[7];
+	matrix[6] = m1[2] * m2[4] + m1[6] * m2[5] + m1[10] * m2[6] + m1[14] * m2[7];
+	matrix[7] = m1[3] * m2[4] + m1[7] * m2[5] + m1[11] * m2[6] + m1[15] * m2[7];
 
-	matrix[8] = m1[0]*m2[8] + m1[4]*m2[9] + m1[8]*m2[10] + m1[12]*m2[11];
-	matrix[9] = m1[1]*m2[8] + m1[5]*m2[9] + m1[9]*m2[10] + m1[13]*m2[11];
-	matrix[10] = m1[2]*m2[8] + m1[6]*m2[9] + m1[10]*m2[10] + m1[14]*m2[11];
-	matrix[11] = m1[3]*m2[8] + m1[7]*m2[9] + m1[11]*m2[10] + m1[15]*m2[11];
+	matrix[8] = m1[0] * m2[8] + m1[4] * m2[9] + m1[8] * m2[10] + m1[12] * m2[11];
+	matrix[9] = m1[1] * m2[8] + m1[5] * m2[9] + m1[9] * m2[10] + m1[13] * m2[11];
+	matrix[10] = m1[2] * m2[8] + m1[6] * m2[9] + m1[10] * m2[10] + m1[14] * m2[11];
+	matrix[11] = m1[3] * m2[8] + m1[7] * m2[9] + m1[11] * m2[10] + m1[15] * m2[11];
 
-	matrix[12] = m1[0]*m2[12] + m1[4]*m2[13] + m1[8]*m2[14] + m1[12]*m2[15];
-	matrix[13] = m1[1]*m2[12] + m1[5]*m2[13] + m1[9]*m2[14] + m1[13]*m2[15];
-	matrix[14] = m1[2]*m2[12] + m1[6]*m2[13] + m1[10]*m2[14] + m1[14]*m2[15];
-	matrix[15] = m1[3]*m2[12] + m1[7]*m2[13] + m1[11]*m2[14] + m1[15]*m2[15];
+	matrix[12] = m1[0] * m2[12] + m1[4] * m2[13] + m1[8] * m2[14] + m1[12] * m2[15];
+	matrix[13] = m1[1] * m2[12] + m1[5] * m2[13] + m1[9] * m2[14] + m1[13] * m2[15];
+	matrix[14] = m1[2] * m2[12] + m1[6] * m2[13] + m1[10] * m2[14] + m1[14] * m2[15];
+	matrix[15] = m1[3] * m2[12] + m1[7] * m2[13] + m1[11] * m2[14] + m1[15] * m2[15];
 }
 
 void Transform::setInverseRotationRadians(const Vector3& rotation)
@@ -314,7 +307,7 @@ void Transform::setInverseRotationRadians(const Vector3& rotation)
 
 	matrix[2] = crsp * cy + sr * sy;
 	matrix[6] = crsp * sy - sr * cy;
-	matrix[10] = cr*cp;
+	matrix[10] = cr * cp;
 }
 
 void Transform::setInverseRotationDegrees(const Vector3& rotation)
@@ -381,7 +374,7 @@ void Transform::setFromArray(const float* transformMatrix)
 void Transform::inverseRotatePoint(Vector3& point) const
 {
 	Vector3& tmp = point;
-	point.X = tmp.X * matrix[0] + tmp.Y * matrix[1] + tmp.Z *matrix[2];
+	point.X = tmp.X * matrix[0] + tmp.Y * matrix[1] + tmp.Z * matrix[2];
 	point.Y = tmp.X * matrix[4] + tmp.Y * matrix[5] + tmp.Z * matrix[6];
 	point.Z = tmp.X * matrix[8] + tmp.Y * matrix[9] + tmp.Z * matrix[10];
 }

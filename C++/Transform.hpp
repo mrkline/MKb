@@ -43,7 +43,6 @@ public:
 	/*!
 	\brief Sets a transform the inverse of this one, if possible
 	\param out The transform to set to the inverse
-	\return true on success, false if there is no inverse
 	\throws MathException if no inverse exists
 
 	The inverse is calculated using Cramers rule.
@@ -110,7 +109,7 @@ public:
 	\return The interpolation between this transform and other at t
 	\todo Make this method static, as with dot and cross in Vector3
 	*/
-	Transform interpolate(const Transform& other, float t)
+	Transform interpolate(const Transform& other, float t) const
 	{
 		Transform ret;
 		interpolate(other, t, ret);
@@ -119,10 +118,10 @@ public:
 
 	/*!
 	\brief Checks equality using Math::kFloatRoundError as tolerance
-	\see Math::kFloatRoundError
+	\see Math::kUlpsEquality
 	*/
 	bool equals(const Transform& other,
-	            float roundingTolerance = Math::kFloatRoundError) const;
+	            float roundingTolerance = Math::kUlpsEquality) const;
 
 	//! Returns true if this transform is an identity matrix
 	bool isIdentity() const;
