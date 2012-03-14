@@ -330,12 +330,12 @@ void Transform::setInverseTranslation(const Vector3& translation)
 
 void Transform::setRotationRadians(const Vector3& rotation)
 {
-	const float cr = cos( rotation.X );
-	const float sr = sin( rotation.X );
-	const float cp = cos( rotation.Y );
-	const float sp = sin( rotation.Y );
-	const float cy = cos( rotation.Z );
-	const float sy = sin( rotation.Z );
+	const float cr = cos(rotation.X);
+	const float sr = sin(rotation.X);
+	const float cp = cos(rotation.Y);
+	const float sp = sin(rotation.Y);
+	const float cy = cos(rotation.Z);
+	const float sy = sin(rotation.Z);
 
 	matrix[0] = cp * cy;
 	matrix[1] = cp * sy;
