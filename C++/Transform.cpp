@@ -128,7 +128,7 @@ void Transform::interpolate(const Transform& other, float t, Transform& out) con
 		out[c] = matrix[c] + (other[c] - matrix[c]) * t;
 }
 
-bool Transform::equals(const Transform& other, float roundingTolerance) const
+bool Transform::equals(const Transform& other, int roundingTolerance) const
 {
 	for (unsigned int c = 0; c < 16; ++c) {
 		if (!Math::equals(matrix[c], other[c], roundingTolerance))

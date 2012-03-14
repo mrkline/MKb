@@ -121,7 +121,7 @@ public:
 	\see Math::kUlpsEquality
 	*/
 	bool equals(const Transform& other,
-	            float roundingTolerance = Math::kUlpsEquality) const;
+	            int roundingTolerance = Math::kUlpsEquality) const;
 
 	//! Returns true if this transform is an identity matrix
 	bool isIdentity() const;
