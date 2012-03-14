@@ -31,6 +31,12 @@ Transform::Transform(const Transform& other)
 	*this = other;
 }
 
+Transform::Transform(const Vector3& position)
+{
+	setToIdentity();
+	setTranslation(position);
+}
+
 void Transform::getInverse(Transform& out) const
 {
 	const Transform& m = *this;

@@ -27,6 +27,8 @@ public:
 	*/
 	Transform(const Transform& other);
 
+	Transform(const Vector3& position);
+
 	/*!
 	\brief Constructs a transform from the first 16 floats in an array
 	\param matrixArray Array to construct the transform from.
