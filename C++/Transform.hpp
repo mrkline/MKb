@@ -131,6 +131,9 @@ public:
 	//! Returns true if this transform is orthagonal
 	bool isOrthogonal() const;
 
+	//! Gets the x, y, and z axes after being rotated by the matrix
+	void getRotatedAxes(Vector3& x, Vector3& y, Vector3& z);
+
 	/*!
 	\brief Sets a vector to the rotation of this transform in degrees
 	\param vecOut Upon completion, vecOut contains the rotation in degrees
@@ -241,6 +244,8 @@ public:
 
 	//! Sets the rotation of this transform to the provided one in radians
 	void setRotationRadians(const Vector3& rotation);
+
+	void setRotationFromAxes(const Vector3 x, Vector3 y, Vector3 z);
 
 	//! Sets the translation of this transform
 	void setTranslation(const Vector3& translation);

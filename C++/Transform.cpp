@@ -231,6 +231,21 @@ void Transform::getRotationRadians(Vector3& vecOut) const
 
 }
 
+void Transform::getRotatedAxes(Vector3& x, Vector3& y, Vector3& z)
+{
+	x.X = matrix[0];
+	x.Y = matrix[1];
+	x.Z = matrix[2];
+
+	y.X = matrix[4];
+	y.Y = matrix[5];
+	y.Z = matrix[6];
+
+	z.X = matrix[8];
+	z.Y = matrix[9];
+	z.Z = matrix[10];
+}
+
 void Transform::getRotationDegrees(Vector3& vecOut) const
 {
 	getRotationRadians(vecOut);
@@ -356,6 +371,25 @@ void Transform::setRotationRadians(const Vector3& rotation)
 void Transform::setRotationDegrees(const Vector3& rotation)
 {
 	setRotationRadians(rotation.getScaledBy(Math::kDegToRad));
+}
+
+void Transform::setRotationFromAxes(Vector3 x, Vector3 y, Vector3 z)
+{
+	x.normalize();
+	y.normalize();
+	z.normalize();
+
+	matrix[0] = x.X;
+	matrix[1] = x.Y;
+	matrix[2] = x.Z;
+
+	matrix[4] = y.X;
+	matrix[5] = y.Y;
+	matrix[6] = y.Z;
+
+	matrix[8] = z.X;
+	matrix[9] = z.Y;
+	matrix[10] = z.Z;
 }
 
 void Transform::setTranslation(const Vector3& translation)
