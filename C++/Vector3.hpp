@@ -142,11 +142,11 @@ public:
 	}
 
 	//! Gets the length of this vector
-	float getLength() const { return std::sqrt(X*X + Y*Y + Z*Z); }
+	float getLength() const { return std::sqrt(X * X + Y * Y + Z * Z); }
 
 	//! Gets the length squared of this vector,
 	//! which is faster to calculate than the length
-	float getLengthSq() const { return X*X + Y*Y + Z*Z; }
+	float getLengthSq() const { return X * X + Y * Y + Z * Z; }
 
 	//! Gets the distance from this vector to another one,
 	//! interpreting both vectors as points
@@ -156,7 +156,7 @@ public:
 		dx = X - o.X;
 		dy = Y - o.Y;
 		dz = Z - o.Z;
-		return std::sqrt(dx*dx + dy*dy + dz*dz);
+		return std::sqrt(dx * dx + dy * dy + dz * dz);
 	}
 
 	//! Gets the distance squared from this vector to another one,
@@ -168,12 +168,12 @@ public:
 		dx = X - o.X;
 		dy = Y - o.Y;
 		dz = Z - o.Z;
-		return dx*dx + dy*dy + dz*dz;
+		return dx * dx + dy * dy + dz * dz;
 	}
 
 	//! Returns true if this vector is a unit vector (with a length of 1)
 	bool isNormalized() const
-	{ return Math::equals(std::sqrt(X*X + Y*Y + Z*Z), 1.0f); }
+	{ return Math::equals(std::sqrt(X * X + Y * Y + Z * Z), 1.0f); }
 
 	//! Copies this vector into the first three values of the provided array
 	void getAsArray(float* arr) const
@@ -227,7 +227,7 @@ public:
 	//! Sets the length of this vector to 1
 	void normalize()
 	{
-		float len = std::sqrt(X*X + Y*Y + Z*Z);
+		float len = std::sqrt(X * X + Y * Y + Z * Z);
 
 		// Normalized already if our length is zero.
 		// Also stops NaN errors

@@ -145,7 +145,7 @@ public:
 		float dx, dy;
 		dx = X - o.X;
 		dy = Y - o.Y;
-		return std::sqrt(dx*dx + dy*dy);
+		return std::sqrt(dx * dx + dy * dy);
 	}
 
 	//! Gets the distance squared from this vector to another one,
@@ -156,12 +156,12 @@ public:
 		float dx, dy;
 		dx = X - o.X;
 		dy = Y - o.Y;
-		return dx*dx + dy*dy;
+		return dx * dx + dy * dy;
 	}
 
 	//! Returns true if this vector is a unit vector (with a length of 1)
 	bool isNormalized() const
-	{ return Math::equals(std::sqrt(X*X + Y*Y), 1.0f); }
+	{ return Math::equals(std::sqrt(X * X + Y * Y), 1.0f); }
 
 	//! Copies this vector into the first two values of the provided array
 	void getAsArray(float* arr) const
@@ -204,7 +204,7 @@ public:
 	//! Sets the length of this vector to 1
 	void normalize()
 	{
-		float len = std::sqrt(X*X + Y*Y);
+		float len = std::sqrt(X * X + Y * Y);
 
 		// Normalized already if our length is zero.
 		// Also stops NaN errors
