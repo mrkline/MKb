@@ -12,8 +12,8 @@ SocketMultiplexer::SocketMultiplexer()
 void SocketMultiplexer::setReadSet(const std::list<Socket*>& sockets)
 {
 	FD_ZERO(&read);
-	for (auto it = sockets.begin(); it != sockets.end(); ++it)
-		FD_SET((*it)->getSocket(), &read);
+	for (Socket* sock : sockets)
+		FD_SET(sock->getSocket(), &read);
 
 	readList = sockets;
 }
@@ -29,8 +29,8 @@ void SocketMultiplexer::setReadSet(Socket* socket)
 void SocketMultiplexer::setWriteSet(const std::list<Socket*>& sockets)
 {
 	FD_ZERO(&write);
-	for (auto it = sockets.begin(); it != sockets.end(); ++it)
-		FD_SET((*it)->getSocket(), &write);
+	for (Socket* sock : sockets)
+		FD_SET(sock->getSocket(), &write);
 
 	writeList = sockets;
 }
@@ -66,22 +66,21 @@ int SocketMultiplexer::select(struct timeval* timeout)
 	SockDesc highest = -1;
 	
 	// Fill the exception set with sockets from the read set
-	for (auto it = readList.begin(); it != readList.end(); ++it) {
-		SockDesc curr = (*it)->getSocket();
+	for (Socket* sock : readList) {
+		SockDesc curr = sock->getSocket();
 		FD_SET(curr, &except);
-		exceptList.push_back(*it);
+		exceptList.push_back(sock);
 		if (curr > highest)
 			highest = curr;
 	}
 
 	// Fill the exception set with sockets from the write set
-	for (auto it = writeList.begin(); it != writeList.end(); ++it) {
-		SockDesc curr = (*it)->getSocket();
+	for (Socket* sock : writeList) {
+		SockDesc curr = sock->getSocket();
 		// Only add the socket if it wasn't already in the read set
-		if (!FD_ISSET(curr, &except))
-		{
+		if (!FD_ISSET(curr, &except)) {
 			FD_SET(curr, &except);
-			exceptList.push_back(*it);
+			exceptList.push_back(sock);
 			if (curr > highest)
 				highest = curr;
 		}
