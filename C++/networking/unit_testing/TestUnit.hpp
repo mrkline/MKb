@@ -43,7 +43,7 @@ namespace UnitTesting {
 					       ex.callingFunction.c_str(), ex.message.c_str());
 				}
 				catch (...) {
-					printf("FAILURE: %s test failed and thew an unknown exception\n", currName);
+					printf("FAILURE: %s test failed and threw an unknown exception\n", currName);
 					failedTests.push_back(std::move(curr));
 				}
 				unrunTests.pop();
