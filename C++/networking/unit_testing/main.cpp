@@ -1,4 +1,5 @@
-#include <list>
+#include <memory>
+#include <queue>
 
 #include "Test.hpp"
 #include "TestUnit.hpp"
@@ -7,14 +8,15 @@
 using namespace UnitTesting;
 using namespace std;
 
-list<TestUnit*> testUnits;
+queue<unique_ptr<TestUnit>> testUnits;
 
 int main()
 {
 	//! \todo Load units into testUnits here
-	testUnits.push_back(new NetworkTestUnit());
+	testUnits.push(unique_ptr<TestUnit>(new NetworkTestUnit()));
 
-	for (TestUnit* curr : testUnits) {
+	while (!testUnits.empty()) {
+		const auto& curr = testUnits.front();
 		try {
 			printf("Beginning test unit %s...\n\n", curr->getUnitName());
 			curr->runUnit();
@@ -23,7 +25,7 @@ int main()
 			printf("The test unit %s threw an unexpected exception.\n",
 			       curr->getUnitName());
 		}
-		delete curr;
+		testUnits.pop();
 	}
 	printf("\n");
 	return 0;

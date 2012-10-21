@@ -11,8 +11,8 @@ namespace UnitTesting {
 
 		void loadTests()
 		{
-			unrunTests.push_back(new IPTest());
-			unrunTests.push_back(new TCPTest());
+			unrunTests.push(std::unique_ptr<Test>(new IPTest()));
+			unrunTests.push(std::unique_ptr<Test>(new TCPTest()));
 		}
 
 	};
