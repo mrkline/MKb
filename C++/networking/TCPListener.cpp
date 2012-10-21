@@ -64,7 +64,7 @@ void TCPListener::stop()
 		throw NetworkException("The listener failed while stopping itself", __FUNCTION__);
 }
 
-TCPConnection* TCPListener::accept()
+unique_ptr<TCPConnection> TCPListener::accept()
 {
 	if (listenSock == INVALID_SOCKET)
 		throw InvalidOperationException("The listener must be started before it can accept connections.",
@@ -75,5 +75,5 @@ TCPConnection* TCPListener::accept()
 	if (connSock == INVALID_SOCKET)
 		throw NetworkException( "The listener failed while accepting a connection.", __FUNCTION__);
 
-	return new TCPConnection(connSock);
+	return unique_ptr<TCPConnection>(new TCPConnection(connSock));
 }

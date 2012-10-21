@@ -27,7 +27,7 @@ namespace UnitTesting {
 				client.connect(IPEndPoint(IP(127, 0, 0, 1), port));
 
 				// Accept the connection
-				TCPConnection* serverConn = server.accept();
+				auto serverConn = server.accept();
 
 				// Test sending from the server to the client
 				serverConn->send(testData, testDataLen);
@@ -57,7 +57,6 @@ namespace UnitTesting {
 
 				serverConn->disconnect();
 
-				delete serverConn;
 				free(buff);
 			}
 			catch (...) {

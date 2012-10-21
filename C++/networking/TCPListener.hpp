@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #include "Portability.hpp"
 #include "IP.hpp"
 
@@ -49,13 +51,11 @@ public:
 
 	/*!
 	\brief Accepts an incoming connection request
-	\warning The code calling this method is responsible for deleting
-	         the returned connection
 	\returns The accepted TCP connection
 	\throws InvalidOperationException if the listener has not been started
 	\throws NetworkException if Winsock's accept fails
 	*/
-	TCPConnection* accept();
+	std::unique_ptr<TCPConnection> accept();
 
 private:
 	// Disallow copy and assign
