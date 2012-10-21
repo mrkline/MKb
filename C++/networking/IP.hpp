@@ -24,8 +24,7 @@ public:
 	\param oct2 The third octet
 	\param oct3 The fourth octet
 	*/
-	IP(unsigned char oct0, unsigned char oct1,
-	   unsigned char oct2, unsigned char oct3);
+	IP(unsigned char oct0, unsigned char oct1, unsigned char oct2, unsigned char oct3);
 
 	/*!
 	\brief Constructs the IP from its binary representation
@@ -42,8 +41,7 @@ public:
 	\param oct2 The third octet
 	\param oct3 The fourth octet
 	*/
-	void set(unsigned char oct0, unsigned char oct1,
-	         unsigned char oct2, unsigned char oct3);
+	void set(unsigned char oct0, unsigned char oct1, unsigned char oct2, unsigned char oct3);
 
 	/*!
 	\brief Gets a given octet

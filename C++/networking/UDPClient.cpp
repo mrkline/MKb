@@ -36,11 +36,7 @@ void UDPClient::bind( int port )
 	ai.sin_port = htons(port);
 
 	if (::bind(sock, (struct sockaddr*)&ai, sizeof(ai)) != 0)
-	{
-		throw NetworkException(
-		    "UDP socket could not be bound to the given port",
-		    __FUNCTION__);
-	}
+		throw NetworkException( "UDP socket could not be bound to the given port", __FUNCTION__);
 
 	bound = true;
 }
@@ -59,25 +55,18 @@ size_t UDPClient::send(const char* data, size_t dataLen )
 {
 	if (defaultDest == nullptr)
 	{
-		throw InvalidOperationException(
-		    "A default destination must be set before sending"
-		    " without a specified destination",
-		    __FUNCTION__);
+		throw InvalidOperationException("A default destination must be set before sending"
+		                                " without a specified destination",
+		                                __FUNCTION__);
 	}
 
 	if (!canSend)
-	{
-		throw InvalidOperationException(
-		    "Sending has been shut down on this connection.", __FUNCTION__);
-	}
+		throw InvalidOperationException( "Sending has been shut down on this connection.", __FUNCTION__);
 
-	int ret = sendto(sock, data, dataLen, 0, (sockaddr*)defaultDest,
-	                 sizeof(*defaultDest));
+	int ret = sendto(sock, data, dataLen, 0, (sockaddr*)defaultDest, sizeof(*defaultDest));
 
 	if (0 > ret)
-	{
 		throw NetworkException("Sending failed.", __FUNCTION__);
-	}
 
 	return ret;
 }
@@ -86,10 +75,7 @@ size_t UDPClient::send(const char* data, size_t dataLen,
                        const IPEndPoint& destination )
 {
 	if (!canSend)
-	{
-		throw InvalidOperationException(
-		    "Sending has been shut down on this connection.", __FUNCTION__);
-	}
+		throw InvalidOperationException( "Sending has been shut down on this connection.", __FUNCTION__);
 
 	sockaddr_in dest;
 	memset(&dest, 0, sizeof(dest));
@@ -100,29 +86,18 @@ size_t UDPClient::send(const char* data, size_t dataLen,
 	int ret = sendto(sock, data, dataLen, 0, (sockaddr*)&dest, sizeof(dest));
 
 	if (0 > ret)
-	{
 		throw NetworkException("Sending failed.", __FUNCTION__);
-	}
 
 	return ret;
 }
 
-size_t UDPClient::receive( char* recvBuff, size_t recvBuffLen,
-                           IP* from /*= nullptr*/ )
+size_t UDPClient::receive( char* recvBuff, size_t recvBuffLen, IP* from /*= nullptr*/ )
 {
 	if (!bound)
-	{
-		throw InvalidOperationException(
-		    "To receive from a UDP client, it must first be bound.",
-		    __FUNCTION__);
-	}
+		throw InvalidOperationException( "To receive from a UDP client, it must first be bound.", __FUNCTION__);
 
 	if (!canReceive)
-	{
-		throw InvalidOperationException(
-		    "Receiving has been shut down on this connection.",
-		    __FUNCTION__);
-	}
+		throw InvalidOperationException( "Receiving has been shut down on this connection.", __FUNCTION__);
 
 	int ret;
 
@@ -130,12 +105,10 @@ size_t UDPClient::receive( char* recvBuff, size_t recvBuffLen,
 	// Clear the LastError flag so we can check it after we run recvfrom
 	WSASetLastError(0);
 
-	if (from == nullptr)
-	{
+	if (from == nullptr) {
 		ret = recvfrom(sock, recvBuff, recvBuffLen, 0, nullptr, nullptr);
 	}
-	else
-	{
+	else {
 		sockaddr_in fa;
 		int fasz = sizeof(fa);
 		ret = recvfrom(sock, recvBuff, recvBuffLen, 0, (sockaddr*)&fa, &fasz);
@@ -145,12 +118,9 @@ size_t UDPClient::receive( char* recvBuff, size_t recvBuffLen,
 	// \todo Does recvfrom return an error in this case?
 
 	// Check if we didn't have a large enough buffer
-	if (WSAGetLastError() == WSAEMSGSIZE)
-	{
-		throw InsufficientBufferException(
-		    "In UDP, the receiving buffer must be as large"
-		    " as the incoming datagram",
-		    __FUNCTION__);
+	if (WSAGetLastError() == WSAEMSGSIZE) {
+		throw InsufficientBufferException("In UDP, the receiving buffer must be as large as the incoming datagram",
+		                                  __FUNCTION__);
 	}
 #else
 	if (from == nullptr)
@@ -192,11 +162,7 @@ void UDPClient::shutDownSending()
 void UDPClient::shutDownReceiving()
 {
 	if (!canReceive)
-	{
-		throw InvalidOperationException(
-		    "Receiving has already been shut down on this connection.",
-		    __FUNCTION__);
-	}
+		throw InvalidOperationException( "Receiving has already been shut down on this connection.", __FUNCTION__);
 
 	if (shutdown(sock, SD_RECEIVE) != 0)
 		throw NetworkException("Receiving shutdown failed.", __FUNCTION__);

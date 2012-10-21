@@ -16,8 +16,7 @@ public:
 	WinsockRequirement()
 	{
 		if (WSAStartup(MAKEWORD(2, 2), &wsd) != 0)
-			throw NetworkException("Winsock failed during initialization",
-			                       __FUNCTION__);
+			throw NetworkException("Winsock failed during initialization", __FUNCTION__);
 	}
 
 	~WinsockRequirement()

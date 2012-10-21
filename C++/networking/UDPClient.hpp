@@ -26,8 +26,7 @@ public:
 	{
 		//! \todo Move me into Exceptions.h
 	public:
-		InsufficientBufferException(const char* exceptionMessage,
-		                            const char* callingFunctionName = nullptr)
+		InsufficientBufferException(const char* exceptionMessage, const char* callingFunctionName = nullptr)
 				: NetworkException(exceptionMessage, callingFunctionName)
 		{ }
 	};

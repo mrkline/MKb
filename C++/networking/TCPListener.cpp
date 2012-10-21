@@ -39,63 +39,41 @@ TCPListener::~TCPListener()
 void TCPListener::start( int maxRequests /*= SOMAXCONN*/ )
 {
 	if (listenSock != INVALID_SOCKET)
-	{
-		throw InvalidOperationException(
-		    "The listener has already been started.", __FUNCTION__);
-	}
+		throw InvalidOperationException( "The listener has already been started.", __FUNCTION__);
 
 	listenSock = socket(ai->ai_family, ai->ai_socktype, ai->ai_protocol);
 
 	if (listenSock == INVALID_SOCKET)
 		throw NetworkException("Socket creation failed.", __FUNCTION__);
 
-	if (0 > bind(listenSock, ai->ai_addr, (int)ai->ai_addrlen))
-	{
+	if (0 > bind(listenSock, ai->ai_addr, (int)ai->ai_addrlen)) {
 		closesocket(listenSock);
-		throw NetworkException("A socket could not be bound to its given port.",
-		                       __FUNCTION__);
+		throw NetworkException("A socket could not be bound to its given port.", __FUNCTION__);
 	}
 
 	if (0 > listen(listenSock, maxRequests))
-	{
-		throw NetworkException(
-		    "A socket failed on listening for connection requests.",
-		    __FUNCTION__);
-	}
+		throw NetworkException("A socket failed on listening for connection requests.", __FUNCTION__);
 }
 
 void TCPListener::stop()
 {
 	if (listenSock == INVALID_SOCKET)
-	{
-		throw InvalidOperationException("The listener has not been started,"
-		                                " so it cannot be stopped.",
-		                                __FUNCTION__);
-	}
+		throw InvalidOperationException("The listener has not been started, so it cannot be stopped.", __FUNCTION__);
 
 	if (closesocket(listenSock) != 0)
-	{
-		throw NetworkException("The listener failed while stopping itself",
-		                       __FUNCTION__);
-	}
+		throw NetworkException("The listener failed while stopping itself", __FUNCTION__);
 }
 
 TCPConnection* TCPListener::accept()
 {
 	if (listenSock == INVALID_SOCKET)
-	{
-		throw InvalidOperationException(
-		    "The listener must be started before it can accept connections.",
-		    __FUNCTION__);
-	}
+		throw InvalidOperationException("The listener must be started before it can accept connections.",
+		                                __FUNCTION__);
 
 	SockDesc connSock = ::accept(listenSock, NULL, NULL);
+
 	if (connSock == INVALID_SOCKET)
-	{
-		throw NetworkException(
-		    "The listener failed while accepting a connection.",
-		    __FUNCTION__);
-	}
+		throw NetworkException( "The listener failed while accepting a connection.", __FUNCTION__);
 
 	return new TCPConnection(connSock);
 }

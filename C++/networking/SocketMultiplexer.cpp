@@ -66,8 +66,7 @@ int SocketMultiplexer::select(struct timeval* timeout)
 	SockDesc highest = -1;
 	
 	// Fill the exception set with sockets from the read set
-	for (auto it = readList.begin(); it != readList.end(); ++it)
-	{
+	for (auto it = readList.begin(); it != readList.end(); ++it) {
 		SockDesc curr = (*it)->getSocket();
 		FD_SET(curr, &except);
 		exceptList.push_back(*it);
@@ -76,8 +75,7 @@ int SocketMultiplexer::select(struct timeval* timeout)
 	}
 
 	// Fill the exception set with sockets from the write set
-	for (auto it = writeList.begin(); it != writeList.end(); ++it)
-	{
+	for (auto it = writeList.begin(); it != writeList.end(); ++it) {
 		SockDesc curr = (*it)->getSocket();
 		// Only add the socket if it wasn't already in the read set
 		if (!FD_ISSET(curr, &except))
@@ -95,18 +93,15 @@ int SocketMultiplexer::select(struct timeval* timeout)
 		throw Exceptions::NetworkException("select failed", __FUNCTION__);
 
 	// Filter the linked lists for items that should still be in them
-	for (auto it = readList.begin(); it != readList.end(); ++it)
-	{
+	for (auto it = readList.begin(); it != readList.end(); ++it) {
 		if (!FD_ISSET((*it)->getSocket(), &read))
 			readList.erase(it--);
 	}
-	for (auto it = writeList.begin(); it != writeList.end(); ++it)
-	{
+	for (auto it = writeList.begin(); it != writeList.end(); ++it) {
 		if (!FD_ISSET((*it)->getSocket(), &write))
 			writeList.erase(it--);
 	}
-	for (auto it = exceptList.begin(); it != exceptList.end(); ++it)
-	{
+	for (auto it = exceptList.begin(); it != exceptList.end(); ++it) {
 		if (!FD_ISSET((*it)->getSocket(), &except))
 			exceptList.erase(it--);
 	}

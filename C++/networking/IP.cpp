@@ -21,8 +21,7 @@ IP::IP(const string& ipStr)
 	updateString();
 }
 
-IP::IP(unsigned char oct0, unsigned char oct1,
-       unsigned char oct2, unsigned char oct3)
+IP::IP(unsigned char oct0, unsigned char oct1, unsigned char oct2, unsigned char oct3)
 {
 	octets[0] = oct0;
 	octets[1] = oct1;
@@ -38,8 +37,7 @@ IP::IP(uint32_t bin)
 	updateString();
 }
 
-void IP::set(unsigned char oct0, unsigned char oct1,
-             unsigned char oct2, unsigned char oct3)
+void IP::set(unsigned char oct0, unsigned char oct1, unsigned char oct2, unsigned char oct3)
 {
 	octets[0] = oct0;
 	octets[1] = oct1;
@@ -52,8 +50,7 @@ void IP::set(unsigned char oct0, unsigned char oct1,
 unsigned char IP::getOctet(unsigned char octetNum) const
 {
 	if (octetNum > 3)
-		throw ArgumentOutOfRangeException("IPs have octets [0,4)",
-		                                  __FUNCTION__);
+		throw ArgumentOutOfRangeException("IPs have octets [0,4)", __FUNCTION__);
 
 	return octets[octetNum];
 }
@@ -61,8 +58,7 @@ unsigned char IP::getOctet(unsigned char octetNum) const
 void IP::setOctet(unsigned char octetNum, unsigned char val)
 {
 	if (octetNum > 3)
-		throw ArgumentOutOfRangeException("IPs have octets [0,4)",
-		                                  __FUNCTION__);
+		throw ArgumentOutOfRangeException("IPs have octets [0,4)", __FUNCTION__);
 
 	octets[octetNum] = val;
 	updateString();
@@ -71,8 +67,7 @@ void IP::setOctet(unsigned char octetNum, unsigned char val)
 uint32_t IP::getAsBinary() const
 {
 	typedef uint32_t ui; // to save some typing
-	return ((ui)octets[0] << 24) + ((ui)octets[1] << 16)
-	       + ((ui)octets[2] << 8) + (ui)octets[3];
+	return ((ui)octets[0] << 24) + ((ui)octets[1] << 16) + ((ui)octets[2] << 8) + ((ui)octets[3]);
 }
 
 IP& IP::operator=(const std::string& str)
@@ -91,8 +86,7 @@ IP& IP::operator=(uint32_t bin )
 
 bool IP::operator==(const IP& other) const
 {
-	for (int c = 0; c < 4; ++c)
-	{
+	for (int c = 0; c < 4; ++c) {
 		if (octets[c] != other.octets[c])
 			return false;
 	}
@@ -102,8 +96,7 @@ bool IP::operator==(const IP& other) const
 void IP::updateString()
 {
 	stringstream ss;
-	ss << (int)octets[0] << "." << (int)octets[1] << "."
-	<< (int)octets[2] << "." << (int)octets[3];
+	ss << (int)octets[0] << "." << (int)octets[1] << "." << (int)octets[2] << "." << (int)octets[3];
 	strRep = ss.str();
 }
 
@@ -114,15 +107,12 @@ void IP::octetsFromString(const string& ipStr)
 	stringstream ss(ipStr);
 	string octet;
 
-	while (getline(ss, octet, '.'))
-	{
+	while (getline(ss, octet, '.')) {
 		octetStrs.push_back(octet);
 	}
 
 	if (octetStrs.size() != 4)
-		throw ArgumentException(
-		    "An IP address could not be constructed from the given string",
-		    __FUNCTION__);
+		throw ArgumentException( "An IP address could not be constructed from the given string", __FUNCTION__);
 
 	octets[0] = atoi(octetStrs[0].c_str());
 	octets[1] = atoi(octetStrs[1].c_str());
