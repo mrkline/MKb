@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #include "Socket.hpp"
 #include "IP.hpp"
 #include "Exceptions.hpp"
@@ -110,7 +112,7 @@ private:
 #ifdef _WIN32
 	WinsockRequirement ws;
 #endif
-	sockaddr_in* defaultDest;
+	std::unique_ptr<sockaddr_in> defaultDest;
 	bool bound;
 	bool canSend;
 	bool canReceive;

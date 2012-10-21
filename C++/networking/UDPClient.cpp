@@ -21,9 +21,6 @@ UDPClient::~UDPClient()
 {
 	shutdown(sock, SD_BOTH);
 	closesocket(sock);
-
-	if (defaultDest != nullptr)
-		delete defaultDest;
 }
 
 void UDPClient::bind( int port )
@@ -43,9 +40,9 @@ void UDPClient::bind( int port )
 
 void UDPClient::setDefaultDestination( const IPEndPoint& destination )
 {
-	defaultDest = new sockaddr_in;
+	defaultDest.reset(new sockaddr_in);
 
-	memset(defaultDest, 0, sizeof(*defaultDest));
+	memset(defaultDest.get(), 0, sizeof(*defaultDest));
 	defaultDest->sin_family = AF_INET;
 	defaultDest->sin_port = htons(destination.Port);
 	defaultDest->sin_addr.s_addr = destination.Address.getAsBinary();
@@ -63,7 +60,7 @@ size_t UDPClient::send(const char* data, size_t dataLen )
 	if (!canSend)
 		throw InvalidOperationException( "Sending has been shut down on this connection.", __FUNCTION__);
 
-	int ret = sendto(sock, data, dataLen, 0, (sockaddr*)defaultDest, sizeof(*defaultDest));
+	size_t ret = sendto(sock, data, dataLen, 0, (sockaddr*)defaultDest.get(), sizeof(*defaultDest));
 
 	if (0 > ret)
 		throw NetworkException("Sending failed.", __FUNCTION__);
@@ -83,7 +80,7 @@ size_t UDPClient::send(const char* data, size_t dataLen,
 	dest.sin_port = htons(destination.Port);
 	dest.sin_addr.s_addr = destination.Address.getAsBinary();
 
-	int ret = sendto(sock, data, dataLen, 0, (sockaddr*)&dest, sizeof(dest));
+	size_t ret = sendto(sock, data, dataLen, 0, (sockaddr*)&dest, sizeof(dest));
 
 	if (0 > ret)
 		throw NetworkException("Sending failed.", __FUNCTION__);
