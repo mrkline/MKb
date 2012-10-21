@@ -104,38 +104,29 @@ size_t UDPClient::receive( char* recvBuff, size_t recvBuffLen, IP* from /*= null
 #ifdef _WIN32
 	// Clear the LastError flag so we can check it after we run recvfrom
 	WSASetLastError(0);
+#else
+	errno = 0;
+#endif
 
 	if (from == nullptr) {
 		ret = recvfrom(sock, recvBuff, recvBuffLen, 0, nullptr, nullptr);
 	}
 	else {
 		sockaddr_in fa;
-		int fasz = sizeof(fa);
+		socklen_t fasz = sizeof(fa);
 		ret = recvfrom(sock, recvBuff, recvBuffLen, 0, (sockaddr*)&fa, &fasz);
 		*from = fa.sin_addr.s_addr;
 	}
 
-	// \todo Does recvfrom return an error in this case?
-
+#ifdef _WIN32
 	// Check if we didn't have a large enough buffer
 	if (WSAGetLastError() == WSAEMSGSIZE) {
 		throw InsufficientBufferException("In UDP, the receiving buffer must be as large as the incoming datagram",
 		                                  __FUNCTION__);
 	}
 #else
-	if (from == nullptr)
-	{
-		sockaddr_in fa;
-		socklen_t fasz;
-		ret = recvfrom(sock, recvBuff, recvBuffLen, 0, (sockaddr *) &fa, &fasz);
-	}
-	else
-	{
-		ret = recvfrom(sock, recvBuff, recvBuffLen, 0, NULL, NULL);
-	}
-
-	//! \todo Do we need to throw an exception on failure here like we do in
-	//!       Windows?
+	if (errno == ENOBUFS)
+		throw InsufficientBufferException("The buffer may have been smaller than the incoming datagram", __FUNCTION__);
 #endif
 
 	if (0 > ret)
