@@ -12,16 +12,15 @@ The STL should be used  directly for such operations. Floating point equality
 operations are borrowed from
 http://altdevblogaday.com/2012/02/22/comparing-floating-point-numbers-2012-edition/
 */
-namespace Math
-{
+namespace Math {
 	//! Float representation of Pi
-	const float kPi		= 3.14159265359f;
+	const float kPi	= 3.14159265359f;
 	//! Float representation of 1 / Pi
-	const float kPiRecip	= 1.0f / kPi;
+	const float kPiRecip = 1.0f / kPi;
 	//! Float representation of Pi / 2
 	const float kHalfPi	= kPi / 2.0f;
 	//! Double representation of Pi
-	const double kPiDouble		= 3.1415926535897932384626433832795028841971693993751;
+	const double kPiDouble = 3.1415926535897932384626433832795028841971693993751;
 	//! Double representation of 1 / Pi
 	const double kPiDoubleRecip = 1.0 / kPiDouble;
 	//! Double represntation of Pi / 2
@@ -31,7 +30,7 @@ namespace Math
 	const float kDegToRad = kPi / 180.0f;
 	//! Conversion ratio to convert angle measurements in
 	//! radians to degree angle mesurements
-	const float kRadToDeg   = 180.0f / kPi;
+	const float kRadToDeg = 180.0f / kPi;
 	//! Conversion ratio to convert angle measurements in
 	//! degrees to radian angle mesurements
 	const double kDegToRadDouble = kPiDouble / 180.0;
@@ -40,6 +39,17 @@ namespace Math
 	const double kRadToDegDouble = 180.0 / kPiDouble;
 	//! Default number of Ulps considered for floating-point equality
 	const int kUlpsEquality = 2;
+
+	/*!
+	\brief Returns the sign of a value
+	\return The sign of val (-1, 0, or 1)
+
+	From http://stackoverflow.com/a/4609795/713961
+	*/
+	template <class T>
+	inline int sign(const T& value) {
+		return (T(0) < value) - (value < T(0));
+	}
 
 	/*!
 	\brief Clamps a value between a low and high value
@@ -54,6 +64,13 @@ namespace Math
 	inline const T clamp(const T& value, const T& low, const T& high)
 	{
 		return std::min(std::max(value, low), high);
+	}
+
+	//! Lerps between two values based on parameter t
+	template <class T>
+	inline const T lerp(const T& a, const T& b, const T& t)
+	{
+		return a + (b - a) * t;
 	}
 
 	/*!
