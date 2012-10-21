@@ -4,7 +4,7 @@
 #include "IP.hpp"
 #include "Exceptions.hpp"
 
-#ifdef FMS_WINDOWS_BUILD
+#ifdef _WIN32
 #  include "WinsockRequirement.hpp"
 #endif
 
@@ -108,7 +108,7 @@ public:
 	void shutDownReceiving();
 
 private:
-#ifdef FMS_WINDOWS_BUILD
+#ifdef _WIN32
 	WinsockRequirement ws;
 #endif
 	sockaddr_in* defaultDest;

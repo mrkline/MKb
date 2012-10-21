@@ -1,5 +1,6 @@
 #include "TCPConnection.hpp"
 
+#include <cstring>
 #include <sstream>
 
 #include "Exceptions.hpp"

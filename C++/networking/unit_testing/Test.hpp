@@ -17,6 +17,9 @@ namespace UnitTesting
 	class Test
 	{
 	public:
+
+		virtual ~Test() { }
+
 		//! Returns the name of the test
 		virtual const char* getName() const = 0;
 

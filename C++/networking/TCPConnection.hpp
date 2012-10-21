@@ -3,7 +3,7 @@
 #include "Socket.hpp"
 #include "IP.hpp"
 
-#ifdef FMS_WINDOWS_BUILD
+#ifdef _WIN32
 #  include "WinsockRequirement.hpp"
 #endif
 
@@ -102,7 +102,7 @@ private:
 	void operator=(const TCPConnection&) {}
 	TCPConnection(const TCPConnection&) {}
 
-#ifdef FMS_WINDOWS_BUILD
+#ifdef _WIN32
 	WinsockRequirement ws;
 #endif
 	bool canSend;

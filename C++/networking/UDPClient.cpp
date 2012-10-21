@@ -1,5 +1,7 @@
 #include "UDPClient.hpp"
 
+#include <cstring>
+
 using namespace Exceptions;
 
 UDPClient::UDPClient()
@@ -124,7 +126,7 @@ size_t UDPClient::receive( char* recvBuff, size_t recvBuffLen,
 
 	int ret;
 
-#ifdef FMS_WINDOWS_BUILD
+#ifdef _WIN32
 	// Clear the LastError flag so we can check it after we run recvfrom
 	WSASetLastError(0);
 

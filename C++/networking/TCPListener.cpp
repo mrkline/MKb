@@ -1,13 +1,10 @@
 #include "TCPListener.hpp"
 
+#include <cstring>
 #include <sstream>
 
 #include "Exceptions.hpp"
 #include "TCPConnection.hpp"
-
-#ifdef FMS_WINDOWS_BUILD
-#  pragma comment (lib, "Ws2_32.lib")
-#endif
 
 using namespace std;
 using namespace Exceptions;
