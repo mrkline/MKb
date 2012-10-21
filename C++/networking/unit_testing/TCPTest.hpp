@@ -4,10 +4,9 @@
 #include "TCPListener.hpp"
 #include "Test.hpp"
 
-namespace UnitTesting
-{
-	class TCPTest : public Test
-	{
+namespace UnitTesting {
+	class TCPTest : public Test {
+	public:
 		const char* getName() const { return "TCP"; }
 
 		void run()
@@ -18,8 +17,7 @@ namespace UnitTesting
 
 			const int port = 1337;
 
-			try
-			{
+			try {
 				// Create a listener and a client connection
 				TCPListener server(port);
 				TCPConnection client;
@@ -36,10 +34,7 @@ namespace UnitTesting
 				client.receive(buff, testDataLen);
 
 				if (strcmp(testData, buff) != 0)
-				{
-					throw TestFailedException("Data sent from server to client"
-					                          " didn't go through properly");
-				}
+					throw TestFailedException("Data sent from server to client didn't go through properly");
 
 				// Reset the buffer and try sending from
 				// the client to the server
@@ -52,27 +47,20 @@ namespace UnitTesting
 				serverConn->receive(buff, testDataLen);
 
 				if (strcmp(testData, buff) != 0)
-				{
-					throw TestFailedException("Data sent from client to server"
-					                          " didn't go through properly");
-				}
+					throw TestFailedException("Data sent from client to server didn't go through properly");
 
 				// Shut down the connections
 				client.disconnect();
 
 				if (serverConn->receive(buff, testDataLen) != 0)
-				{
-					throw TestFailedException("The server was not notified"
-					                          " when the client disconnected");
-				}
+					throw TestFailedException("The server was not notified when the client disconnected");
 
 				serverConn->disconnect();
 
 				delete serverConn;
 				free(buff);
 			}
-			catch (...)
-			{
+			catch (...) {
 				free(buff);
 				throw;
 			}

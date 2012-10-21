@@ -2,11 +2,9 @@
 
 #include "Exceptions.hpp"
 
-namespace UnitTesting
-{
+namespace UnitTesting {
 	//! Thrown out of Test::Run() if a test fails in an anticipated manner
-	class TestFailedException : public Exceptions::Exception
-	{
+	class TestFailedException : public Exceptions::Exception {
 	public:
 		TestFailedException(const char* exceptionMessage)
 				: Exception(exceptionMessage, nullptr)
@@ -14,8 +12,7 @@ namespace UnitTesting
 	};
 
 	//! Represents a single test, a series of which is run by each TestUnit
-	class Test
-	{
+	class Test {
 	public:
 
 		virtual ~Test() { }

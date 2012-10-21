@@ -14,20 +14,16 @@ int main()
 	//! \todo Load units into testUnits here
 	testUnits.push_back(new NetworkTestUnit());
 
-	for (auto iter = testUnits.begin(); iter != testUnits.end(); ++iter)
-	{
-		TestUnit* curr = *iter;
-		try
-		{
+	for (TestUnit* curr : testUnits) {
+		try {
 			printf("Beginning test unit %s...\n\n", curr->getUnitName());
 			curr->runUnit();
 		}
-		catch (...)
-		{
+		catch (...) {
 			printf("The test unit %s threw an unexpected exception.\n",
 			       curr->getUnitName());
 		}
-		delete *iter;
+		delete curr;
 	}
 	printf("\n");
 	return 0;
