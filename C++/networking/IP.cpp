@@ -5,6 +5,7 @@
 #include <cstring>
 
 #include "Exceptions.hpp"
+#include "Portability.hpp"
 
 using namespace std;
 using namespace Exceptions;
@@ -67,7 +68,7 @@ void IP::setOctet(unsigned char octetNum, unsigned char val)
 uint32_t IP::getAsBinary() const
 {
 	typedef uint32_t ui; // to save some typing
-	return ((ui)octets[0] << 24) + ((ui)octets[1] << 16) + ((ui)octets[2] << 8) + ((ui)octets[3]);
+	return htonl(((ui)octets[0] << 24) | ((ui)octets[1] << 16) | ((ui)octets[2] << 8) | ((ui)octets[3]));
 }
 
 IP& IP::operator=(const std::string& str)
@@ -122,6 +123,7 @@ void IP::octetsFromString(const string& ipStr)
 
 void IP::octetsFromBinary(uint32_t bin)
 {
+	//! \todo FIXME wrong order (htonl)
 	octets[0] = (0xFF000000 & bin) >> 24;
 	octets[1] = (0x00FF0000 & bin) >> 16;
 	octets[2] = (0x0000FF00 & bin) >> 8;
