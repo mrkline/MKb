@@ -47,9 +47,6 @@ namespace UnitTesting {
 				if (strcmp(testData, buff) != 0)
 					throw TestFailedException("Data sent from client to server didn't go through properly");
 
-				if (server.receive(buff, testDataLen) != 0)
-					throw TestFailedException("The server was not notified when the client disconnected");
-
 				free(buff);
 			}
 			catch (...) {
