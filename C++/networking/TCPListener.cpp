@@ -6,13 +6,12 @@
 #include "Exceptions.hpp"
 #include "TCPConnection.hpp"
 
-using namespace std;
 using namespace Exceptions;
 
 TCPListener::TCPListener( int port )
 		: listenSock(INVALID_SOCKET)
 {
-	stringstream ps;
+	std::stringstream ps;
 	ps << port;
 
 	addrinfo hints;
@@ -64,7 +63,7 @@ void TCPListener::stop()
 		throw NetworkException("The listener failed while stopping itself", __FUNCTION__);
 }
 
-unique_ptr<TCPConnection> TCPListener::accept()
+std::unique_ptr<TCPConnection> TCPListener::accept()
 {
 	if (listenSock == INVALID_SOCKET)
 		throw InvalidOperationException("The listener must be started before it can accept connections.",
@@ -75,5 +74,5 @@ unique_ptr<TCPConnection> TCPListener::accept()
 	if (connSock == INVALID_SOCKET)
 		throw NetworkException( "The listener failed while accepting a connection.", __FUNCTION__);
 
-	return unique_ptr<TCPConnection>(new TCPConnection(connSock));
+	return std::unique_ptr<TCPConnection>(new TCPConnection(connSock));
 }
