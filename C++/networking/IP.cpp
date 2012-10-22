@@ -123,7 +123,7 @@ void IP::octetsFromString(const string& ipStr)
 
 void IP::octetsFromBinary(uint32_t bin)
 {
-	//! \todo FIXME wrong order (htonl)
+	bin = ntohl(bin);
 	octets[0] = (0xFF000000 & bin) >> 24;
 	octets[1] = (0x00FF0000 & bin) >> 16;
 	octets[2] = (0x0000FF00 & bin) >> 8;

@@ -58,14 +58,11 @@ namespace UnitTesting {
 				throw TestFailedException("An IP could not be assigned from a string.");
 
 			// Test binary representation
-			//! \todo Fix me (since htonl change)
-			/*
 			unsigned int binRep = (208 << 24) + (47 << 16) + (17 << 8) + 18;
 			IP fromBin(binRep);
 
 			if (binRep != fromBin.getAsBinary())
 				throw TestFailedException("An IP's binary representation was incorrect.");
-			*/
 		}
 
 	};
