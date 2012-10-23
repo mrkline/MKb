@@ -59,9 +59,9 @@ namespace UnitTesting {
 
 			// Test binary representation
 			unsigned int binRep = (208 << 24) + (47 << 16) + (17 << 8) + 18;
-			IP fromBin(binRep);
+			IP fromBin(binRep, IP::BO_HOST);
 
-			if (binRep != fromBin.getAsBinary())
+			if (binRep != fromBin.getAsBinary(IP::BO_HOST))
 				throw TestFailedException("An IP's binary representation was incorrect.");
 		}
 

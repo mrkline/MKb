@@ -8,6 +8,13 @@ class IP
 {
 public:
 
+	//! Byte order for binary addresses
+	enum ByteOrder {
+		BO_HOST, //!< Host byte order (depends on system)
+		BO_NET //!< Network byte order (big endian)
+	};
+
+
 	//! Default constructor. Sets the ip to 0.0.0.0
 	IP();
 
@@ -29,8 +36,9 @@ public:
 	/*!
 	\brief Constructs the IP from its binary representation
 	\param bin The binary representation of the IP address
+	\param order The byte order of bin
 	*/
-	IP(uint32_t bin);
+	IP(uint32_t bin, ByteOrder order = BO_HOST);
 
 	/*!
 	\brief Sets the IP from individual octets
@@ -64,9 +72,12 @@ public:
 	const std::string& getAsString() const { return strRep; }
 
 	//! Gets the binary represetnation of the string
-	uint32_t getAsBinary() const;
+	//! \param order The byte order
+	uint32_t getAsBinary(ByteOrder order = BO_HOST) const;
 
 	IP& operator=(const std::string& str);
+
+	//! Assigns the IP from a binary representation, assumed to be in host order
 	IP& operator=(uint32_t bin);
 
 	bool operator==(const IP& other) const;
@@ -89,8 +100,9 @@ private:
 	/*!
 	\brief Sets the IP octets from a binary representation
 	\param bin The binary representation of the IP address
+	\param order The byte order of bin
 	*/
-	void octetsFromBinary(uint32_t bin);
+	void octetsFromBinary(uint32_t bin, ByteOrder order = BO_HOST);
 };
 
 //! An IP end point consisting of an address and a port

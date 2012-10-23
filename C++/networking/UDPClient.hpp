@@ -26,7 +26,7 @@ class UDPClient : public Socket
 public:
 	class InsufficientBufferException : public Exceptions::NetworkException
 	{
-		//! \todo Move me into Exceptions.h
+	//! \todo Move me into Exceptions.h
 	public:
 		InsufficientBufferException(const char* exceptionMessage, const char* callingFunctionName = nullptr)
 				: NetworkException(exceptionMessage, callingFunctionName)

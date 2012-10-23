@@ -11,7 +11,6 @@ UDPClient::UDPClient()
 }
 
 UDPClient::UDPClient(int port)
-	: canSend(true)
 {
 	init();
 	bind(port);
@@ -44,7 +43,7 @@ void UDPClient::setDefaultDestination( const IPEndPoint& destination )
 	memset(defaultDest.get(), 0, sizeof(*defaultDest));
 	defaultDest->sin_family = AF_INET;
 	defaultDest->sin_port = htons(destination.Port);
-	defaultDest->sin_addr.s_addr = destination.Address.getAsBinary();
+	defaultDest->sin_addr.s_addr = destination.Address.getAsBinary(IP::BO_NET);
 }
 
 size_t UDPClient::send(const char* data, size_t dataLen )
@@ -71,7 +70,7 @@ size_t UDPClient::send(const char* data, size_t dataLen,
 	memset(&dest, 0, sizeof(dest));
 	dest.sin_family = AF_INET;
 	dest.sin_port = htons(destination.Port);
-	dest.sin_addr.s_addr = destination.Address.getAsBinary();
+	dest.sin_addr.s_addr = destination.Address.getAsBinary(IP::BO_NET);
 
 	size_t ret = sendto(sock, data, dataLen, 0, (sockaddr*)&dest, sizeof(dest));
 

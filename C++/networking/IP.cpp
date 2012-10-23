@@ -32,9 +32,9 @@ IP::IP(unsigned char oct0, unsigned char oct1, unsigned char oct2, unsigned char
 	updateString();
 }
 
-IP::IP(uint32_t bin)
+IP::IP(uint32_t bin, ByteOrder order /* = BO_HOST */)
 {
-	octetsFromBinary(bin);
+	octetsFromBinary(bin, order);
 	updateString();
 }
 
@@ -65,10 +65,11 @@ void IP::setOctet(unsigned char octetNum, unsigned char val)
 	updateString();
 }
 
-uint32_t IP::getAsBinary() const
+uint32_t IP::getAsBinary(ByteOrder order /* = host */) const
 {
 	typedef uint32_t ui; // to save some typing
-	return htonl(((ui)octets[0] << 24) | ((ui)octets[1] << 16) | ((ui)octets[2] << 8) | ((ui)octets[3]));
+	ui ret = ((ui)octets[0] << 24) | ((ui)octets[1] << 16) | ((ui)octets[2] << 8) | ((ui)octets[3]);
+	return order == BO_HOST ? ret : htonl(ret);
 }
 
 IP& IP::operator=(const std::string& str)
@@ -78,9 +79,9 @@ IP& IP::operator=(const std::string& str)
 	return *this;
 }
 
-IP& IP::operator=(uint32_t bin )
+IP& IP::operator=(uint32_t bin)
 {
-	octetsFromBinary(bin);
+	octetsFromBinary(bin, BO_HOST);
 	updateString();
 	return *this;
 }
@@ -121,9 +122,10 @@ void IP::octetsFromString(const string& ipStr)
 	octets[3] = atoi(octetStrs[3].c_str());
 }
 
-void IP::octetsFromBinary(uint32_t bin)
+void IP::octetsFromBinary(uint32_t bin, ByteOrder order /* = BO_HOST */)
 {
-	bin = ntohl(bin);
+	if (order == BO_NET)
+		bin = ntohl(bin);
 	octets[0] = (0xFF000000 & bin) >> 24;
 	octets[1] = (0x00FF0000 & bin) >> 16;
 	octets[2] = (0x0000FF00 & bin) >> 8;
