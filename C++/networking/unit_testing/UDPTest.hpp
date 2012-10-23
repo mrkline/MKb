@@ -29,7 +29,8 @@ namespace UnitTesting {
 				if (server.send(testData, testDataLen) != testDataLen)
 					throw TestFailedException("UDP send failed");
 
-				client.receive(buff, testDataLen);
+				if (client.receive(buff, testDataLen) != testDataLen)
+					throw TestFailedException("UDP receive failed");
 
 				if (strcmp(testData, buff) != 0)
 					throw TestFailedException("Data sent from server to client didn't go through properly");
@@ -38,11 +39,11 @@ namespace UnitTesting {
 				// the client to the server
 				memset(buff, 0, testDataLen);
 
-				server.shutDownSending();
-				client.shutDownReceiving();
+				if (client.send(testData, testDataLen) != testDataLen)
+					throw TestFailedException("UDP send failed");
 
-				client.send(testData, testDataLen);
-				server.receive(buff, testDataLen);
+				if (server.receive(buff, testDataLen) != testDataLen)
+					throw TestFailedException("UDP receive failed");
 
 				if (strcmp(testData, buff) != 0)
 					throw TestFailedException("Data sent from client to server didn't go through properly");

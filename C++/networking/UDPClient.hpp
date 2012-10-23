@@ -94,28 +94,12 @@ public:
 	*/
 	size_t receive(char* recvBuff, size_t recvBuffLen, IP* from = nullptr);
 
-	/*!
-	\brief Shuts down sending operations on the connection
-	\throws InvalidOperationException if sending has already been shut down
-	\throws NetworkException if Winsock's shutdown fails
-	*/
-	void shutDownSending();
-
-	/*!
-	\brief Shuts down receiving operations on the connection
-	\throws InvalidOperationException if receiving has already been shut down
-	\throws NetworkException if Winsock's shutdown fails
-	*/
-	void shutDownReceiving();
-
 private:
 #ifdef _WIN32
 	WinsockRequirement ws;
 #endif
 	std::unique_ptr<sockaddr_in> defaultDest;
 	bool bound;
-	bool canSend;
-	bool canReceive;
 
 	// Does common work shared by both constructors
 	void init();

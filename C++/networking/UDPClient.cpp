@@ -5,13 +5,13 @@
 using namespace Exceptions;
 
 UDPClient::UDPClient()
-		: bound(false), canSend(true), canReceive(true)
+	: bound(false)
 {
 	init();
 }
 
 UDPClient::UDPClient(int port)
-		: canSend(true), canReceive(true)
+	: canSend(true)
 {
 	init();
 	bind(port);
@@ -19,7 +19,6 @@ UDPClient::UDPClient(int port)
 
 UDPClient::~UDPClient()
 {
-	shutdown(sock, SD_BOTH);
 	closesocket(sock);
 }
 
@@ -57,9 +56,6 @@ size_t UDPClient::send(const char* data, size_t dataLen )
 		                                __FUNCTION__);
 	}
 
-	if (!canSend)
-		throw InvalidOperationException( "Sending has been shut down on this connection.", __FUNCTION__);
-
 	size_t ret = sendto(sock, data, dataLen, 0, (sockaddr*)defaultDest.get(), sizeof(*defaultDest));
 
 	if (0 > ret)
@@ -71,9 +67,6 @@ size_t UDPClient::send(const char* data, size_t dataLen )
 size_t UDPClient::send(const char* data, size_t dataLen,
                        const IPEndPoint& destination )
 {
-	if (!canSend)
-		throw InvalidOperationException( "Sending has been shut down on this connection.", __FUNCTION__);
-
 	sockaddr_in dest;
 	memset(&dest, 0, sizeof(dest));
 	dest.sin_family = AF_INET;
@@ -92,9 +85,6 @@ size_t UDPClient::receive( char* recvBuff, size_t recvBuffLen, IP* from /*= null
 {
 	if (!bound)
 		throw InvalidOperationException( "To receive from a UDP client, it must first be bound.", __FUNCTION__);
-
-	if (!canReceive)
-		throw InvalidOperationException( "Receiving has been shut down on this connection.", __FUNCTION__);
 
 	int ret;
 
@@ -130,32 +120,6 @@ size_t UDPClient::receive( char* recvBuff, size_t recvBuffLen, IP* from /*= null
 		throw NetworkException("Receiving failed", __FUNCTION__);
 
 	return ret;
-}
-
-void UDPClient::shutDownSending()
-{
-	if (!canSend)
-	{
-		throw InvalidOperationException(
-		    "Sending has already been shut down on this connection.",
-		    __FUNCTION__);
-	}
-
-	if (shutdown(sock, SD_SEND) != 0)
-		throw NetworkException("Sending shutdown failed.", __FUNCTION__);
-
-	canSend = false;
-}
-
-void UDPClient::shutDownReceiving()
-{
-	if (!canReceive)
-		throw InvalidOperationException( "Receiving has already been shut down on this connection.", __FUNCTION__);
-
-	if (shutdown(sock, SD_RECEIVE) != 0)
-		throw NetworkException("Receiving shutdown failed.", __FUNCTION__);
-
-	canReceive = false;
 }
 
 void UDPClient::init()
