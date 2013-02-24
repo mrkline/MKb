@@ -25,6 +25,8 @@ namespace Exceptions
 				type("generic")
 		{ }
 
+		virtual ~Exception() { }
+
 		const std::string message; //!< Exception message
 		const std::string callingFunction; //!< Name of calling function
 		const std::string type; //!< Type of exception.
@@ -60,6 +62,9 @@ namespace Exceptions
 				: Exception(exceptionMessage, callingFunctionName,
 				            "not implemented")
 		{ }
+
+
+		virtual ~NotImplementedException() { }
 	};
 
 //! Thrown due to math-related errors
@@ -70,6 +75,8 @@ namespace Exceptions
 		              const std::string& callingFunctionName = nullptr)
 				: Exception(exceptionMessage, callingFunctionName, "math")
 		{ }
+
+		virtual ~MathException() { }
 	};
 
 //! Thrown if an argument to a method was invalid
@@ -80,6 +87,9 @@ namespace Exceptions
 		                  const std::string& callingFunctionName = nullptr)
 				: Exception(exceptionMessage, callingFunctionName, "argument")
 		{ }
+
+
+		virtual ~ArgumentException() { }
 
 	protected:
 		ArgumentException(const std::string& exceptionMessage,
@@ -97,6 +107,8 @@ namespace Exceptions
 		                     const std::string& callingFunctionName = nullptr)
 				: Exception(exceptionMessage, callingFunctionName, "concurrency")
 		{ }
+
+		virtual ~ConcurrencyException() { }
 	};
 
 //! Thrown if a null argument was passed to a method that doesn't accept it.
@@ -108,6 +120,8 @@ namespace Exceptions
 				: ArgumentException(exceptionMessage, callingFunctionName,
 				                    "argument null")
 		{ }
+
+		virtual ~ArgumentNullException() { }
 	};
 
 //! Thrown if an argument value is out of range
@@ -119,6 +133,8 @@ namespace Exceptions
 				: ArgumentException(exceptionMessage, callingFunctionName,
 				                    "argument out of range")
 		{ }
+
+		virtual ~ArgumentOutOfRangeException() { }
 	};
 
 //! Thrown if an array index is out of bounds
@@ -129,6 +145,8 @@ namespace Exceptions
 		                         const std::string& callingFunctionName = nullptr)
 				: Exception(exceptionMessage, callingFunctionName, "index out of range")
 		{ }
+
+		virtual ~IndexOutOfRangeException() { }
 	};
 
 //! Thrown if a method was called at an improper time
@@ -139,6 +157,8 @@ namespace Exceptions
 		                          const std::string& callingFunctionName = nullptr)
 				: Exception(exceptionMessage, callingFunctionName, "invalid operation")
 		{ }
+
+		virtual ~InvalidOperationException() { }
 	};
 
 //! Thrown when an IO error, such as a networking or file error, occurs
@@ -149,6 +169,8 @@ namespace Exceptions
 		            const std::string& callingFunctionName = nullptr)
 				: Exception(exceptionMessage, callingFunctionName, "I/O")
 		{ }
+
+		virtual ~IOException() { }
 
 	protected:
 		IOException(const std::string& exceptionMessage,
@@ -166,6 +188,8 @@ namespace Exceptions
 		              const std::string& callingFunctionName = nullptr)
 				: IOException(exceptionMessage, callingFunctionName, "file")
 		{ }
+
+		virtual ~FileException() { }
 	};
 
 //! Thrown when a networking error occurs
@@ -176,5 +200,7 @@ namespace Exceptions
 		                 const std::string& callingFunctionName = nullptr)
 				: IOException(exceptionMessage, callingFunctionName, "network")
 		{ }
+
+		virtual ~NetworkException() { }
 	};
 } // end namespace Exceptions
