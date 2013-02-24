@@ -1,5 +1,6 @@
 #pragma once
 
+#include <exception>
 #include <string>
 
 namespace Exceptions
@@ -9,7 +10,7 @@ namespace Exceptions
 
 	Most exception types are lovingly borrowed from the .NET framework.
 	*/
-	class Exception
+	class Exception : public std::exception
 	{
 	public:
 		/*!
@@ -25,7 +26,9 @@ namespace Exceptions
 				type("generic")
 		{ }
 
-		virtual ~Exception() { }
+		virtual ~Exception() noexcept { }
+
+		const char* what() const noexcept override { return message.c_str(); }
 
 		const std::string message; //!< Exception message
 		const std::string callingFunction; //!< Name of calling function
@@ -64,7 +67,7 @@ namespace Exceptions
 		{ }
 
 
-		virtual ~NotImplementedException() { }
+		virtual ~NotImplementedException() noexcept { }
 	};
 
 //! Thrown due to math-related errors
@@ -76,7 +79,7 @@ namespace Exceptions
 				: Exception(exceptionMessage, callingFunctionName, "math")
 		{ }
 
-		virtual ~MathException() { }
+		virtual ~MathException() noexcept { }
 	};
 
 //! Thrown if an argument to a method was invalid
@@ -89,7 +92,7 @@ namespace Exceptions
 		{ }
 
 
-		virtual ~ArgumentException() { }
+		virtual ~ArgumentException() noexcept { }
 
 	protected:
 		ArgumentException(const std::string& exceptionMessage,
@@ -108,7 +111,7 @@ namespace Exceptions
 				: Exception(exceptionMessage, callingFunctionName, "concurrency")
 		{ }
 
-		virtual ~ConcurrencyException() { }
+		virtual ~ConcurrencyException() noexcept { }
 	};
 
 //! Thrown if a null argument was passed to a method that doesn't accept it.
@@ -121,7 +124,7 @@ namespace Exceptions
 				                    "argument null")
 		{ }
 
-		virtual ~ArgumentNullException() { }
+		virtual ~ArgumentNullException() noexcept { }
 	};
 
 //! Thrown if an argument value is out of range
@@ -134,7 +137,7 @@ namespace Exceptions
 				                    "argument out of range")
 		{ }
 
-		virtual ~ArgumentOutOfRangeException() { }
+		virtual ~ArgumentOutOfRangeException() noexcept { }
 	};
 
 //! Thrown if an array index is out of bounds
@@ -146,7 +149,7 @@ namespace Exceptions
 				: Exception(exceptionMessage, callingFunctionName, "index out of range")
 		{ }
 
-		virtual ~IndexOutOfRangeException() { }
+		virtual ~IndexOutOfRangeException() noexcept { }
 	};
 
 //! Thrown if a method was called at an improper time
@@ -158,7 +161,7 @@ namespace Exceptions
 				: Exception(exceptionMessage, callingFunctionName, "invalid operation")
 		{ }
 
-		virtual ~InvalidOperationException() { }
+		virtual ~InvalidOperationException() noexcept { }
 	};
 
 //! Thrown when an IO error, such as a networking or file error, occurs
@@ -170,7 +173,7 @@ namespace Exceptions
 				: Exception(exceptionMessage, callingFunctionName, "I/O")
 		{ }
 
-		virtual ~IOException() { }
+		virtual ~IOException() noexcept { }
 
 	protected:
 		IOException(const std::string& exceptionMessage,
@@ -189,7 +192,7 @@ namespace Exceptions
 				: IOException(exceptionMessage, callingFunctionName, "file")
 		{ }
 
-		virtual ~FileException() { }
+		virtual ~FileException() noexcept { }
 	};
 
 //! Thrown when a networking error occurs
@@ -201,6 +204,6 @@ namespace Exceptions
 				: IOException(exceptionMessage, callingFunctionName, "network")
 		{ }
 
-		virtual ~NetworkException() { }
+		virtual ~NetworkException() noexcept { }
 	};
 } // end namespace Exceptions
