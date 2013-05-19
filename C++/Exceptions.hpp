@@ -1,7 +1,7 @@
-#pragma once
+#ifndef __MK_EXCEPTIONS_HPP__
+#define __MK_EXCEPTIONS_HPP__
 
 #include <exception>
-#include <string>
 
 namespace Exceptions
 {
@@ -20,7 +20,7 @@ namespace Exceptions
 		       comes from.
 		*/
 		Exception(const std::string& exceptionMessage,
-		          const std::string& callingFunctionName = nullptr)
+		          const std::string& callingFunctionName)
 				: message(exceptionMessage),
 				callingFunction(callingFunctionName),
 				type("generic")
@@ -75,7 +75,7 @@ namespace Exceptions
 	{
 	public:
 		MathException(const std::string& exceptionMessage,
-		              const std::string& callingFunctionName = nullptr)
+		              const std::string& callingFunctionName)
 				: Exception(exceptionMessage, callingFunctionName, "math")
 		{ }
 
@@ -87,7 +87,7 @@ namespace Exceptions
 	{
 	public:
 		ArgumentException(const std::string& exceptionMessage,
-		                  const std::string& callingFunctionName = nullptr)
+		                  const std::string& callingFunctionName)
 				: Exception(exceptionMessage, callingFunctionName, "argument")
 		{ }
 
@@ -107,7 +107,7 @@ namespace Exceptions
 	{
 	public:
 		ConcurrencyException(const std::string& exceptionMessage,
-		                     const std::string& callingFunctionName = nullptr)
+		                     const std::string& callingFunctionName)
 				: Exception(exceptionMessage, callingFunctionName, "concurrency")
 		{ }
 
@@ -119,7 +119,7 @@ namespace Exceptions
 	{
 	public:
 		ArgumentNullException(const std::string& exceptionMessage,
-		                      const std::string& callingFunctionName = nullptr)
+		                      const std::string& callingFunctionName)
 				: ArgumentException(exceptionMessage, callingFunctionName,
 				                    "argument null")
 		{ }
@@ -132,7 +132,7 @@ namespace Exceptions
 	{
 	public:
 		ArgumentOutOfRangeException(const std::string& exceptionMessage,
-		                            const std::string& callingFunctionName = nullptr)
+		                            const std::string& callingFunctionName)
 				: ArgumentException(exceptionMessage, callingFunctionName,
 				                    "argument out of range")
 		{ }
@@ -145,7 +145,7 @@ namespace Exceptions
 	{
 	public:
 		IndexOutOfRangeException(const std::string& exceptionMessage,
-		                         const std::string& callingFunctionName = nullptr)
+		                         const std::string& callingFunctionName)
 				: Exception(exceptionMessage, callingFunctionName, "index out of range")
 		{ }
 
@@ -157,11 +157,23 @@ namespace Exceptions
 	{
 	public:
 		InvalidOperationException(const std::string& exceptionMessage,
-		                          const std::string& callingFunctionName = nullptr)
+		                          const std::string& callingFunctionName)
 				: Exception(exceptionMessage, callingFunctionName, "invalid operation")
 		{ }
 
 		virtual ~InvalidOperationException() noexcept { }
+	};
+
+//! Thrown if some user input is invalid
+	class InvalidInputException : public Exception
+	{
+	public:
+		InvalidInputException(const std::string& exceptionMessage,
+		                      const std::string& callingFunctionName)
+				: Exception(exceptionMessage, callingFunctionName, "invalid operation")
+		{ }
+
+		virtual ~InvalidInputException() noexcept { }
 	};
 
 //! Thrown when an IO error, such as a networking or file error, occurs
@@ -169,7 +181,7 @@ namespace Exceptions
 	{
 	public:
 		IOException(const std::string& exceptionMessage,
-		            const std::string& callingFunctionName = nullptr)
+		            const std::string& callingFunctionName)
 				: Exception(exceptionMessage, callingFunctionName, "I/O")
 		{ }
 
@@ -188,7 +200,7 @@ namespace Exceptions
 	{
 	public:
 		FileException(const std::string& exceptionMessage,
-		              const std::string& callingFunctionName = nullptr)
+		              const std::string& callingFunctionName)
 				: IOException(exceptionMessage, callingFunctionName, "file")
 		{ }
 
@@ -200,10 +212,12 @@ namespace Exceptions
 	{
 	public:
 		NetworkException(const std::string& exceptionMessage,
-		                 const std::string& callingFunctionName = nullptr)
+		                 const std::string& callingFunctionName)
 				: IOException(exceptionMessage, callingFunctionName, "network")
 		{ }
 
 		virtual ~NetworkException() noexcept { }
 	};
 } // end namespace Exceptions
+
+#endif
