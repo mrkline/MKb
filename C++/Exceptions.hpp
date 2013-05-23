@@ -1,7 +1,12 @@
 #ifndef __MK_EXCEPTIONS_HPP__
 #define __MK_EXCEPTIONS_HPP__
 
+#ifdef _WIN32
+#define noexcept
+#endif
+
 #include <exception>
+#include <string>
 
 namespace Exceptions
 {
