@@ -3,7 +3,7 @@
 #include "Exceptions.hpp"
 
 namespace UnitTesting {
-	//! Thrown out of Test::Run() if a test fails in an anticipated manner
+	/// Thrown out of Test::Run() if a test fails in an anticipated manner
 	class TestFailedException : public Exceptions::Exception {
 	public:
 		TestFailedException(const char* exceptionMessage)
@@ -11,16 +11,16 @@ namespace UnitTesting {
 		{ }
 	};
 
-	//! Represents a single test, a series of which is run by each TestUnit
+	/// Represents a single test, a series of which is run by each TestUnit
 	class Test {
 	public:
 
 		virtual ~Test() { }
 
-		//! Returns the name of the test
+		/// Returns the name of the test
 		virtual const char* getName() const = 0;
 
-		/*!
+		/**
 		\brief Runs the test. Error reporting is done via exceptions
 		\throws TestFailedException if the test fails in an anticipated manner.
 		*/

@@ -6,7 +6,7 @@
 
 using namespace Exceptions;
 
-//! Used for very quickly setting the identity matrices
+/// Used for very quickly setting the identity matrices
 static const float kIdentityMatrix[16] = { 1, 0, 0, 0,
                                            0, 1, 0, 0,
                                            0, 0, 1, 0,

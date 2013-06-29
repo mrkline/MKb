@@ -2,7 +2,7 @@
 
 #include "Portability.hpp"
 
-//! A base class for networking sockets (excluding TCP listener sockets)
+/// A base class for networking sockets (excluding TCP listener sockets)
 class Socket
 {
 public:

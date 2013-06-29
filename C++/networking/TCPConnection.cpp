@@ -52,7 +52,7 @@ void TCPConnection::connect(const IPEndPoint& server)
 		sock = socket(ptr->ai_family, ptr->ai_socktype, ptr->ai_protocol);
 
 		if (sock == INVALID_SOCKET) {
-			//! \todo free result?
+			/// \todo free result?
 			throw NetworkException("Socket creation failed.", __FUNCTION__);
 		}
 

@@ -12,7 +12,7 @@ queue<unique_ptr<TestUnit>> testUnits;
 
 int main()
 {
-	//! \todo Load units into testUnits here
+	/// \todo Load units into testUnits here
 	testUnits.push(unique_ptr<TestUnit>(new NetworkTestUnit()));
 
 	while (!testUnits.empty()) {

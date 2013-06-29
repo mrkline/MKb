@@ -8,7 +8,7 @@
 #include "Test.hpp"
 
 namespace UnitTesting {
-	/*!
+	/**
 	\brief Provides a base abstract class for test units.
 
 	A test unit is a group of related tests related to a given component.
@@ -16,10 +16,10 @@ namespace UnitTesting {
 	class TestUnit {
 	public:
 
-		//! Returns this unit's name
+		/// Returns this unit's name
 		virtual const char* getUnitName() const = 0;
 
-		//! Executes all Tests and prints a summary of the unit
+		/// Executes all Tests and prints a summary of the unit
 		void runUnit()
 		{
 			const char* name = getUnitName();
@@ -65,7 +65,7 @@ namespace UnitTesting {
 		}
 
 	protected:
-		//! Loads tests into unrunTests.
+		/// Loads tests into unrunTests.
 		//Tests will automatically be deleted on this unit's destruction
 		virtual void loadTests() = 0;
 

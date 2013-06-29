@@ -10,7 +10,7 @@
 
 namespace Exceptions
 {
-	/*!
+	/**
 	\brief A base Exception class
 
 	Most exception types are lovingly borrowed from the .NET framework.
@@ -18,7 +18,7 @@ namespace Exceptions
 	class Exception : public std::exception
 	{
 	public:
-		/*!
+		/**
 		\brief Initializes an exception with a message and other optional data
 		\param exceptionMessage The message to contain within the exception.
 		\param callingFunctionName The name of the exception the function
@@ -35,9 +35,9 @@ namespace Exceptions
 
 		const char* what() const noexcept override { return message.c_str(); }
 
-		const std::string message; //!< Exception message
-		const std::string callingFunction; //!< Name of calling function
-		const std::string type; //!< Type of exception.
+		const std::string message; ///< Exception message
+		const std::string callingFunction; ///< Name of calling function
+		const std::string type; ///< Type of exception.
 
 	protected:
 
@@ -50,7 +50,7 @@ namespace Exceptions
 		{ }
 	};
 
-	/*!
+	/**
 	\brief Thrown if a method or function is not implemented.
 
 	Mostly for use as a placeholder in stubs during development.
@@ -75,7 +75,7 @@ namespace Exceptions
 		virtual ~NotImplementedException() noexcept { }
 	};
 
-//! Thrown due to math-related errors
+/// Thrown due to math-related errors
 	class MathException : public Exception
 	{
 	public:
@@ -87,7 +87,7 @@ namespace Exceptions
 		virtual ~MathException() noexcept { }
 	};
 
-//! Thrown if an argument to a method was invalid
+/// Thrown if an argument to a method was invalid
 	class ArgumentException : public Exception
 	{
 	public:
@@ -107,7 +107,7 @@ namespace Exceptions
 		{ }
 	};
 
-//! Thrown if an argument to a method was invalid
+/// Thrown if an argument to a method was invalid
 	class ConcurrencyException : public Exception
 	{
 	public:
@@ -119,7 +119,7 @@ namespace Exceptions
 		virtual ~ConcurrencyException() noexcept { }
 	};
 
-//! Thrown if a null argument was passed to a method that doesn't accept it.
+/// Thrown if a null argument was passed to a method that doesn't accept it.
 	class ArgumentNullException : public ArgumentException
 	{
 	public:
@@ -132,7 +132,7 @@ namespace Exceptions
 		virtual ~ArgumentNullException() noexcept { }
 	};
 
-//! Thrown if an argument value is out of range
+/// Thrown if an argument value is out of range
 	class ArgumentOutOfRangeException : public ArgumentException
 	{
 	public:
@@ -145,7 +145,7 @@ namespace Exceptions
 		virtual ~ArgumentOutOfRangeException() noexcept { }
 	};
 
-//! Thrown if an array index is out of bounds
+/// Thrown if an array index is out of bounds
 	class IndexOutOfRangeException : public Exception
 	{
 	public:
@@ -157,7 +157,7 @@ namespace Exceptions
 		virtual ~IndexOutOfRangeException() noexcept { }
 	};
 
-//! Thrown if a method was called at an improper time
+/// Thrown if a method was called at an improper time
 	class InvalidOperationException : public Exception
 	{
 	public:
@@ -169,7 +169,7 @@ namespace Exceptions
 		virtual ~InvalidOperationException() noexcept { }
 	};
 
-//! Thrown if some user input is invalid
+/// Thrown if some user input is invalid
 	class InvalidInputException : public Exception
 	{
 	public:
@@ -181,7 +181,7 @@ namespace Exceptions
 		virtual ~InvalidInputException() noexcept { }
 	};
 
-//! Thrown when an IO error, such as a networking or file error, occurs
+/// Thrown when an IO error, such as a networking or file error, occurs
 	class IOException : public Exception
 	{
 	public:
@@ -200,7 +200,7 @@ namespace Exceptions
 		{ }
 	};
 
-//! Thrown when a file error occurs
+/// Thrown when a file error occurs
 	class FileException : public IOException
 	{
 	public:
@@ -212,7 +212,7 @@ namespace Exceptions
 		virtual ~FileException() noexcept { }
 	};
 
-//! Thrown when a networking error occurs
+/// Thrown when a networking error occurs
 	class NetworkException : public IOException
 	{
 	public:

@@ -4,30 +4,30 @@
 
 #include "Socket.hpp"
 
-//! This class is essentially a C++ wrapper of select, and is used to mux
-//! multiple networking sockets
+/// This class is essentially a C++ wrapper of select, and is used to mux
+/// multiple networking sockets
 class SocketMultiplexer
 {
 public:
 	// It's a linked list of socket pointers
 	typedef std::list<Socket*> SocketList;
 
-	//! Empties all sets
+	/// Empties all sets
 	SocketMultiplexer();
 	
-	//! Sets the set of sockets which will be queried for receive operations
+	/// Sets the set of sockets which will be queried for receive operations
 	void setReadSet(const SocketList& sockets);
 
-	//! Sets a single socket to be queried for receive operations
+	/// Sets a single socket to be queried for receive operations
 	void setReadSet(Socket* socket);
 
-	//! Sets the set of sockets which will be queried for send operations
+	/// Sets the set of sockets which will be queried for send operations
 	void setWriteSet(const SocketList& sockets);
 
-	//! Sets a single socket to be queried for send operations
+	/// Sets a single socket to be queried for send operations
 	void setWriteSet(Socket* socket);
 
-	/*!
+	/**
 	 * \brief Gets the set of sockets for receive operations
 	 *
 	 * Before select is called, this function just returns the same list set by
@@ -36,7 +36,7 @@ public:
 	 */
 	const SocketList& getReadSet() const { return readList; }
 
-	/*!
+	/**
 	 * \brief Gets the set of sockets for send operations
 	 *
 	 * Before select is called, this function just returns the same list set by
@@ -45,17 +45,17 @@ public:
 	 */
 	const SocketList& getWriteSet() const { return writeList; }
 
-	//! After select is called, this function returns a list of any bad sockets
-	//! from the read and write sets.
+	/// After select is called, this function returns a list of any bad sockets
+	/// from the read and write sets.
 	const SocketList& getBadSet() const { return exceptList; }
 
-	//! Empties the set of sockets for receive operations
+	/// Empties the set of sockets for receive operations
 	void clearReadSet();
 
-	//! Empties the set of sockets for send operations
+	/// Empties the set of sockets for send operations
 	void clearWriteSet();
 
-	/*!
+	/**
 	 * \brief Accepts a sets of sockets intended for sending and receiving and
 	 *        returns the subset of those sockets which can do so without
 	 *        blocking
