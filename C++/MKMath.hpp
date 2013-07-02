@@ -98,7 +98,7 @@ namespace Math {
 		FloatUnion uB(b);
 
 		if (uA.isPositive() == uB.isPositive())
-			 return abs(uA.i - uB.i) <= tolerance;
+			return abs(uA.i - uB.i) <= tolerance;
 		else
 			return a == b;
 	}
