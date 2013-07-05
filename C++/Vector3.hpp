@@ -1,7 +1,5 @@
 #pragma once
 
-#include <string>
-
 #include "MKMath.hpp"
 #include "Vector2.hpp"
 

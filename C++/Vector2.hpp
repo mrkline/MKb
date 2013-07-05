@@ -1,7 +1,5 @@
 #pragma once
 
-#include <string>
-
 #include "MKMath.hpp"
 
 /// A two-dimensional vector using floats for each dimension
