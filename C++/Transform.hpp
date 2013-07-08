@@ -1,4 +1,5 @@
-#pragma once
+#ifndef __MK_TRANSFORM_HPP__
+#define __MK_TRANSFORM_HPP__
 
 #include "Exceptions.hpp"
 #include "Vector3.hpp"
@@ -320,3 +321,5 @@ protected:
 	/// The array of floats for the matrix
 	float matrix[16];
 };
+
+#endif

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef __MK_MATH_HPP__
+#define __MK_MATH_HPP__
 
 #include <algorithm>
 #include <cmath>
@@ -148,3 +149,5 @@ namespace Math {
 	}
 
 } // end namespace Math
+
+#endif

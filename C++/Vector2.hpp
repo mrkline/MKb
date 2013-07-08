@@ -1,4 +1,5 @@
-#pragma once
+#ifndef __MK_VECTOR_2D_HPP__
+#define __MK_VECTOR_2D_HPP__
 
 #include "MKMath.hpp"
 
@@ -277,3 +278,5 @@ public:
 		return one;
 	}
 };
+
+#endif

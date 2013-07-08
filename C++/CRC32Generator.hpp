@@ -1,4 +1,5 @@
-#pragma once
+#ifndef __MK_CRC_32_GENERATOR_HPP__
+#define __MK_CRC_32_GENERATOR_HPP__
 
 #include <cstddef> // For size_t
 #include <stdint.h> // For uint32_t
@@ -28,3 +29,5 @@ private:
 	/// Lookup table for the crc32 algorithm
 	uint32_t table[256];
 };
+
+#endif

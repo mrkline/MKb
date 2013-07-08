@@ -1,4 +1,5 @@
-#pragma once
+#ifndef __MK_VECTOR_3D_HPP__
+#define __MK_VECTOR_3D_HPP__
 
 #include "MKMath.hpp"
 #include "Vector2.hpp"
@@ -331,3 +332,5 @@ public:
 		return one;
 	}
 };
+
+#endif
