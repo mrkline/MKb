@@ -11,6 +11,11 @@
  * The STL should be used  directly for such operations. Floating point equality
  * operations are borrowed from
  * http://altdevblogaday.com/2012/02/22/comparing-floating-point-numbers-2012-edition/
+ * Boost's math library has some of the functions below, but
+ * 1. These have simpler code
+ * 2. These, in rough tests, are somewhat faster (in the case of clamp) to _much_ faster
+ *    (in the case of floating point ULPs comparisons). It's quite possible that I am
+ *    missing some edge cases that Boost covers, but I have yet to run into them.
  */
 namespace Math {
 
