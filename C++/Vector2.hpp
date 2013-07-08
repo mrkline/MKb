@@ -69,9 +69,8 @@ public:
 	/// then Y
 	bool operator<=(const Vector2& o) const
 	{
-		return 	(X < o.X || Math::equals(X, o.X)) ||
-		        (Math::equals(X, o.X) && (Y < o.Y || Math::equals(Y, o.Y))) ||
-		        (Math::equals(X, o.X) && Math::equals(Y, o.Y));
+		return  (X < o.X || Math::equals(X, o.X)) ||
+		        (Math::equals(X, o.X) && (Y < o.Y || Math::equals(Y, o.Y)));
 	}
 
 	/// Comparison operators can be used to sort vectors with respect to X,
@@ -79,8 +78,7 @@ public:
 	bool operator>=(const Vector2& o) const
 	{
 		return 	(X > o.X || Math::equals(X, o.X)) ||
-		        (Math::equals(X, o.X) && (Y > o.Y || Math::equals(Y, o.Y))) ||
-		        (Math::equals(X, o.X) && Math::equals(Y, o.Y));
+		        (Math::equals(X, o.X) && (Y > o.Y || Math::equals(Y, o.Y)));
 	}
 
 	/// Comparison operators can be used to sort vectors with respect to X,
@@ -88,8 +86,7 @@ public:
 	bool operator<(const Vector2& o) const
 	{
 		return 	(X < o.X && !Math::equals(X, o.X)) ||
-		        (Math::equals(X, o.X) && Y < o.Y && !Math::equals(Y, o.Y)) ||
-		        (Math::equals(X, o.X) && Math::equals(Y, o.Y));
+		        (Math::equals(X, o.X) && Y < o.Y && !Math::equals(Y, o.Y));
 	}
 
 	/// Comparison operators can be used to sort vectors with respect to X,
@@ -97,8 +94,7 @@ public:
 	bool operator>(const Vector2& o) const
 	{
 		return 	(X > o.X && !Math::equals(X, o.X)) ||
-		        (Math::equals(X, o.X) && Y > o.Y && !Math::equals(Y, o.Y)) ||
-		        (Math::equals(X, o.X) && Math::equals(Y, o.Y));
+		        (Math::equals(X, o.X) && Y > o.Y && !Math::equals(Y, o.Y));
 	}
 
 	/**
