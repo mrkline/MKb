@@ -235,28 +235,28 @@ public:
 		return a.X * b.X + a.Y * b.Y;
 	}
 
-	/// Gets the left world vector (-1, 0, 0)
+	/// Gets the left world vector (-1, 0)
 	static const Vector2& getLeft()
 	{
 		static Vector2 left(-1.0f, 0.0f);
 		return left;
 	}
 
-	/// Gets the right world vector, (1, 0, 0)
+	/// Gets the right world vector, (1, 0)
 	static const Vector2& getRight()
 	{
 		static Vector2 right(1.0f, 0.0f);
 		return right;
 	}
 
-	/// Gets the up world vector, (0, 1, 0)
+	/// Gets the up world vector, (0, 1)
 	static const Vector2& getUp()
 	{
 		static Vector2 up(0.0f, 1.0f);
 		return up;
 	}
 
-	/// Gets the down world vector, (0, -1, 0)
+	/// Gets the down world vector, (0, -1)
 	static const Vector2& getDown()
 	{
 		static Vector2 down(0.0f, -1.0f);
