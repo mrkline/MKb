@@ -258,7 +258,7 @@ public:
 	\param b The second vector in the dot product
 	\return a dot b
 	*/
-	static float dotProduct(const Vector3& a, const Vector3& b)
+	static float dot(const Vector3& a, const Vector3& b)
 	{
 		return a.X * b.X + a.Y * b.Y + a.Z * b.Z;
 	}
@@ -269,7 +269,7 @@ public:
 	\param b The second vector in the cross product
 	\return a x b
 	*/
-	static Vector3 crossProduct(const Vector3& a, const Vector3& b)
+	static Vector3 cross(const Vector3& a, const Vector3& b)
 	{
 		return Vector3(a.Y * b.Z - a.Z * b.Y, a.Z * b.X - a.X * b.Z,
 		               a.X * b.Y - a.Y * b.X);

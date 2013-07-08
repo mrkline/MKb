@@ -230,7 +230,7 @@ public:
 	\param b The second vector in the dot product
 	\return a dot b
 	*/
-	static float dotProduct(const Vector2& a, const Vector2& b)
+	static float dot(const Vector2& a, const Vector2& b)
 	{
 		return a.X * b.X + a.Y * b.Y;
 	}
