@@ -60,7 +60,7 @@ namespace Math {
 	 * \brief Tests two floats for equality within a given tolerance
 	 * \param a The first value to test for equality
 	 * \param b The second value to test for equality
-	 * \param tolerance The tolerance allowed between a and b for them to
+	 * \param tolerance The tolerance (in ULPs) allowed between a and b for them to
 	 *                  still be considered equal
 	 * \returns a == b, within tolerance
 	 *
@@ -90,7 +90,7 @@ namespace Math {
 	 * \brief Tests two doubles for equality within a given tolerance
 	 * \param a The first value to test for equality
 	 * \param b The second value to test for equality
-	 * \param tolerance The tolerance allowed between a and b for them to
+	 * \param tolerance The tolerance (in ULPs) allowed between a and b for them to
 	 *                  still be considered equal
 	 * \returns a == b, within tolerance
 	 *
