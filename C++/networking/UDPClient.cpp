@@ -18,7 +18,7 @@ UDPClient::UDPClient(int port)
 
 UDPClient::~UDPClient()
 {
-	closesocket(sock);
+	close(sock);
 }
 
 void UDPClient::bind( int port )
@@ -55,7 +55,7 @@ size_t UDPClient::send(const char* data, size_t dataLen )
 		                                __FUNCTION__);
 	}
 
-	size_t ret = sendto(sock, data, dataLen, 0, (sockaddr*)defaultDest.get(), sizeof(*defaultDest));
+	ssize_t ret = sendto(sock, data, dataLen, 0, (sockaddr*)defaultDest.get(), sizeof(*defaultDest));
 
 	if (0 > ret)
 		throw NetworkException("Sending failed.", __FUNCTION__);
@@ -72,7 +72,7 @@ size_t UDPClient::send(const char* data, size_t dataLen,
 	dest.sin_port = htons(destination.Port);
 	dest.sin_addr.s_addr = destination.Address.getAsBinary(IP::BO_NET);
 
-	size_t ret = sendto(sock, data, dataLen, 0, (sockaddr*)&dest, sizeof(dest));
+	ssize_t ret = sendto(sock, data, dataLen, 0, (sockaddr*)&dest, sizeof(dest));
 
 	if (0 > ret)
 		throw NetworkException("Sending failed.", __FUNCTION__);
@@ -124,7 +124,7 @@ size_t UDPClient::receive( char* recvBuff, size_t recvBuffLen, IP* from /*= null
 void UDPClient::init()
 {
 	sock = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
-	if (sock == INVALID_SOCKET)
+	if (!socketIsValid(sock))
 		throw NetworkException("UDP socket could not be created", __FUNCTION__);
 
 	defaultDest = nullptr;

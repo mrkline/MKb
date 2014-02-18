@@ -21,7 +21,7 @@ public:
 	/**
 	\brief Initializes the listener to a given port
 	\param port The port to listen in on
-	\throws NetworkException if Winsock's getaddrinfo fails
+	\throws NetworkException if getaddrinfo fails
 	*/
 	TCPListener(int port);
 
@@ -34,7 +34,7 @@ public:
 	       will place on backlog to accept. The default is the maximum number
 	       of connections.
 	\throws InvalidOperationException if the listener has already been started
-	\throws NetworkException if Winsock's socket, bind, or listen fail
+	\throws NetworkException if socket, bind, or listen fail
 	*/
 	void start(int maxRequests = SOMAXCONN);
 
@@ -42,18 +42,17 @@ public:
 	\brief Stops the listener so that it no longer listens for incoming
 	       connection requests
 	\throws InvalidOperationException if the listener has not been started
-	\throws NetworkException if Winsock's shutdown fails
 	*/
 	void stop();
 
 	/// Returns true if the listener has been successfully started
-	bool isRunning() { return listenSock != INVALID_SOCKET; }
+	bool isRunning() { return socketIsValid(listenSock); }
 
 	/**
 	\brief Accepts an incoming connection request
 	\returns The accepted TCP connection
 	\throws InvalidOperationException if the listener has not been started
-	\throws NetworkException if Winsock's accept fails
+	\throws NetworkException if accept fails
 	*/
 	std::unique_ptr<TCPConnection> accept();
 

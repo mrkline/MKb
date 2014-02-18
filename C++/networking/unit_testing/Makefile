@@ -1,4 +1,4 @@
-CXXFLAGS= -Wall -std=c++11 -g -I../ -I../../
+CXXFLAGS= -Wall -std=c++11 -Wextra -g -I../ -I../../
 OBJ_FILES= IP.o TCPConnection.o TCPListener.o UDPClient.o
 
 all: unit_tests

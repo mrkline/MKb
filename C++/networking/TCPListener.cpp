@@ -8,8 +8,8 @@
 
 using namespace Exceptions;
 
-TCPListener::TCPListener( int port )
-		: listenSock(INVALID_SOCKET)
+TCPListener::TCPListener(int port)
+		: listenSock(invalidSocket)
 {
 	std::stringstream ps;
 	ps << port;
@@ -31,22 +31,22 @@ TCPListener::~TCPListener()
 {
 	freeaddrinfo(ai);
 
-	if (listenSock != INVALID_SOCKET)
-		closesocket(listenSock);
+	if (socketIsValid(listenSock))
+		close(listenSock);
 }
 
 void TCPListener::start( int maxRequests /*= SOMAXCONN*/ )
 {
-	if (listenSock != INVALID_SOCKET)
+	if (socketIsValid(listenSock))
 		throw InvalidOperationException( "The listener has already been started.", __FUNCTION__);
 
 	listenSock = socket(ai->ai_family, ai->ai_socktype, ai->ai_protocol);
 
-	if (listenSock == INVALID_SOCKET)
+	if (!socketIsValid(listenSock))
 		throw NetworkException("Socket creation failed.", __FUNCTION__);
 
 	if (0 > bind(listenSock, ai->ai_addr, (int)ai->ai_addrlen)) {
-		closesocket(listenSock);
+		close(listenSock);
 		throw NetworkException("A socket could not be bound to its given port.", __FUNCTION__);
 	}
 
@@ -56,22 +56,22 @@ void TCPListener::start( int maxRequests /*= SOMAXCONN*/ )
 
 void TCPListener::stop()
 {
-	if (listenSock == INVALID_SOCKET)
+	if (!socketIsValid(listenSock))
 		throw InvalidOperationException("The listener has not been started, so it cannot be stopped.", __FUNCTION__);
 
-	if (closesocket(listenSock) != 0)
+	if (close(listenSock) != 0)
 		throw NetworkException("The listener failed while stopping itself", __FUNCTION__);
 }
 
 std::unique_ptr<TCPConnection> TCPListener::accept()
 {
-	if (listenSock == INVALID_SOCKET)
+	if (!socketIsValid(listenSock))
 		throw InvalidOperationException("The listener must be started before it can accept connections.",
 		                                __FUNCTION__);
 
 	SockDesc connSock = ::accept(listenSock, NULL, NULL);
 
-	if (connSock == INVALID_SOCKET)
+	if (!socketIsValid(connSock))
 		throw NetworkException( "The listener failed while accepting a connection.", __FUNCTION__);
 
 	return std::unique_ptr<TCPConnection>(new TCPConnection(connSock));

@@ -8,28 +8,31 @@
 using namespace std;
 using namespace Exceptions;
 
-TCPConnection::TCPConnection()
+TCPConnection::TCPConnection() :
+	Socket()
 {
 }
 
-TCPConnection::TCPConnection( SockDesc connSock )
-		: Socket(connSock), canSend(true), canReceive(true), closedByOtherParty(false)
+TCPConnection::TCPConnection(SockDesc connSock) :
+	Socket(connSock),
+	canSend(true),
+	canReceive(true),
+	closedByOtherParty(false)
 {
-	if (connSock == INVALID_SOCKET)
+	if (!socketIsValid(connSock))
 		throw ArgumentException("The provided socket is invalid.", __FUNCTION__);
 }
 
 TCPConnection::~TCPConnection()
 {
-	if (sock != INVALID_SOCKET) {
-		shutdown(sock, SD_BOTH);
-		closesocket(sock);
+	if (socketIsValid(sock)) {
+		close(sock);
 	}
 }
 
 void TCPConnection::connect(const IPEndPoint& server)
 {
-	if (sock != INVALID_SOCKET)
+	if (socketIsValid(sock))
 		throw InvalidOperationException("A connection has already been made.", __FUNCTION__);
 
 
@@ -51,14 +54,14 @@ void TCPConnection::connect(const IPEndPoint& server)
 	for (addrinfo* ptr = result; ptr != nullptr; ptr = ptr->ai_next) {
 		sock = socket(ptr->ai_family, ptr->ai_socktype, ptr->ai_protocol);
 
-		if (sock == INVALID_SOCKET) {
+		if (!socketIsValid(sock)) {
 			/// \todo free result?
 			throw NetworkException("Socket creation failed.", __FUNCTION__);
 		}
 
 		if (0 > ::connect(sock, ptr->ai_addr, (int)ptr->ai_addrlen)) {
-			closesocket(sock);
-			sock = INVALID_SOCKET;
+			close(sock);
+			sock = invalidSocket;
 			continue;
 		}
 		break;
@@ -66,7 +69,7 @@ void TCPConnection::connect(const IPEndPoint& server)
 
 	freeaddrinfo(result);
 
-	if (sock == INVALID_SOCKET)
+	if (!socketIsValid(sock))
 		throw NetworkException( "A connection to the server could not be established.", __FUNCTION__);
 
 	canSend = true;
@@ -76,33 +79,23 @@ void TCPConnection::connect(const IPEndPoint& server)
 
 void TCPConnection::disconnect()
 {
-	int how;
-
-	if (sock == INVALID_SOCKET) {
+	if (!socketIsValid(sock)) {
 		throw InvalidOperationException(
-		    "The connection cannot be disconnected since it is not"
-		    " connected in the first place.",
-		    __FUNCTION__);
+			"The connection cannot be disconnected since it is not connected in the first place.",
+			__FUNCTION__);
 	}
 
-	how = (canSend && canReceive) ?  SD_BOTH : (canSend ? SD_SEND : (canReceive ? SD_RECEIVE : -1));
-
-	if (-1 != how)
-		shutdown(sock, how);
-	//	throw NetworkException("Socket shutdown failed during disconnection.", __FUNCTION__);
-
-	canSend = false;
-	canReceive = false;
-
-	if (closesocket(sock) != 0)
+	if (close(sock) != 0)
 		throw NetworkException("Socket closure failed during disconnection.", __FUNCTION__);
 
-	sock = INVALID_SOCKET;
+	sock = invalidSocket;
+	canSend = false;
+	canReceive = false;
 }
 
 size_t TCPConnection::send(const char* data, size_t dataLen )
 {
-	if (sock == INVALID_SOCKET) {
+	if (!socketIsValid(sock)) {
 		throw InvalidOperationException("The connection cannot send data since" " no connection is established",
 		                                __FUNCTION__);
 	}
@@ -123,7 +116,7 @@ size_t TCPConnection::send(const char* data, size_t dataLen )
 
 size_t TCPConnection::receive( char* recvBuff, size_t recvBuffLen )
 {
-	if (sock == INVALID_SOCKET) {
+	if (!socketIsValid(sock)) {
 		throw InvalidOperationException("The connection cannot receive data since no connection is established",
 		                                __FUNCTION__);
 	}
@@ -150,7 +143,7 @@ void TCPConnection::shutDownSending()
 	if (!canSend)
 		throw InvalidOperationException( "Sending has already been shut down on this connection.", __FUNCTION__);
 
-	if (shutdown(sock, SD_SEND) != 0)
+	if (shutdown(sock, SHUT_WR) != 0)
 		throw NetworkException("Sending shutdown failed.", __FUNCTION__);
 
 	canSend = false;
@@ -161,7 +154,7 @@ void TCPConnection::shutDownReceiving()
 	if (!canReceive)
 		throw InvalidOperationException( "Receiving has already been shut down on this connection.", __FUNCTION__);
 
-	if (shutdown(sock, SD_RECEIVE) != 0)
+	if (shutdown(sock, SHUT_RD) != 0)
 		throw NetworkException("Receiving shutdown failed.", __FUNCTION__);
 
 	canReceive = false;

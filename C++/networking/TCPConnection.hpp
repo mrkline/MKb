@@ -42,14 +42,13 @@ public:
 	       at the given end point
 	\param server The IP and port of the TCP server to connect to
 	\throws InvalidOperationException if the connection is already established
-	\throws NetworkException if Winsock's getaddrinfo, socket, or connect fail
+	\throws NetworkException if getaddrinfo, socket, or connect fail
 	*/
 	void connect(const IPEndPoint& server);
 
 	/**
 	\brief Closes the TCP connection
 	\throws InvalidOperationException if the connection isn't established
-	\throws NetworkException if Winsock's shutdown or closesocket fail
 	*/
 	void disconnect();
 
@@ -61,7 +60,7 @@ public:
 	\throws InvalidOperationException if the connection is not established,
 	        sending has been shut down, or the other party has closed the
 	        connection
-	\throws NetworkException if Winsock's send fails
+	\throws NetworkException if send fails
 
 	This operation is blocking.
 	*/
@@ -77,7 +76,7 @@ public:
 	\throws InvalidOperationException if the connection is not established,
 	        receiving has been shut down, or the other party has closed the
 	        connection
-	\throws NetworkException if Winsock's recv fails
+	\throws NetworkException if recv fails
 
 	This operation is blocking.
 	*/
@@ -86,21 +85,22 @@ public:
 	/**
 	\brief Shuts down sending operations on the connection
 	\throws InvalidOperationException if sending has already been shut down
-	\throws NetworkException if Winsock's shutdown fails
+	\throws NetworkException if shutdown fails
 	*/
 	void shutDownSending();
 
 	/**
 	\brief Shuts down receiving operations on the connection
 	\throws InvalidOperationException if receiving has already been shut down
-	\throws NetworkException if Winsock's shutdown fails
+	\throws NetworkException if shutdown fails
 	*/
 	void shutDownReceiving();
 
-private:
 	// Disallow copy and assign
-	void operator=(const TCPConnection&) {}
-	TCPConnection(const TCPConnection&) {}
+	void operator=(const TCPConnection&) = delete;
+	TCPConnection(const TCPConnection&) = delete;
+
+private:
 
 #ifdef _WIN32
 	WinsockRequirement ws;
