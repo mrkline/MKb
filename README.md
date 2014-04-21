@@ -1,25 +1,32 @@
-## Directory Contents
+# MKb
 
-- The networking directory contains some basic wrappers for TCP and UDP
-  communication.
-- CRC32Generator generates a 32-bit cyclic redundancy check (CRC) checksum
-  for a given buffer of data.
-- Exceptions provides a base exception class which can report an error message
-  and the function it originated from, as well as a set of derived exception
-  classes which provide information about the type of error that occurred.
-  The exception hierarchy is similar to that of .NET.
-- MKMath provides a set of math constants as well as some utilities like
-  clamping and floating point comparisons using tolerances.
-- Transform provides a 4x4 transform matrix class (such as those
-  used by 3D graphics for vertex transformation).
-- Vector2 and Vector3 are 2D and 3D vector classes, respectively.
+MKb is a random collection of code snippets I've accumulated through various
+projects for school, for work, and for fun. Since I found myself using
+and updating these snippets often for various projects, it made sense to
+centralize them in a repo.  With a little luck, others might find them useful
+as well.
 
-## Todo
+## License
 
-- Make any needed changes now that exceptions are in a namespace
+(The zlib License)
 
-## Comment Format
+Copyright (c) 2014 Matt Kline
 
-Most, if not all of the C++ files are commented in a format to be consumed by
-Doxygen, a documentation system which can be found at
-http://www.stack.nl/~dimitri/doxygen/
+This software is provided 'as-is', without any express or implied
+warranty. In no event will the authors be held liable for any damages
+arising from the use of this software.
+
+Permission is granted to anyone to use this software for any purpose,
+including commercial applications, and to alter it and redistribute it
+freely, subject to the following restrictions:
+
+   1. The origin of this software must not be misrepresented; you must not
+   claim that you wrote the original software. If you use this software
+   in a product, an acknowledgment in the product documentation would be
+   appreciated but is not required.
+
+   2. Altered source versions must be plainly marked as such, and must not be
+   misrepresented as being the original software.
+
+   3. This notice may not be removed or altered from any source
+   distribution.
